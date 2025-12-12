@@ -5,16 +5,19 @@ import { gsap } from 'gsap'
 import './Masonry.css'
 
 const useMedia = (queries: string[], values: number[], defaultValue: number) => {
-  const get = () => values[queries.findIndex(q => window.matchMedia(q).matches)] ?? defaultValue
-
-  const [value, setValue] = useState(get)
-
+  const [value, setValue] = useState(defaultValue)
+  
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    const get = () => values[queries.findIndex(q => window.matchMedia(q).matches)] ?? defaultValue
+    setValue(get())
+    
     const handler = () => setValue(get)
     queries.forEach(q => window.matchMedia(q).addEventListener('change', handler))
     return () => queries.forEach(q => window.matchMedia(q).removeEventListener('change', handler))
-  }, [queries])
-
+  }, [queries, values, defaultValue])
+  
   return value
 }
 
@@ -117,7 +120,7 @@ const Masonry = ({
       case 'left':
         return { x: -200, y: item.y }
       case 'right':
-        return { x: window.innerWidth + 200, y: item.y }
+        return { x: (typeof window !== 'undefined' ? window.innerWidth : 1920) + 200, y: item.y }
       case 'center':
         return {
           x: containerRect.width / 2 - item.w / 2,
@@ -267,7 +270,7 @@ const Masonry = ({
             key={item.id}
             data-key={item.id}
             className="item-wrapper"
-            onClick={() => item.url && window.open(item.url, '_blank', 'noopener')}
+            onClick={() => item.url && typeof window !== 'undefined' && window.open(item.url, '_blank', 'noopener')}
             onMouseEnter={e => handleMouseEnter(e, item)}
             onMouseLeave={e => handleMouseLeave(e, item)}
           >
