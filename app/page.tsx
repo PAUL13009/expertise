@@ -2,10 +2,11 @@
 
 import { useRef, useEffect } from 'react'
 import Hero from '@/components/Hero'
+import StatsSection from '@/components/StatsSection'
 import About from '@/components/About'
 import Gallery from '@/components/Gallery'
 import Features from '@/components/Features'
-import Team from '@/components/Team'
+import Testimonials from '@/components/Testimonials'
 import LocationSection from '@/components/LocationSection'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
@@ -25,10 +26,11 @@ export default function Home() {
     <main ref={mainRef} className="min-h-screen">
       <Navbar />
       <Hero />
+      <StatsSection />
       <About />
       <Features />
       <Gallery />
-      <Team />
+      <Testimonials />
       <LocationSection />
       <Footer />
     </main>

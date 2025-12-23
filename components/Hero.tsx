@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useRef } from 'react'
 import AnimatedContent from './AnimatedContent'
 import VariableProximity from './VariableProximity'
@@ -11,33 +10,33 @@ interface HeroProps {
   buttonText?: string
   buttonLink?: string
   id?: string
-  backgroundImage?: string
-  alt?: string
+  videoPath?: string
 }
 
 export default function Hero({ 
-  title = "L'agence Y L",
-  subtitle = "Votre agence immobilière de confiance",
+  title = "Une autre manière de vendre et d'accompagner l'immobilier",
+  subtitle = "Une agence immobilière qui applique une méthode exigeante pour des projets sérieux, à Marseille et ses environs.",
   buttonText = "Découvrir nos biens",
   buttonLink = "#a-propos",
   id = "accueil",
-  backgroundImage = "/images/maison15esejour2.webp",
-  alt = "Agence immobilière Y L - Intérieur moderne"
+  videoPath = "/videos/drone.mp4"
 }: HeroProps = {}) {
   const containerRef = useRef<HTMLElement>(null)
 
   return (
-    <section ref={containerRef as any} id={id} className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Image de fond */}
+    <section ref={containerRef as any} id={id} className="relative h-screen flex items-center justify-center overflow-hidden" style={{ marginTop: 0, paddingTop: 0 }}>
+      {/* Vidéo de fond */}
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-full">
-          <Image
-            src={backgroundImage}
-            alt={alt}
-            fill
-            className="object-cover"
-            priority
-          />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src={videoPath} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60" />
         </div>
       </div>

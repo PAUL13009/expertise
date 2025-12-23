@@ -1,141 +1,30 @@
 'use client'
 
+import Image from 'next/image'
 import VariableProximity from './VariableProximity'
 
 export default function Footer() {
   const containerRef = null
   return (
-    <footer className="bg-black text-white py-12">
+    <footer className="bg-white text-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          <div>
-            <h3 className="text-2xl font-light mb-4">
-              <VariableProximity
-                label="Le Nid Céleste"
-                fromFontVariationSettings="'wght' 300"
-                toFontVariationSettings="'wght' 500"
-                containerRef={null}
-                radius={80}
-                falloff="linear"
-              />
-            </h3>
-            <p className="text-white/70 leading-relaxed">
-              <VariableProximity
-                label="Une villa exceptionnelle en bambou au cœur de Bali. Votre havre de paix pour un séjour inoubliable."
-                fromFontVariationSettings="'wght' 200"
-                toFontVariationSettings="'wght' 400"
-                containerRef={null}
-                radius={70}
-                falloff="linear"
-              />
-            </p>
-          </div>
-          
-          <div>
-            <h4 className="font-light mb-4">
-              <VariableProximity
-                label="Liens rapides"
-                fromFontVariationSettings="'wght' 300"
-                toFontVariationSettings="'wght' 500"
-                containerRef={null}
-                radius={70}
-                falloff="linear"
-              />
-            </h4>
-            <ul className="space-y-2 text-white/70">
-              <li><a href="#accueil" className="hover:text-bali-400 transition-colors">
-                <VariableProximity
-                  label="Accueil"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </a></li>
-              <li><a href="#a-propos" className="hover:text-bali-400 transition-colors">
-                <VariableProximity
-                  label="À propos"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </a></li>
-              <li><a href="#galerie" className="hover:text-bali-400 transition-colors">
-                <VariableProximity
-                  label="Galerie"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </a></li>
-              <li><a href="#reservation" className="hover:text-bali-400 transition-colors">
-                <VariableProximity
-                  label="Réservation"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-light mb-4">
-              <VariableProximity
-                label="Contact"
-                fromFontVariationSettings="'wght' 300"
-                toFontVariationSettings="'wght' 500"
-                containerRef={null}
-                radius={70}
-                falloff="linear"
-              />
-            </h4>
-            <ul className="space-y-2 text-white/70">
-              <li>
-                <VariableProximity
-                  label="Sidemen, Karangasem, Bali, Indonésie"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </li>
-              <li>
-                <VariableProximity
-                  label="bonjour@theskynest.com"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </li>
-              <li>
-                <VariableProximity
-                  label="+62 812 3456 7890"
-                  fromFontVariationSettings="'wght' 200"
-                  toFontVariationSettings="'wght' 400"
-                  containerRef={null}
-                  radius={60}
-                  falloff="linear"
-                />
-              </li>
-            </ul>
-          </div>
+        {/* Logo centré */}
+        <div className="flex justify-center mb-8">
+          <Image
+            src="/images/Logo-removebg-preview.png"
+            alt="L'Agence Y L"
+            width={200}
+            height={200}
+            className="object-contain"
+            priority
+          />
         </div>
         
-        <div className="border-t border-white/20 pt-8 text-center text-white/60 text-sm">
+        {/* Copyright */}
+        <div className="text-center text-gray-600 text-sm mb-4">
           <p>
             <VariableProximity
-              label={`© ${new Date().getFullYear()} Le Nid Céleste. Tous droits réservés.`}
+              label={`© ${new Date().getFullYear()} L'Agence Y L. Tous droits réservés.`}
               fromFontVariationSettings="'wght' 200"
               toFontVariationSettings="'wght' 300"
               containerRef={null}
@@ -143,6 +32,17 @@ export default function Footer() {
               falloff="linear"
             />
           </p>
+        </div>
+        
+        {/* Lien Espace Admin */}
+        <div className="text-center">
+          <a
+            href="/admin/login"
+            className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+            style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
+          >
+            Espace Admin
+          </a>
         </div>
       </div>
     </footer>

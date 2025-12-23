@@ -1,38 +1,121 @@
 'use client'
 
+import { useState } from 'react'
 import FadeContent from './FadeContent'
 import VariableProximity from './VariableProximity'
+import { supabase } from '@/lib/supabase'
 
 export default function LocationSection() {
   const containerRef = null
+  const [formData, setFormData] = useState({
+    nom: '',
+    prenom: '',
+    telephone: '',
+    email: '',
+    pays: '',
+    projet: '',
+    contactMethod: ''
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
-  const contactInfos = [
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-        </svg>
-      ),
-      text: "+33 6 61 73 64 38"
-    },
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      ),
-      text: "lagenceyl@gmail.com"
-    },
-    {
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      ),
-      text: "142 Boulevard Notre Dame 13008 Marseille"
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, contactMethod: e.target.value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setSubmitError('')
+    setSubmitSuccess(false)
+
+    try {
+      // Insérer le message dans la base de données
+      console.log('Inserting message:', formData)
+      const { data: insertedData, error } = await supabase
+        .from('contact_messages')
+        .insert([
+          {
+            nom: formData.nom,
+            prenom: formData.prenom || null,
+            email: formData.email,
+            telephone: formData.telephone || null,
+            pays: formData.pays || null,
+            projet: formData.projet || null,
+            contact_method: formData.contactMethod
+          }
+        ])
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Erreur lors de l\'insertion du message:', error)
+        console.error('Détails:', JSON.stringify(error, null, 2))
+        throw error
+      }
+
+      console.log('Message inséré avec succès:', insertedData)
+
+      // Appeler la Edge Function pour envoyer l'email
+      console.log('Calling Edge Function with data:', insertedData)
+      try {
+        const { data: functionData, error: functionError } = await supabase.functions.invoke('send-contact-email', {
+          body: {
+            record: {
+              id: insertedData.id,
+              nom: insertedData.nom,
+              prenom: insertedData.prenom,
+              email: insertedData.email,
+              telephone: insertedData.telephone,
+              pays: insertedData.pays,
+              projet: insertedData.projet,
+              contact_method: insertedData.contact_method,
+              created_at: insertedData.created_at
+            }
+          }
+        })
+
+        if (functionError) {
+          console.error('Erreur lors de l\'envoi de l\'email:', functionError)
+          console.error('Détails de l\'erreur:', JSON.stringify(functionError, null, 2))
+        } else {
+          console.log('Email envoyé avec succès:', functionData)
+        }
+      } catch (emailError: any) {
+        console.error('Erreur lors de l\'appel de la fonction email:', emailError)
+        console.error('Stack trace:', emailError.stack)
+        // On continue même si l'email échoue
+      }
+
+      setSubmitSuccess(true)
+      // Réinitialiser le formulaire après soumission
+      setFormData({
+        nom: '',
+        prenom: '',
+        telephone: '',
+        email: '',
+        pays: '',
+        projet: '',
+        contactMethod: ''
+      })
+
+      // Masquer le message de succès après 5 secondes
+      setTimeout(() => {
+        setSubmitSuccess(false)
+      }, 5000)
+    } catch (error: any) {
+      console.error('Erreur lors de l\'envoi du formulaire:', error)
+      setSubmitError('Une erreur est survenue. Veuillez réessayer.')
+    } finally {
+      setSubmitting(false)
     }
-  ]
+  }
 
   return (
     <section id="contact" className="pt-20 pb-20 bg-stone-50">
@@ -42,7 +125,7 @@ export default function LocationSection() {
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif mb-4 max-w-4xl mx-auto" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
               <VariableProximity
-                label="Contact"
+                label="Évaluons ensemble la faisabilité de votre projet"
                 fromFontVariationSettings="'wght' 400"
                 toFontVariationSettings="'wght' 700"
                 containerRef={containerRef}
@@ -51,6 +134,22 @@ export default function LocationSection() {
               />
             </h2>
           </div>
+
+          {/* Messages de succès/erreur */}
+          {submitSuccess && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 text-center">
+              <p style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Votre message a été envoyé avec succès ! Nous vous contacterons bientôt.
+              </p>
+            </div>
+          )}
+          {submitError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-center">
+              <p style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                {submitError}
+              </p>
+            </div>
+          )}
 
           {/* Carte Google Maps et Informations */}
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
@@ -68,71 +167,156 @@ export default function LocationSection() {
               />
             </div>
 
-            {/* Colonne de droite - Informations de contact */}
-            <div className="space-y-6">
-              {contactInfos.map((info, index) => (
-                <div key={index} className="bg-white rounded-lg p-6 shadow-md border border-gray-100">
-                  <div className="flex items-center gap-4">
-                    <div className="text-gray-600 flex-shrink-0">
-                      {info.icon}
-                    </div>
-                    <p className="text-gray-900 text-lg">
-                      <VariableProximity
-                        label={info.text}
-                        fromFontVariationSettings="'wght' 400"
-                        toFontVariationSettings="'wght' 600"
-                        containerRef={containerRef}
-                        radius={80}
-                        falloff="linear"
-                      />
-                    </p>
+            {/* Colonne de droite - Formulaire de contact */}
+            <div>
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Champs du formulaire */}
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Nom et prénom */}
+                  <div>
+                    <label htmlFor="nom" className="block text-sm font-medium mb-3 text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Nom et prénom <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="nom"
+                      name="nom"
+                      value={formData.nom}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      className="w-full bg-transparent border-0 border-b focus:outline-none transition-colors pb-2 text-gray-800 disabled:opacity-50"
+                      style={{ borderColor: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium mb-3 text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Adresse email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      className="w-full bg-transparent border-0 border-b focus:outline-none transition-colors pb-2 text-gray-800 disabled:opacity-50"
+                      style={{ borderColor: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
+                    />
+                  </div>
+
+                  {/* Téléphone */}
+                  <div>
+                    <label htmlFor="telephone" className="block text-sm font-medium mb-3 text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Numéro de téléphone
+                    </label>
+                    <input
+                      type="tel"
+                      id="telephone"
+                      name="telephone"
+                      value={formData.telephone}
+                      onChange={handleInputChange}
+                      disabled={submitting}
+                      className="w-full bg-transparent border-0 border-b focus:outline-none transition-colors pb-2 text-gray-800 disabled:opacity-50"
+                      style={{ borderColor: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
+                    />
+                  </div>
+
+                  {/* Pays de résidence */}
+                  <div>
+                    <label htmlFor="pays" className="block text-sm font-medium mb-3 text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Pays de résidence
+                    </label>
+                    <input
+                      type="text"
+                      id="pays"
+                      name="pays"
+                      value={formData.pays}
+                      onChange={handleInputChange}
+                      disabled={submitting}
+                      className="w-full bg-transparent border-0 border-b focus:outline-none transition-colors pb-2 text-gray-800 disabled:opacity-50"
+                      style={{ borderColor: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
+                    />
                   </div>
                 </div>
-              ))}
 
-              {/* Icônes sociales */}
-              <div className="flex items-center justify-center gap-6 pt-4">
-                <a 
-                  href="https://www.instagram.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="transition-transform duration-300 hover:scale-110"
-                  aria-label="Instagram"
-                >
-                  <svg className="w-8 h-8" fill="url(#instagram-gradient)" viewBox="0 0 24 24">
-                    <defs>
-                      <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#E4405F" />
-                        <stop offset="50%" stopColor="#C13584" />
-                        <stop offset="100%" stopColor="#833AB4" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </a>
-                <a 
-                  href="https://www.linkedin.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="transition-transform duration-300 hover:scale-110"
-                  aria-label="LinkedIn"
-                >
-                  <svg className="w-8 h-8" fill="#0077B5" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </a>
-                <a 
-                  href="https://www.facebook.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="transition-transform duration-300 hover:scale-110"
-                  aria-label="Facebook"
-                >
-                  <svg className="w-8 h-8" fill="#1877F2" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
-              </div>
+                {/* Description du projet */}
+                <div>
+                  <label htmlFor="projet" className="block text-sm font-medium mb-3 text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    Décrivez votre projet
+                  </label>
+                  <textarea
+                    id="projet"
+                    name="projet"
+                    value={formData.projet}
+                    onChange={handleInputChange}
+                    rows={5}
+                    disabled={submitting}
+                    className="w-full bg-transparent border-0 border-b focus:outline-none transition-colors pb-2 resize-none text-gray-800 disabled:opacity-50"
+                    style={{ borderColor: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
+                  />
+                </div>
+
+                {/* Méthode de contact préférée */}
+                <div className="pt-4">
+                  <p className="text-xs mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    Sélectionnez autant que nécessaire
+                  </p>
+                  <div className="flex items-center justify-between gap-4 flex-wrap">
+                    <div className="flex items-center gap-4">
+                      <p className="text-sm font-medium text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        Je préfère être contacté par <span className="text-red-500">*</span>
+                      </p>
+                      <div className="flex flex-wrap gap-6">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="contactMethod"
+                            value="telephone-whatsapp"
+                            checked={formData.contactMethod === 'telephone-whatsapp'}
+                            onChange={handleRadioChange}
+                            required
+                            disabled={submitting}
+                            className="w-4 h-4"
+                            style={{ accentColor: '#4682B4' }}
+                          />
+                          <span className="text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                            Via Téléphone/WhatsApp
+                          </span>
+                        </label>
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="contactMethod"
+                            value="email"
+                            checked={formData.contactMethod === 'email'}
+                            onChange={handleRadioChange}
+                            required
+                            disabled={submitting}
+                            className="w-4 h-4"
+                            style={{ accentColor: '#4682B4' }}
+                          />
+                          <span className="text-gray-800" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                            Via Mail
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    {/* Bouton de soumission */}
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="text-lg font-semibold transition-all hover:opacity-80 hover:scale-105 hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
+                    >
+                      {submitting ? 'Envoi...' : 'CONTINUER'}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>

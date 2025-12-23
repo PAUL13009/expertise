@@ -4,9 +4,11 @@ import { useState } from 'react'
 import Image from 'next/image'
 import FadeContent from './FadeContent'
 import VariableProximity from './VariableProximity'
+import AnimatedContent from './AnimatedContent'
 
 interface FeatureData {
-  image: string
+  image?: string
+  video?: string
   imageAlt: string
   title: string
   subtitle: string
@@ -30,7 +32,7 @@ export default function Features() {
       ]
     },
     {
-      image: "/images/terrasse.jpg",
+      video: "/videos/transaction.mov",
       imageAlt: "Vente immobilière - Agence Y L",
       title: "Vente immobilière",
       subtitle: "Votre projet de vente, encadré de A à Z",
@@ -41,7 +43,7 @@ export default function Features() {
       ]
     },
     {
-      image: "/images/DSC04839.JPG",
+      video: "/videos/location.mov",
       imageAlt: "Location immobilière - Agence Y L",
       title: "Location immobilière",
       subtitle: "Une location sécurisée, sans stress",
@@ -68,13 +70,13 @@ export default function Features() {
   const currentFeature = features[currentFeatureIndex]
 
   return (
-    <section className="pt-20 pb-20 bg-stone-50">
+    <section id="services" className="pt-12 pb-8 bg-stone-50">
       <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif mb-4 max-w-4xl mx-auto" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
               <VariableProximity
-                label="Découvrez les services de l'Agence Y L"
+                label="Une méthode immobilière, pas une liste de prestations"
                 fromFontVariationSettings="'wght' 400"
                 toFontVariationSettings="'wght' 700"
                 containerRef={null}
@@ -86,15 +88,28 @@ export default function Features() {
 
           <div key={currentFeatureIndex} className="animate-fade-in">
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center relative">
-              {/* Colonne de gauche - Image */}
+              {/* Colonne de gauche - Image ou Vidéo */}
               <div className="relative h-[500px] md:h-[600px] overflow-hidden shadow-2xl">
-                <Image
-                  src={currentFeature.image}
-                  alt={currentFeature.imageAlt}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                {currentFeature.video ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                  >
+                    <source src={currentFeature.video} type="video/mp4" />
+                    <source src={currentFeature.video} type="video/quicktime" />
+                  </video>
+                ) : currentFeature.image ? (
+                  <Image
+                    src={currentFeature.image}
+                    alt={currentFeature.imageAlt}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                ) : null}
               </div>
 
               {/* Colonne de droite - Contenu */}
@@ -128,23 +143,67 @@ export default function Features() {
                   <div className="space-y-3">
                     <ul className="space-y-3 text-gray-700">
                       {currentFeature.details.map((detail, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <span className="mt-1" style={{ color: '#4682B4' }}>•</span>
-                          <span className="leading-relaxed">
-                            <VariableProximity
-                              label={detail}
-                              fromFontVariationSettings="'wght' 300"
-                              toFontVariationSettings="'wght' 500"
-                              containerRef={null}
-                              radius={70}
-                              falloff="linear"
-                            />
-                          </span>
-                        </li>
+                        <AnimatedContent
+                          key={index}
+                          distance={50}
+                          direction="vertical"
+                          reverse={false}
+                          duration={0.8}
+                          ease="power3.out"
+                          initialOpacity={0}
+                          animateOpacity={true}
+                          threshold={0.2}
+                          delay={index * 0.1}
+                        >
+                          <li className="flex items-start gap-3">
+                            <span className="mt-1" style={{ color: '#4682B4' }}>•</span>
+                            <span className="leading-relaxed">
+                              <VariableProximity
+                                label={detail}
+                                fromFontVariationSettings="'wght' 300"
+                                toFontVariationSettings="'wght' 500"
+                                containerRef={null}
+                                radius={70}
+                                falloff="linear"
+                              />
+                            </span>
+                          </li>
+                        </AnimatedContent>
                       ))}
                     </ul>
                   </div>
                 )}
+
+                {/* Bouton "En savoir plus" */}
+                <div className="pt-6">
+                  <a
+                    href={currentFeatureIndex === 0 ? "/estimation" : currentFeatureIndex === 1 ? "/vente" : currentFeatureIndex === 2 ? "/location" : "#contact"}
+                    className="inline-block px-6 py-3 rounded-full font-semibold transition-all border-2 hover:shadow-lg hover:scale-105 hover:-translate-y-1"
+                    style={{
+                      backgroundColor: '#4682B4',
+                      color: 'white',
+                      borderColor: '#4682B4',
+                      fontFamily: 'var(--font-playfair), serif'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#3a6a8f'
+                      e.currentTarget.style.borderColor = '#3a6a8f'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#4682B4'
+                      e.currentTarget.style.borderColor = '#4682B4'
+                    }}
+                  >
+                    <VariableProximity
+                      label="En savoir plus"
+                      fromFontVariationSettings="'wght' 500"
+                      toFontVariationSettings="'wght' 700"
+                      containerRef={null}
+                      radius={60}
+                      falloff="linear"
+                    />
+                  </a>
+                </div>
               </div>
 
               {/* Flèches de navigation - Positionnées à mi-hauteur de l'image, décalées vers la droite */}

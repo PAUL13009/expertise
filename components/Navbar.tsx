@@ -1,152 +1,350 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import VariableProximity from './VariableProximity'
+import { gsap } from 'gsap'
+import './StaggeredMenu.css'
 
 export default function Navbar() {
   const containerRef = null
+  const pathname = usePathname()
+  const isHomePage = pathname === '/'
   const [scrolled, setScrolled] = useState(false)
   const [isOnHero, setIsOnHero] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)
+  
+  // Refs pour le menu animé
+  const panelRef = useRef<HTMLElement>(null)
+  const preLayersRef = useRef<HTMLDivElement>(null)
+  const preLayerElsRef = useRef<HTMLElement[]>([])
+  const plusHRef = useRef<HTMLSpanElement>(null)
+  const plusVRef = useRef<HTMLSpanElement>(null)
+  const iconRef = useRef<HTMLSpanElement>(null)
+  const openTlRef = useRef<gsap.core.Timeline | null>(null)
+  const closeTweenRef = useRef<gsap.core.Tween | null>(null)
+  const spinTweenRef = useRef<gsap.core.Tween | null>(null)
+  const busyRef = useRef(false)
+
+  const menuItems = [
+    { label: 'Accueil', link: '/', ariaLabel: 'Aller à la page d\'accueil' },
+    { label: 'À propos', link: '#a-propos', ariaLabel: 'Aller à la section À propos' },
+    { label: 'Services', link: '/#services', ariaLabel: 'Aller à la section Services' },
+    { label: 'À vendre', link: '/vente', ariaLabel: 'Aller à la page Vente' },
+    { label: 'À louer', link: '/location', ariaLabel: 'Aller à la page Location' },
+    { label: 'Estimation', link: '/estimation', ariaLabel: 'Aller à la page Estimation' },
+    { label: 'Équipe', link: '#equipe', ariaLabel: 'Aller à la section Équipe' },
+    { label: 'Contact', link: '#contact', ariaLabel: 'Aller à la section Contact' },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY
       
       setScrolled(scrollY > 20)
-      setIsOnHero(scrollY < 50) // L'effet se déclenche dès qu'on commence à scroller (dès que scrollY > 50px)
+      setIsOnHero(scrollY < 50)
     }
     
-    // Vérifier l'état initial
     handleScroll()
     
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const panel = panelRef.current
+      const preContainer = preLayersRef.current
+      const plusH = plusHRef.current
+      const plusV = plusVRef.current
+      const icon = iconRef.current
+      if (!panel || !plusH || !plusV || !icon) return
+
+      let preLayers: HTMLElement[] = []
+      if (preContainer) {
+        preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
+      }
+      preLayerElsRef.current = preLayers
+
+      gsap.set([panel, ...preLayers], { xPercent: 100 })
+      gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 })
+      gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 })
+      gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' })
+    })
+    return () => ctx.revert()
+  }, [])
+
+  const buildOpenTimeline = useCallback(() => {
+    const panel = panelRef.current
+    const layers = preLayerElsRef.current
+    if (!panel) return null
+
+    openTlRef.current?.kill()
+    if (closeTweenRef.current) {
+      closeTweenRef.current.kill()
+      closeTweenRef.current = null
+    }
+
+    const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[]
+    const numberEls = Array.from(panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item')) as HTMLElement[]
+
+    const layerStates = layers.map(el => ({ el, start: Number(gsap.getProperty(el, 'xPercent')) }))
+    const panelStart = Number(gsap.getProperty(panel, 'xPercent'))
+
+    if (itemEls.length) {
+      gsap.set(itemEls, { yPercent: 140, rotate: 10 })
+    }
+    if (numberEls.length) {
+      gsap.set(numberEls, { '--sm-num-opacity': 0 })
+    }
+
+    const tl = gsap.timeline({ paused: true })
+
+    // On n'anime pas les prelayers (même design sur toutes les pages)
+    const lastTime = 0
+    const panelInsertTime = 0
+    const panelDuration = 0.65
+    tl.fromTo(
+      panel,
+      { xPercent: panelStart },
+      { xPercent: 0, duration: panelDuration, ease: 'power4.out' },
+      panelInsertTime
+    )
+
+    if (itemEls.length) {
+      const itemsStartRatio = 0.15
+      const itemsStart = panelInsertTime + panelDuration * itemsStartRatio
+      tl.to(
+        itemEls,
+        {
+          yPercent: 0,
+          rotate: 0,
+          duration: 1,
+          ease: 'power4.out',
+          stagger: { each: 0.1, from: 'start' }
+        },
+        itemsStart
+      )
+      if (numberEls.length) {
+        tl.to(
+          numberEls,
+          {
+            duration: 0.6,
+            ease: 'power2.out',
+            '--sm-num-opacity': 1,
+            stagger: { each: 0.08, from: 'start' }
+          },
+          itemsStart + 0.1
+        )
+      }
+    }
+
+    openTlRef.current = tl
+    return tl
+  }, [])
+
+  const playOpen = useCallback(() => {
+    if (busyRef.current) return
+    busyRef.current = true
+    const tl = buildOpenTimeline()
+    if (tl) {
+      tl.eventCallback('onComplete', () => {
+        busyRef.current = false
+      })
+      tl.play(0)
+    } else {
+      busyRef.current = false
+    }
+  }, [buildOpenTimeline])
+
+  const playClose = useCallback(() => {
+    openTlRef.current?.kill()
+    openTlRef.current = null
+
+    const panel = panelRef.current
+    if (!panel) return
+
+    // On n'anime que le panel (même design sur toutes les pages)
+    const all = [panel]
+    closeTweenRef.current?.kill()
+    closeTweenRef.current = gsap.to(all, {
+      xPercent: 100,
+      duration: 0.32,
+      ease: 'power3.in',
+      overwrite: 'auto',
+      onComplete: () => {
+        const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[]
+        if (itemEls.length) {
+          gsap.set(itemEls, { yPercent: 140, rotate: 10 })
+        }
+        const numberEls = Array.from(panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item')) as HTMLElement[]
+        if (numberEls.length) {
+          gsap.set(numberEls, { '--sm-num-opacity': 0 })
+        }
+        busyRef.current = false
+      }
+    })
+  }, [])
+
+  const animateIcon = useCallback((opening: boolean) => {
+    const icon = iconRef.current
+    if (!icon) return
+    spinTweenRef.current?.kill()
+    if (opening) {
+      spinTweenRef.current = gsap.to(icon, { rotate: 225, duration: 0.8, ease: 'power4.out', overwrite: 'auto' })
+    } else {
+      spinTweenRef.current = gsap.to(icon, { rotate: 0, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' })
+    }
+  }, [])
+
+  // Fonction animateText supprimée car le texte n'est plus utilisé
+
+  const toggleMenu = useCallback(() => {
+    const target = !menuOpen
+    setMenuOpen(target)
+    if (target) {
+      playOpen()
+    } else {
+      playClose()
+    }
+    animateIcon(target)
+  }, [menuOpen, playOpen, playClose, animateIcon])
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(target) &&
+        !(event.target as HTMLElement)?.closest('.sm-toggle')
+      ) {
+        setMenuOpen(false)
+        playClose()
+        animateIcon(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuOpen, playClose, animateIcon])
+
+  // Détection du curseur à l'extrémité droite pour ouvrir le menu automatiquement
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const windowWidth = window.innerWidth
+      const mouseX = e.clientX
+      const threshold = 50 // Distance en pixels depuis le bord droit pour déclencher l'ouverture
+      
+      // Si le curseur est proche du bord droit (dans les 50px)
+      if (mouseX >= windowWidth - threshold && !menuOpen) {
+        setMenuOpen(true)
+        playOpen()
+        animateIcon(true)
+      }
+    }
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [menuOpen, playOpen, animateIcon])
+
+  // Fermeture automatique du menu quand le curseur quitte le menu
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const panel = panelRef.current
+    if (!panel) return
+
+    const handleMouseLeave = () => {
+      setMenuOpen(false)
+      playClose()
+      animateIcon(false)
+    }
+
+    panel.addEventListener('mouseleave', handleMouseLeave)
+    return () => {
+      panel.removeEventListener('mouseleave', handleMouseLeave)
+    }
+  }, [menuOpen, playClose, animateIcon])
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
-      scrolled ? 'bg-stone-50 shadow-lg' : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-500 ease-out ${
-          isOnHero ? 'h-24' : 'h-20'
-        }`}>
-          <div className="flex-1"></div>
-          <div className={`hidden md:flex items-center transition-all duration-500 ease-out ${
-            isOnHero ? 'space-x-8' : 'space-x-6'
-          }`}>
-            <a href="/" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="Accueil"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="#a-propos" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="À propos"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="#services" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="Services"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="#a-vendre" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="À vendre"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="/" className="flex items-center justify-center">
-              <Image
-                src="/images/Logo-removebg-preview.png"
-                alt="L'Agence Y L"
-                width={isOnHero ? 120 : 100}
-                height={isOnHero ? 120 : 100}
-                className="transition-all duration-500 ease-out"
-                priority
-              />
-            </a>
-            <a href="#a-louer" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="À louer"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="#estimation" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="Estimation"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="#equipe" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="Équipe"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-            <a href="#contact" className={`transition-all duration-500 ease-out hover:opacity-80 text-white ${
-              isOnHero ? 'text-lg' : 'text-base'
-            }`}>
-              <VariableProximity
-                label="Contact"
-                fromFontVariationSettings="'wght' 400"
-                toFontVariationSettings="'wght' 600"
-                containerRef={null}
-                radius={60}
-                falloff="linear"
-              />
-            </a>
-          </div>
-          <div className="flex-1"></div>
+    <div data-open={menuOpen || undefined}>
+      {/* Les prelayers ne sont plus affichés pour avoir le même design sur toutes les pages */}
+      
+      <header 
+        className="staggered-menu-header fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out" 
+        style={{
+          background: scrolled ? 'rgba(250, 250, 249, 0.95)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(10px)' : 'none',
+          transform: scrolled && !isOnHero ? 'translateY(-100%)' : 'translateY(0)',
+          opacity: scrolled && !isOnHero ? 0 : 1,
+          pointerEvents: scrolled && !isOnHero ? 'none' : 'auto',
+        }}
+      >
+        <div className="sm-logo" style={{ position: 'absolute', left: '50%', transform: 'translate(-50%, -50%)', top: 'calc(50% - 10px)', display: 'flex', alignItems: 'center' }}>
+          <a href="/" className="flex items-center justify-center">
+            <Image
+              src="/images/Logo-removebg-preview.png"
+              alt="L'Agence Y L"
+              width={isOnHero ? 140 : 120}
+              height={isOnHero ? 140 : 120}
+              className="transition-all duration-500 ease-out"
+              priority
+            />
+          </a>
         </div>
-      </div>
-    </nav>
+        
+        <button
+          className="sm-toggle"
+          aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={menuOpen}
+          aria-controls="staggered-menu-panel"
+          onClick={toggleMenu}
+          type="button"
+          style={{ 
+            color: menuOpen ? '#000000' : (isOnHero ? 'white' : '#4682B4')
+          }}
+        >
+          <span ref={iconRef} className="sm-icon" aria-hidden="true">
+            <span ref={plusHRef} className="sm-icon-line" />
+            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+          </span>
+        </button>
+      </header>
+
+      {/* Panel menu mobile */}
+      <aside
+        id="staggered-menu-panel"
+        ref={panelRef}
+        className="staggered-menu-panel"
+        aria-hidden={!menuOpen}
+      >
+        <div className="sm-panel-inner">
+          <ul className="sm-panel-list" role="list" data-numbering>
+            {menuItems.map((it, idx) => (
+              <li className="sm-panel-itemWrap" key={it.label + idx}>
+                <a
+                  className="sm-panel-item"
+                  href={it.link}
+                  aria-label={it.ariaLabel}
+                  data-index={idx + 1}
+                  onClick={() => {
+                    setMenuOpen(false)
+                    playClose()
+                    animateIcon(false)
+                  }}
+                >
+                  <span className="sm-panel-itemLabel">{it.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
   )
 }
 
