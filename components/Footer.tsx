@@ -6,16 +6,20 @@ import VariableProximity from './VariableProximity'
 export default function Footer() {
   const containerRef = null
   return (
-    <footer className="bg-white text-gray-900 py-12">
+    <footer className="bg-white text-gray-900 py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo centré */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-6 sm:mb-8">
           <Image
             src="/images/Logo-removebg-preview.png"
             alt="L'Agence Y L"
             width={200}
             height={200}
-            className="object-contain"
+            className="object-contain w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48"
+            style={{
+              width: '128px',
+              height: '128px'
+            }}
             priority
           />
         </div>

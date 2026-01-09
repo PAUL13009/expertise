@@ -71,3 +71,4 @@ BEGIN
   RAISE NOTICE 'Les utilisateurs anonymes peuvent maintenant insérer des données';
 END $$;
 
+

@@ -82,3 +82,4 @@ BEGIN
   RAISE NOTICE '⚠️ ATTENTION: Ces politiques sont très permissives - à restreindre après test';
 END $$;
 
+

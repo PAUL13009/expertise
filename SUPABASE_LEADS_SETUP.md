@@ -74,3 +74,4 @@ Dans l'onglet "Lead entrant", vous pouvez :
 - Les notes sont utiles pour garder une trace des échanges avec chaque prospect
 
 
+

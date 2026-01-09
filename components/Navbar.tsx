@@ -13,6 +13,12 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [isOnHero, setIsOnHero] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768
+    }
+    return false
+  })
   
   // Refs pour le menu animé
   const panelRef = useRef<HTMLElement>(null)
@@ -29,6 +35,7 @@ export default function Navbar() {
   const menuItems = [
     { label: 'Accueil', link: '/', ariaLabel: 'Aller à la page d\'accueil' },
     { label: 'À propos', link: '/a-propos', ariaLabel: 'Aller à la page À propos' },
+    { label: 'Notre approche', link: '/notre-methode', ariaLabel: 'Aller à la page Notre approche' },
     { label: 'Services', link: '/services', ariaLabel: 'Aller à la page Services' },
     { label: 'À vendre', link: '/vente', ariaLabel: 'Aller à la page Vente' },
     { label: 'À louer', link: '/location', ariaLabel: 'Aller à la page Location' },
@@ -44,10 +51,27 @@ export default function Navbar() {
       setIsOnHero(scrollY < 50)
     }
     
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Vérifier aussi au montage
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < 768)
+      }
+    }
+    
     handleScroll()
+    handleResize()
+    checkMobile()
     
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   useLayoutEffect(() => {
@@ -288,9 +312,15 @@ export default function Navbar() {
             <Image
               src="/images/Logo-removebg-preview.png"
               alt="L'Agence Y L"
-              width={isOnHero ? 140 : 120}
-              height={isOnHero ? 140 : 120}
-              className="transition-all duration-500 ease-out"
+              width={isOnHero ? 100 : 90}
+              height={isOnHero ? 100 : 90}
+              className="transition-all duration-500 ease-out rounded-full object-cover sm:w-[120px] sm:h-[120px] md:w-[140px] md:h-[140px]"
+              style={{
+                width: isOnHero ? '100px' : '90px',
+                height: isOnHero ? '100px' : '90px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
               priority
             />
           </a>
@@ -304,7 +334,9 @@ export default function Navbar() {
           onClick={toggleMenu}
           type="button"
           style={{ 
-            color: menuOpen ? '#000000' : (isOnHero ? 'white' : '#4682B4')
+            color: menuOpen && isMobile 
+              ? '#000000' 
+              : (isOnHero ? 'white' : '#4682B4')
           }}
         >
           <span ref={iconRef} className="sm-icon" aria-hidden="true">
@@ -321,6 +353,23 @@ export default function Navbar() {
         className="staggered-menu-panel"
         aria-hidden={!menuOpen}
       >
+        {/* Bouton de fermeture mobile uniquement */}
+        <button
+          className="sm-close-button"
+          aria-label="Fermer le menu"
+          onClick={() => {
+            setMenuOpen(false)
+            playClose()
+            animateIcon(false)
+          }}
+          type="button"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        
         <div className="sm-panel-inner">
           <ul className="sm-panel-list" role="list" data-numbering>
             {menuItems.map((it, idx) => (

@@ -57,7 +57,7 @@ export default function PropertyCard({ property, currentIndex, onPrevious, onNex
     <div
       ref={cardRef}
       className="bg-white shadow-lg overflow-hidden transition-all duration-500 group cursor-pointer block relative hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1"
-      style={{ aspectRatio: '1 / 1' }}
+      style={{ aspectRatio: '1 / 1', minHeight: '300px' }}
     >
       {/* Carrousel d'images - 80% de la hauteur */}
       <div className="relative w-full" style={{ height: '80%' }}>
@@ -149,10 +149,10 @@ export default function PropertyCard({ property, currentIndex, onPrevious, onNex
       </div>
 
       {/* Fine bande blanche en bas - 20% de la hauteur */}
-      <div className="bg-white px-4 py-3 flex flex-col items-center justify-center gap-2 relative overflow-hidden" style={{ height: '20%' }}>
+      <div className="bg-white px-3 sm:px-4 py-2 sm:py-3 flex flex-col items-center justify-center gap-1.5 sm:gap-2 relative overflow-hidden" style={{ height: '20%' }}>
         {/* Informations de base */}
-        <div className="flex items-center justify-center gap-6">
-          <span className="text-sm text-gray-700 font-medium">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-6 flex-wrap">
+          <span className="text-xs sm:text-sm text-gray-700 font-medium">
             <CountUp
               to={parseInt(property.surface)}
               from={0}
@@ -162,7 +162,7 @@ export default function PropertyCard({ property, currentIndex, onPrevious, onNex
             />
             <span> m²</span>
           </span>
-          <span className="text-sm text-gray-700 font-medium">
+          <span className="text-xs sm:text-sm text-gray-700 font-medium">
             <CountUp
               to={parseInt(property.rooms)}
               from={0}
@@ -172,7 +172,7 @@ export default function PropertyCard({ property, currentIndex, onPrevious, onNex
             />
             <span> ch.</span>
           </span>
-          <span className="text-sm text-gray-700 font-medium">
+          <span className="text-xs sm:text-sm text-gray-700 font-medium">
             <CountUp
               to={parseInt(property.bathrooms)}
               from={0}
@@ -182,7 +182,7 @@ export default function PropertyCard({ property, currentIndex, onPrevious, onNex
             />
             <span> SDB</span>
           </span>
-          <span className="text-base md:text-lg font-semibold text-gray-800 ml-2">
+          <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 ml-1 sm:ml-2">
             {formatPrice(property.price)} €
           </span>
         </div>
@@ -190,8 +190,8 @@ export default function PropertyCard({ property, currentIndex, onPrevious, onNex
         {/* CTA "Voir le bien" - apparaît au survol en dessous */}
         <Link
           href={`/properties/${property.id}`}
-          className="text-sm font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 ease-out"
-          style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}
+          className="text-xs sm:text-sm font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 ease-out"
+          style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}
           onClick={(e) => {
             e.stopPropagation()
           }}

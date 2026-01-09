@@ -4,13 +4,16 @@ import { useRef, useEffect } from 'react'
 import Hero from '@/components/Hero'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
-import AnimatedContent from '@/components/AnimatedContent'
 import FadeContent from '@/components/FadeContent'
+import AnimatedContent from '@/components/AnimatedContent'
 import { useProximityContainer } from '@/components/ProximityProvider'
+import { useScrollButtonAnimation } from '@/hooks/useScrollButtonAnimation'
 
 export default function EstimationPage() {
   const mainRef = useRef<HTMLElement>(null)
   const containerRef = useProximityContainer()
+  const cta1ButtonRef = useScrollButtonAnimation()
+  const cta2ButtonRef = useScrollButtonAnimation()
 
   useEffect(() => {
     if (mainRef.current && containerRef) {
@@ -29,420 +32,187 @@ export default function EstimationPage() {
         microText="Une estimation juste est la condition indispensable pour vendre dans de bons délais. Nous réalisons des estimations 100 % gratuites, fondées sur les ventes réelles du marché marseillais, et non sur des algorithmes approximatifs."
         buttonText="Demander une estimation réaliste"
         buttonLink="/estimation/formulaire"
+        imagePath="/images/vue7e.png"
       />
 
-      {/* SECTION 2 — LE PROBLÈME (MIROIR MARCHÉ) */}
-      <section className="py-16 bg-white">
+      {/* SECTION 2 — LE PROBLÈME */}
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-8" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
                 Pourquoi de nombreuses estimations échouent à Marseille
               </h2>
             </div>
             
-            <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0}
-              >
+            <div className="bg-stone-50 rounded-xl p-8 md:p-10 shadow-lg">
+              <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 <p>
                   À Marseille, une grande partie des biens mis en vente restent plusieurs mois sur le marché.
                 </p>
-              </AnimatedContent>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.1}
-              >
                 <p>
                   La cause principale n'est ni la qualité du bien, ni la demande, mais un prix de départ mal positionné.
                 </p>
-              </AnimatedContent>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.2}
-              >
                 <p className="font-semibold mb-4" style={{ color: '#4682B4' }}>
                   Une estimation trop optimiste entraîne :
                 </p>
-              </AnimatedContent>
-              <ul className="space-y-3 list-disc list-inside ml-4">
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.3}
-                >
+                <ul className="space-y-3 list-disc list-inside ml-4">
                   <li>une perte d'attractivité dès les premières semaines,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.4}
-                >
                   <li>des visites peu qualifiées,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.5}
-                >
                   <li>des négociations tardives et agressives,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.6}
-                >
                   <li>parfois l'échec pur et simple de la vente.</li>
-                </AnimatedContent>
-              </ul>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.7}
-              >
+                </ul>
                 <p className="font-semibold mt-6" style={{ color: '#4682B4' }}>
                   Le prix affiché dès le départ conditionne toute la suite du processus.
                 </p>
-              </AnimatedContent>
+              </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
       {/* SECTION 3 — NOTRE DIFFÉRENCE */}
-      <section className="py-16 bg-stone-50">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-stone-50">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-8" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
                 Une estimation fondée sur la réalité du marché, pas sur des promesses
               </h2>
             </div>
             
-            <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0}
-              >
+            <div className="bg-white rounded-xl p-8 md:p-10 shadow-lg">
+              <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 <p>
                   Notre approche de l'estimation immobilière repose sur un principe simple :
                   <br />
                   <span className="font-semibold" style={{ color: '#4682B4' }}>un bien se vend au prix que le marché est prêt à payer, pas au prix espéré.</span>
                 </p>
-              </AnimatedContent>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.2}
-              >
                 <p className="font-semibold mb-4" style={{ color: '#4682B4' }}>
                   Contrairement aux estimateurs automatiques ou aux avis approximatifs :
                 </p>
-              </AnimatedContent>
-              <ul className="space-y-3 list-disc list-inside ml-4">
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.3}
-                >
+                <ul className="space-y-3 list-disc list-inside ml-4">
                   <li>nous analysons les ventes réelles récentes,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.4}
-                >
                   <li>nous tenons compte du secteur précis,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.5}
-                >
                   <li>nous intégrons les spécificités du bien,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.6}
-                >
                   <li>nous positionnons un prix vendable, cohérent et défendable.</li>
-                </AnimatedContent>
-              </ul>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.7}
-              >
+                </ul>
                 <p className="font-semibold mt-6" style={{ color: '#4682B4' }}>
                   L'objectif n'est pas d'annoncer le chiffre le plus élevé, mais le prix qui permet de vendre dans de bons délais.
                 </p>
-              </AnimatedContent>
+              </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
       {/* SECTION 4 — NOTRE MÉTHODE D'ESTIMATION */}
-      <section className="py-16 bg-white">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-8" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
                 Comment nous réalisons votre estimation immobilière
               </h2>
             </div>
             
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Étape 1 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0}
-              >
-                <div className="bg-stone-50 rounded-lg p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-light" style={{ color: '#4682B4' }}>
-                      1
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-light tracking-wide mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                        Analyse du marché local
-                      </h3>
-                      <p className="text-gray-700 font-light leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Étude des ventes récentes comparables dans votre secteur à Marseille, en tenant compte de la réalité actuelle du marché.
-                      </p>
-                    </div>
+              <div className="bg-stone-50 rounded-lg p-8 shadow-lg border border-gray-100">
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center text-2xl font-bold shadow-md" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    1
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-semibold mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Analyse du marché local
+                    </h3>
+                    <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Étude des ventes récentes comparables dans votre secteur à Marseille, en tenant compte de la réalité actuelle du marché.
+                    </p>
                   </div>
                 </div>
-              </AnimatedContent>
+              </div>
 
               {/* Étape 2 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.1}
-              >
-                <div className="bg-stone-50 rounded-lg p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-light" style={{ color: '#4682B4' }}>
-                      2
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-light tracking-wide mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                        Analyse détaillée de votre bien
-                      </h3>
-                      <p className="text-gray-700 font-light leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Surface, état, étage, exposition, environnement, prestations, contraintes éventuelles : chaque élément est pris en compte.
-                      </p>
-                    </div>
+              <div className="bg-stone-50 rounded-lg p-8 shadow-lg border border-gray-100">
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center text-2xl font-bold shadow-md" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    2
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-semibold mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Analyse détaillée de votre bien
+                    </h3>
+                    <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Surface, état, étage, exposition, environnement, prestations, contraintes éventuelles : chaque élément est pris en compte.
+                    </p>
                   </div>
                 </div>
-              </AnimatedContent>
+              </div>
 
               {/* Étape 3 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.2}
-              >
-                <div className="bg-stone-50 rounded-lg p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-light" style={{ color: '#4682B4' }}>
-                      3
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-light tracking-wide mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                        Positionnement stratégique du prix
-                      </h3>
-                      <p className="text-gray-700 font-light leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Définition d'un prix cohérent avec le marché, permettant de susciter une demande qualifiée dès la mise en vente.
-                      </p>
-                    </div>
+              <div className="bg-stone-50 rounded-lg p-8 shadow-lg border border-gray-100">
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center text-2xl font-bold shadow-md" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    3
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-semibold mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Positionnement stratégique du prix
+                    </h3>
+                    <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Définition d'un prix cohérent avec le marché, permettant de susciter une demande qualifiée dès la mise en vente.
+                    </p>
                   </div>
                 </div>
-              </AnimatedContent>
+              </div>
 
               {/* Étape 4 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.3}
-              >
-                <div className="bg-stone-50 rounded-lg p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-light" style={{ color: '#4682B4' }}>
-                      4
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-light tracking-wide mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                        Projection des délais de vente
-                      </h3>
-                      <p className="text-gray-700 font-light leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Objectif visé : une vente maîtrisée sous 2,5 à 3 mois, dans des conditions normales de marché.
-                      </p>
-                    </div>
+              <div className="bg-stone-50 rounded-lg p-8 shadow-lg border border-gray-100">
+                <div className="flex items-start gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center text-2xl font-bold shadow-md" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    4
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-semibold mb-3" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Projection des délais de vente
+                    </h3>
+                    <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Objectif visé : une vente maîtrisée sous 2,5 à 3 mois, dans des conditions normales de marché.
+                    </p>
                   </div>
                 </div>
-              </AnimatedContent>
+              </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
-      {/* SECTION 5 — LE FILTRE (ASSUMÉ) */}
-      <section className="py-16 bg-stone-50">
+      {/* SECTION 5 — LE FILTRE */}
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-stone-50">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white border-2 rounded-lg p-8 md:p-12 shadow-lg" style={{ borderColor: '#4682B4' }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-white border-2 rounded-xl p-8 md:p-12 shadow-lg" style={{ borderColor: '#4682B4' }}>
               <div className="text-center mb-6">
-                <h3 className="text-2xl md:text-3xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+                <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   ⚠️ Nous refusons les estimations destinées à surévaluer un bien.
                 </h3>
               </div>
               <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0}
-                >
-                  <p>
-                    Si votre objectif est d'afficher un prix déconnecté du marché, nous préférons ne pas intervenir.
-                  </p>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.1}
-                >
-                  <p>
-                    Cette exigence est volontaire et assumée : elle conditionne la qualité de notre travail et l'efficacité de la vente.
-                  </p>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.2}
-                >
-                  <p>
-                    Nous privilégions les projets sérieux, basés sur une estimation réaliste et une stratégie claire.
-                  </p>
-                </AnimatedContent>
+                <p>
+                  Si votre objectif est d'afficher un prix déconnecté du marché, nous préférons ne pas intervenir.
+                </p>
+                <p>
+                  Cette exigence est volontaire et assumée : elle conditionne la qualité de notre travail et l'efficacité de la vente.
+                </p>
+                <p>
+                  Nous privilégions les projets sérieux, basés sur une estimation réaliste et une stratégie claire.
+                </p>
               </div>
             </div>
           </div>
@@ -450,401 +220,443 @@ export default function EstimationPage() {
       </section>
 
       {/* SECTION 6 — À QUI S'ADRESSE CETTE ESTIMATION */}
-      <section className="py-16 bg-white">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-8" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
                 À qui s'adresse cette estimation
               </h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
               {/* Colonne gauche - OUI */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0}
-              >
-                <div className="bg-stone-50 rounded-lg shadow-lg p-8 flex flex-col items-center text-center">
-                  <h3 className="text-2xl md:text-3xl font-light tracking-wide mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+              <div className="bg-gradient-to-br from-stone-50 to-white rounded-xl p-8 shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-blue-600 cursor-pointer group" style={{ borderColor: '#4682B4' }}>
+                <div className="flex items-center justify-center mb-6">
+                  <div className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] md:min-w-0 md:min-h-0 rounded-full flex items-center justify-center mr-4 transition-transform duration-300 group-hover:scale-110" style={{ backgroundColor: '#4682B4', aspectRatio: '1 / 1' }}>
+                    <span className="text-white text-xl">✓</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
                     Cette estimation est adaptée si :
                   </h3>
-                  <ul className="space-y-4 w-full text-left">
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>✓</span>
+                </div>
+                <ul className="space-y-4 text-gray-700" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
                       <span>vous êtes propriétaire d'une résidence principale à Marseille,</span>
                     </li>
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>✓</span>
+                  </AnimatedContent>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0.1}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
                       <span>vous envisagez une vente à court ou moyen terme,</span>
                     </li>
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>✓</span>
+                  </AnimatedContent>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0.2}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
                       <span>vous êtes ouvert à un prix fondé sur le marché réel,</span>
                     </li>
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>✓</span>
+                  </AnimatedContent>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0.3}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
                       <span>vous recherchez une approche claire, honnête et structurée.</span>
                     </li>
-                  </ul>
-                </div>
-              </AnimatedContent>
+                  </AnimatedContent>
+                </ul>
+              </div>
 
               {/* Colonne droite - NON */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.1}
-              >
-                <div className="bg-stone-50 rounded-lg shadow-lg p-8 flex flex-col items-center text-center">
-                  <h3 className="text-2xl md:text-3xl font-light tracking-wide mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-8 shadow-lg border-2 border-gray-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-gray-400 cursor-pointer group">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] md:min-w-0 md:min-h-0 rounded-full flex items-center justify-center mr-4 bg-red-500 transition-transform duration-300 group-hover:scale-110" style={{ aspectRatio: '1 / 1' }}>
+                    <span className="text-white text-xl">✗</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-700 text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Cette estimation n'est pas adaptée si :
                   </h3>
-                  <ul className="space-y-4 w-full text-left">
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#dc2626' }}>✗</span>
+                </div>
+                <ul className="space-y-4 text-gray-700" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1 text-gray-500">•</span>
                       <span>vous cherchez uniquement à connaître un prix "maximum" sans projet réel,</span>
                     </li>
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#dc2626' }}>✗</span>
+                  </AnimatedContent>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0.1}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1 text-gray-500">•</span>
                       <span>vous souhaitez comparer des chiffres sans intention de vendre,</span>
                     </li>
-                    <li className="text-gray-700 leading-relaxed font-light flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      <span className="mr-3 mt-1" style={{ color: '#dc2626' }}>✗</span>
+                  </AnimatedContent>
+                  <AnimatedContent
+                    distance={50}
+                    direction="vertical"
+                    reverse={false}
+                    duration={0.8}
+                    ease="power3.out"
+                    initialOpacity={0}
+                    animateOpacity={true}
+                    threshold={0.2}
+                    delay={0.2}
+                  >
+                    <li className="flex items-start">
+                      <span className="mr-3 mt-1 text-gray-500">•</span>
                       <span>vous refusez toute remise en question du prix.</span>
                     </li>
-                  </ul>
-                </div>
-              </AnimatedContent>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 7 — FORMULAIRE D'ESTIMATION (INTRO TEXTE) */}
-      <section className="py-16 bg-stone-50">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                Demander une estimation immobilière gratuite
-              </h2>
-              <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0}
-                >
-                  <p>
-                    L'estimation peut être réalisée :
-                  </p>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.1}
-                >
-                  <ul className="list-disc list-inside space-y-2 text-left max-w-xl mx-auto">
-                    <li>en ligne, à partir des informations et des photos de votre bien,</li>
-                    <li>ou sur place, si la configuration du bien le nécessite.</li>
-                  </ul>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.2}
-                >
-                  <p className="font-semibold mt-4" style={{ color: '#4682B4' }}>
-                    Merci de fournir des informations précises.
-                    <br />
-                    Elles conditionnent la qualité et la fiabilité de l'estimation.
-                  </p>
-                </AnimatedContent>
+                  </AnimatedContent>
+                </ul>
               </div>
             </div>
+          </div>
+        </FadeContent>
+      </section>
 
-            {/* CTA vers le formulaire */}
-            <div className="text-center">
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.3}
-              >
+      {/* SECTION 7 — FORMULAIRE D'ESTIMATION */}
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-stone-50">
+        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
+                Demander une estimation immobilière gratuite
+              </h2>
+            </div>
+            <div className="bg-white rounded-xl p-8 md:p-10 shadow-lg">
+              <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p>
+                  L'estimation peut être réalisée :
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-left max-w-xl mx-auto">
+                  <li>en ligne, à partir des informations et des photos de votre bien,</li>
+                  <li>ou sur place, si la configuration du bien le nécessite.</li>
+                </ul>
+                <p className="font-semibold mt-6" style={{ color: '#4682B4' }}>
+                  Merci de fournir des informations précises.
+                  <br />
+                  Elles conditionnent la qualité et la fiabilité de l'estimation.
+                </p>
+              </div>
+
+              {/* CTA vers le formulaire */}
+              <div className="text-center mt-8">
                 <a
+                  ref={cta1ButtonRef as any}
                   href="/estimation/formulaire"
-                  className="inline-block px-8 py-4 rounded-full font-semibold tracking-wide transition-all hover:shadow-lg hover:scale-105"
+                  className="group relative inline-block px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500"
                   style={{
-                    backgroundColor: '#4682B4',
-                    color: 'white',
-                    fontFamily: 'var(--font-poppins), sans-serif'
+                    backgroundColor: 'white',
+                    color: '#4682B4',
+                    fontFamily: 'var(--font-poppins), sans-serif',
+                    fontSize: '1.125rem',
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    letterSpacing: '0.3px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#3a6a8f'
+                    const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                    const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                    const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                    const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                    if (fill) {
+                      fill.style.width = '100%'
+                      fill.style.transform = 'translateX(-50%) scaleY(1)'
+                    }
+                    if (arrow) {
+                      arrow.style.opacity = '1'
+                      arrow.style.right = '-14px'
+                    }
+                    if (text) text.style.color = 'white'
+                    if (textSpan) textSpan.style.transform = 'translateX(-8px)'
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#4682B4'
+                    const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                    const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                    const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                    const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                    if (fill) {
+                      fill.style.width = '0%'
+                      fill.style.transform = 'translateX(-50%) scaleY(0)'
+                    }
+                    if (arrow) {
+                      arrow.style.opacity = '0'
+                      arrow.style.right = '-30px'
+                    }
+                    if (text) text.style.color = '#4682B4'
+                    if (textSpan) textSpan.style.transform = 'translateX(0)'
                   }}
                 >
-                  Recevoir mon estimation réaliste
+                  {/* Fond bleu qui se remplit */}
+                  <span
+                    className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                    style={{
+                      width: '0%',
+                      backgroundColor: '#4682B4',
+                      transform: 'translateX(-50%) scaleY(0)',
+                      transformOrigin: 'center bottom',
+                      transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                      zIndex: 1
+                    }}
+                  ></span>
+                  
+                  {/* Contenu du bouton */}
+                  <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                    <span className="transition-transform duration-300">Recevoir mon estimation réaliste</span>
+                    <svg
+                      className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                      style={{
+                        opacity: 0,
+                        right: '-30px',
+                        transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                      }}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </span>
                 </a>
-              </AnimatedContent>
+              </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
-      {/* SECTION 8 — RÉASSURANCE SOBRE */}
-      <section className="py-16 bg-white">
+      {/* SECTION 8 — RÉASSURANCE */}
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0}
-              >
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
+                Une approche privilégiant la qualité
+              </h2>
+            </div>
+            <div className="bg-stone-50 rounded-xl p-8 md:p-10 shadow-lg">
+              <div className="text-center space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 <p>
                   Agence immobilière indépendante à Marseille, nous travaillons volontairement sur un nombre limité de projets afin de garantir :
                 </p>
-              </AnimatedContent>
-              <ul className="list-disc list-inside space-y-2 max-w-2xl mx-auto text-left">
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.1}
-                >
+                <ul className="list-disc list-inside space-y-2 max-w-2xl mx-auto text-left">
                   <li>une analyse précise,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.2}
-                >
                   <li>une vraie disponibilité,</li>
-                </AnimatedContent>
-                <AnimatedContent
-                  distance={50}
-                  direction="vertical"
-                  duration={0.8}
-                  ease="power3.out"
-                  initialOpacity={0}
-                  animateOpacity={true}
-                  threshold={0.2}
-                  delay={0.3}
-                >
                   <li>et une stratégie cohérente pour chaque bien.</li>
-                </AnimatedContent>
-              </ul>
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.4}
-              >
+                </ul>
                 <p className="font-semibold mt-6" style={{ color: '#4682B4' }}>
                   Notre approche privilégie la qualité des projets, pas le volume.
                 </p>
-              </AnimatedContent>
+              </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
       {/* SECTION 9 — FAQ */}
-      <section className="py-16 bg-stone-50">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-stone-50">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-8" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif', color: '#4682B4' }}>
                 Questions fréquentes sur l'estimation immobilière
               </h2>
             </div>
             
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Question 1 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0}
-              >
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                    Comment est calculée l'estimation ?
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                    L'estimation repose sur l'analyse des ventes réelles comparables, l'étude du marché local et les caractéristiques spécifiques du bien.
-                  </p>
-                </div>
-              </AnimatedContent>
+              <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Comment est calculée l'estimation ?
+                </h3>
+                <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  L'estimation repose sur l'analyse des ventes réelles comparables, l'étude du marché local et les caractéristiques spécifiques du bien.
+                </p>
+              </div>
 
               {/* Question 2 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.1}
-              >
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                    L'estimation est-elle vraiment gratuite ?
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                    Oui. L'estimation est entièrement gratuite et sans engagement.
-                  </p>
-                </div>
-              </AnimatedContent>
+              <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  L'estimation est-elle vraiment gratuite ?
+                </h3>
+                <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Oui. L'estimation est entièrement gratuite et sans engagement.
+                </p>
+              </div>
 
               {/* Question 3 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.2}
-              >
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                    Combien de temps l'estimation est-elle valable ?
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                    Une estimation reflète un marché à un instant donné. Elle est généralement valable quelques semaines, selon l'évolution du marché.
-                  </p>
-                </div>
-              </AnimatedContent>
+              <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Combien de temps l'estimation est-elle valable ?
+                </h3>
+                <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Une estimation reflète un marché à un instant donné. Elle est généralement valable quelques semaines, selon l'évolution du marché.
+                </p>
+              </div>
 
               {/* Question 4 */}
-              <AnimatedContent
-                distance={50}
-                direction="vertical"
-                duration={0.8}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity={true}
-                threshold={0.2}
-                delay={0.3}
-              >
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                    Intervenez-vous sur tout Marseille ?
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                    Nous intervenons principalement sur Marseille, avec une forte expertise sur les secteurs centraux et résidentiels.
-                  </p>
-                </div>
-              </AnimatedContent>
+              <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl md:text-2xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Intervenez-vous sur tout Marseille ?
+                </h3>
+                <p className="text-lg text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Nous intervenons principalement sur Marseille, avec une forte expertise sur les secteurs centraux et résidentiels.
+                </p>
+              </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
       {/* CTA FINAL */}
-      <section className="py-16 bg-white">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <AnimatedContent
-              distance={50}
-              direction="vertical"
-              duration={0.8}
-              ease="power3.out"
-              initialOpacity={0}
-              animateOpacity={true}
-              threshold={0.2}
-              delay={0}
-            >
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 md:p-10 shadow-lg border border-blue-200">
               <p className="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 Vous souhaitez une estimation honnête, réaliste et exploitable pour vendre dans de bons délais ?
               </p>
-            </AnimatedContent>
-            <AnimatedContent
-              distance={50}
-              direction="vertical"
-              duration={0.8}
-              ease="power3.out"
-              initialOpacity={0}
-              animateOpacity={true}
-              threshold={0.2}
-              delay={0.1}
-            >
               <a
+                ref={cta2ButtonRef as any}
                 href="/estimation/formulaire"
-                className="inline-block px-8 py-4 rounded-full font-semibold tracking-wide transition-all hover:shadow-lg hover:scale-105"
+                className="group relative inline-block px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500"
                 style={{
-                  backgroundColor: '#4682B4',
-                  color: 'white',
-                  fontFamily: 'var(--font-poppins), sans-serif'
+                  backgroundColor: 'white',
+                  color: '#4682B4',
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: '1.125rem',
+                  textDecoration: 'none',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                  letterSpacing: '0.3px'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#3a6a8f'
+                  const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                  const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                  const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                  const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                  if (fill) {
+                    fill.style.width = '100%'
+                    fill.style.transform = 'translateX(-50%) scaleY(1)'
+                  }
+                  if (arrow) {
+                    arrow.style.opacity = '1'
+                    arrow.style.right = '-14px'
+                  }
+                  if (text) text.style.color = 'white'
+                  if (textSpan) textSpan.style.transform = 'translateX(-8px)'
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#4682B4'
+                  const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                  const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                  const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                  const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                  if (fill) {
+                    fill.style.width = '0%'
+                    fill.style.transform = 'translateX(-50%) scaleY(0)'
+                  }
+                  if (arrow) {
+                    arrow.style.opacity = '0'
+                    arrow.style.right = '-30px'
+                  }
+                  if (text) text.style.color = '#4682B4'
+                  if (textSpan) textSpan.style.transform = 'translateX(0)'
                 }}
               >
-                Demander une estimation immobilière
+                {/* Fond bleu qui se remplit */}
+                <span
+                  className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                  style={{
+                    width: '0%',
+                    backgroundColor: '#4682B4',
+                    transform: 'translateX(-50%) scaleY(0)',
+                    transformOrigin: 'center bottom',
+                    transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                    zIndex: 1
+                  }}
+                ></span>
+                
+                {/* Contenu du bouton */}
+                <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                  <span className="transition-transform duration-300">Demander une estimation immobilière</span>
+                  <svg
+                    className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                    style={{
+                      opacity: 0,
+                      right: '-30px',
+                      transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                    }}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
               </a>
-            </AnimatedContent>
+            </div>
           </div>
         </FadeContent>
       </section>

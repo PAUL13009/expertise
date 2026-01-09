@@ -59,8 +59,24 @@
   transition: color 0.3s ease;
 }
 
+/* Sur mobile, forcer la couleur noire quand le menu est ouvert */
+@media (max-width: 767px) {
+  div[data-open] .staggered-menu-header .sm-toggle {
+    color: #000000 !important;
+  }
+}
+
 .staggered-menu-wrapper[data-open] .sm-toggle {
   color: #000000 !important;
+}
+
+/* Sur mobile uniquement, forcer la couleur noire quand le menu est ouvert */
+@media (max-width: 767px) {
+  div[data-open] .sm-toggle,
+  div[data-open] .staggered-menu-header .sm-toggle,
+  .staggered-menu-header .sm-toggle[aria-expanded="true"] {
+    color: #000000 !important;
+  }
 }
 
 .sm-toggle-textWrap {
@@ -136,6 +152,48 @@
   overflow-y: auto;
   padding: 8rem 3rem 3rem;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton de fermeture mobile */
+.sm-close-button {
+  display: none;
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.75rem;
+  color: #000000;
+  z-index: 1003;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+}
+
+.sm-close-button:hover {
+  opacity: 0.7;
+  transform: rotate(90deg);
+}
+
+.sm-close-button:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+.sm-close-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Afficher le bouton de fermeture uniquement sur mobile */
+@media (max-width: 767px) {
+  .sm-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .staggered-menu-wrapper[data-position="left"] .staggered-menu-panel {

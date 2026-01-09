@@ -53,3 +53,4 @@ DELETE FROM analyse_leads WHERE email = 'test@example.com';
 -- Remettre le rôle par défaut
 RESET ROLE;
 
+

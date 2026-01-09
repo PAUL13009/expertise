@@ -62,29 +62,49 @@ interface EstimationLead {
   localisation: string
   type_bien: string
   surface: string | null
+  surface_terrain: string | null
   description_initiale: string | null
   
-  // Données étape 2
-  nombre_pieces: string | null
-  nombre_chambres: string | null
-  etage: string | null
-  dernier_etage: string | null
-  ascenseur: string | null
+  // Données étape 2 - Composition
+  nombre_pieces: number | null
+  nombre_chambres: number | null
+  nombre_salles_de_bain: number | null
+  etage: number | null
+  dernier_etage: boolean | null
+  ascenseur: boolean | null
+  
+  // Extérieurs
   exterieurs: string[] | null
+  surface_exterieur: string | null
+  
+  // Stationnement
   stationnement: string | null
+  stationnement_type: string | null
+  
+  // État & Prestations
   etat_bien: string | null
-  travaux_recents: string | null
+  travaux_recents: boolean | null
   nature_travaux: string | null
-  annee_travaux: string | null
+  annee_travaux: number | null
+  montant_travaux: string | null
   prestations: string[] | null
   autres_prestations: string | null
+  
+  // Confort & Environnement
   exposition: string | null
   vis_a_vis: string | null
-  photos_urls: string[] | null
+  
+  // Projet de vente
   delai_vente: string | null
   situation_actuelle: string | null
+  type_location: string | null
+  loyer_mensuel: string | null
   prix_envisage: string | null
+  ajustement_prix_echelle: number | null
+  
+  // Message & Photos
   message_libre: string | null
+  photos_urls: string[] | null
   
   // Métadonnées
   read: boolean
@@ -1087,7 +1107,8 @@ export default function AdminDashboard() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
                             <p><strong>Localisation:</strong> {estimation.localisation}</p>
                             <p><strong>Type de bien:</strong> {estimation.type_bien}</p>
-                            {estimation.surface && <p><strong>Surface:</strong> {estimation.surface} m²</p>}
+                            {estimation.surface && <p><strong>Surface habitable:</strong> {estimation.surface} m²</p>}
+                            {estimation.surface_terrain && <p><strong>Surface du terrain:</strong> {estimation.surface_terrain} m²</p>}
                             {estimation.description_initiale && (
                               <div className="md:col-span-2">
                                 <p><strong>Description initiale:</strong></p>
@@ -1097,39 +1118,100 @@ export default function AdminDashboard() {
                           </div>
                         </div>
 
-                        {/* Section Étape 2 - Caractéristiques */}
+                        {/* Section Étape 2 - Caractéristiques du bien */}
                         <div className="mb-4 pb-4 border-b border-gray-200">
-                          <h4 className="font-semibold mb-2" style={{ color: '#4682B4' }}>Étape 2 - Caractéristiques du bien</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-gray-600">
+                          <h4 className="font-semibold mb-3" style={{ color: '#4682B4' }}>Étape 2 - Caractéristiques du bien</h4>
+                          
+                          {/* Composition */}
+                          <div className="mb-3">
+                            <h5 className="font-medium text-gray-700 mb-2 text-sm">Composition</h5>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
                             {estimation.nombre_pieces && <p><strong>Pièces:</strong> {estimation.nombre_pieces}</p>}
                             {estimation.nombre_chambres && <p><strong>Chambres:</strong> {estimation.nombre_chambres}</p>}
-                            {estimation.etage && <p><strong>Étage:</strong> {estimation.etage}</p>}
-                            {estimation.dernier_etage && <p><strong>Dernier étage:</strong> {estimation.dernier_etage}</p>}
-                            {estimation.ascenseur && <p><strong>Ascenseur:</strong> {estimation.ascenseur}</p>}
-                            {estimation.stationnement && <p><strong>Stationnement:</strong> {estimation.stationnement}</p>}
-                            {estimation.etat_bien && <p><strong>État:</strong> {estimation.etat_bien}</p>}
-                            {estimation.exposition && <p><strong>Exposition:</strong> {estimation.exposition}</p>}
-                            {estimation.vis_a_vis && <p><strong>Vis-à-vis:</strong> {estimation.vis_a_vis}</p>}
+                              {estimation.nombre_salles_de_bain && <p><strong>Salles de bain:</strong> {estimation.nombre_salles_de_bain}</p>}
+                            </div>
+                          </div>
+
+                          {/* Étage & Accès (si appartement) */}
+                          {(estimation.etage !== null || estimation.dernier_etage !== null || estimation.ascenseur !== null) && (
+                            <div className="mb-3">
+                              <h5 className="font-medium text-gray-700 mb-2 text-sm">Étage & Accès</h5>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                                {estimation.etage !== null && <p><strong>Étage:</strong> {estimation.etage}</p>}
+                                {estimation.dernier_etage !== null && (
+                                  <p><strong>Dernier étage:</strong> {estimation.dernier_etage ? 'Oui' : 'Non'}</p>
+                                )}
+                                {estimation.ascenseur !== null && (
+                                  <p><strong>Ascenseur:</strong> {estimation.ascenseur ? 'Oui' : 'Non'}</p>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Extérieurs */}
+                          {(estimation.exterieurs && estimation.exterieurs.length > 0) || estimation.surface_exterieur ? (
+                            <div className="mb-3">
+                              <h5 className="font-medium text-gray-700 mb-2 text-sm">Extérieurs</h5>
+                              <div className="text-sm text-gray-600">
                             {estimation.exterieurs && estimation.exterieurs.length > 0 && (
-                              <p><strong>Extérieurs:</strong> {estimation.exterieurs.join(', ')}</p>
+                                  <p><strong>Types:</strong> {estimation.exterieurs.join(', ')}</p>
+                                )}
+                                {estimation.surface_exterieur && (
+                                  <p><strong>Surface extérieure:</strong> {estimation.surface_exterieur}</p>
+                                )}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          {/* Stationnement */}
+                          {estimation.stationnement && (
+                            <div className="mb-3">
+                              <h5 className="font-medium text-gray-700 mb-2 text-sm">Stationnement</h5>
+                              <div className="text-sm text-gray-600">
+                                <p><strong>Type:</strong> {estimation.stationnement}</p>
+                                {estimation.stationnement_type && (
+                                  <p><strong>Caractéristique:</strong> {estimation.stationnement_type}</p>
                             )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* État & Prestations */}
+                          <div className="mb-3">
+                            <h5 className="font-medium text-gray-700 mb-2 text-sm">État & Prestations</h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
+                              {estimation.etat_bien && <p><strong>État général:</strong> {estimation.etat_bien}</p>}
+                              {estimation.exposition && <p><strong>Exposition:</strong> {estimation.exposition}</p>}
+                              {estimation.vis_a_vis && <p><strong>Vis-à-vis:</strong> {estimation.vis_a_vis}</p>}
                             {estimation.prestations && estimation.prestations.length > 0 && (
+                                <div className="md:col-span-2">
                               <p><strong>Prestations:</strong> {estimation.prestations.join(', ')}</p>
+                                </div>
                             )}
                             {estimation.autres_prestations && (
+                                <div className="md:col-span-2">
                               <p><strong>Autres prestations:</strong> {estimation.autres_prestations}</p>
+                                </div>
                             )}
+                            </div>
                           </div>
                         </div>
 
                         {/* Section Travaux */}
-                        {estimation.travaux_recents && (
+                        {estimation.travaux_recents !== null && (
                           <div className="mb-4 pb-4 border-b border-gray-200">
                             <h4 className="font-semibold mb-2" style={{ color: '#4682B4' }}>Travaux récents</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
-                              <p><strong>Réalisés:</strong> {estimation.travaux_recents}</p>
-                              {estimation.nature_travaux && <p><strong>Nature:</strong> {estimation.nature_travaux}</p>}
-                              {estimation.annee_travaux && <p><strong>Année:</strong> {estimation.annee_travaux}</p>}
+                              <p><strong>Réalisés:</strong> {estimation.travaux_recents ? 'Oui' : 'Non'}</p>
+                              {estimation.travaux_recents && estimation.nature_travaux && (
+                                <p><strong>Nature:</strong> {estimation.nature_travaux}</p>
+                              )}
+                              {estimation.travaux_recents && estimation.annee_travaux && (
+                                <p><strong>Année:</strong> {estimation.annee_travaux}</p>
+                              )}
+                              {estimation.travaux_recents && estimation.montant_travaux && (
+                                <p><strong>Montant:</strong> {estimation.montant_travaux}</p>
+                              )}
                             </div>
                           </div>
                         )}
@@ -1140,9 +1222,30 @@ export default function AdminDashboard() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
                             {estimation.delai_vente && <p><strong>Délai souhaité:</strong> {estimation.delai_vente}</p>}
                             {estimation.situation_actuelle && <p><strong>Situation:</strong> {estimation.situation_actuelle}</p>}
+                            
+                            {/* Champs conditionnels si bien loué */}
+                            {estimation.situation_actuelle === 'Loué' && (
+                              <>
+                                {estimation.type_location && (
+                                  <p><strong>Type de location:</strong> {estimation.type_location}</p>
+                                )}
+                                {estimation.loyer_mensuel && (
+                                  <p><strong>Loyer mensuel:</strong> {estimation.loyer_mensuel}</p>
+                                )}
+                              </>
+                            )}
+                            
                             {estimation.prix_envisage && (
                               <p className="md:col-span-2">
                                 <strong>Prix envisagé:</strong> <span className="font-semibold text-lg" style={{ color: '#4682B4' }}>{estimation.prix_envisage}</span>
+                              </p>
+                            )}
+                            {estimation.ajustement_prix_echelle !== null && (
+                              <p className="md:col-span-2">
+                                <strong>Disposition à ajuster le prix:</strong> {estimation.ajustement_prix_echelle}/10
+                                <span className="ml-2 text-xs text-gray-500">
+                                  ({estimation.ajustement_prix_echelle === 1 ? 'Pas du tout' : estimation.ajustement_prix_echelle === 10 ? 'Très disposé(e)' : 'Modéré'})
+                                </span>
                               </p>
                             )}
                           </div>

@@ -25,8 +25,8 @@ export default function EstimationConfirmationPage() {
                 threshold={0.3}
                 delay={0}
               >
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-light mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  Votre demande d'estimation a bien été reçue
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Votre demande d'estimation a bien été reçue !
                 </h1>
               </AnimatedContent>
               
@@ -58,9 +58,12 @@ export default function EstimationConfirmationPage() {
                 threshold={0.2}
                 delay={0.3}
               >
-                <h2 className="text-2xl md:text-3xl font-light mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+                <div className="text-center mb-6">
+                  <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+                  <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Prochaine étape
                 </h2>
+                </div>
               </AnimatedContent>
               
               <AnimatedContent
@@ -74,17 +77,17 @@ export default function EstimationConfirmationPage() {
                 delay={0.4}
               >
                 <ul className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed mb-6" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  <li className="flex items-start">
+                  <li className="flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                    <span>Nous analysons manuellement les informations transmises</span>
+                    <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Nous analysons manuellement les informations transmises</span>
                   </li>
-                  <li className="flex items-start">
+                  <li className="flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                    <span>Nous comparons votre bien aux ventes réelles du secteur</span>
+                    <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Nous comparons votre bien aux ventes réelles du secteur</span>
                   </li>
-                  <li className="flex items-start">
+                  <li className="flex items-start" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                    <span>Nous évaluons sa capacité à se vendre dans un délai de 2 à 3 mois</span>
+                    <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Nous évaluons sa capacité à se vendre dans un délai de 2 à 3 mois</span>
                   </li>
                 </ul>
               </AnimatedContent>
@@ -100,7 +103,7 @@ export default function EstimationConfirmationPage() {
                 delay={0.5}
               >
                 <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-semibold italic" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  📌 Chaque estimation est réalisée avec l'objectif de vendre vite, au juste prix, et sans promesse irréaliste.
+                  Chaque estimation est réalisée avec l'objectif de vendre vite, au juste prix, et sans promesse irréaliste.
                 </p>
               </AnimatedContent>
             </div>
@@ -119,38 +122,39 @@ export default function EstimationConfirmationPage() {
               >
                 <div className="bg-white border-2 rounded-lg p-8 md:p-10 shadow-lg" style={{ borderColor: '#4682B4' }}>
                   <div className="text-center mb-6">
-                    <h3 className="text-2xl md:text-3xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                      ⚠️ Notre engagement est simple :
+                    <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+                    <h3 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Notre engagement est simple
                     </h3>
                   </div>
                   
                   <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                    <p className="font-semibold text-center" style={{ color: '#4682B4' }}>
+                    <p className="font-semibold text-center" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                       Nous refusons de prendre des mandats lorsque le prix attendu n'est pas cohérent avec le marché.
                     </p>
                     
                     <div className="pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
-                      <p className="font-semibold mb-4" style={{ color: '#4682B4' }}>
+                      <p className="font-semibold mb-4 text-center" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                         Pourquoi ?
                       </p>
-                      <ul className="space-y-3">
+                      <ul className="space-y-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                         <li className="flex items-start">
                           <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                          <span>Parce qu'un bien surévalué ne se vend pas</span>
+                          <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Parce qu'un bien surévalué ne se vend pas</span>
                         </li>
                         <li className="flex items-start">
                           <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                          <span>Parce qu'il se dévalorise avec le temps</span>
+                          <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Parce qu'il se dévalorise avec le temps</span>
                         </li>
                         <li className="flex items-start">
                           <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                          <span>Parce que notre rôle est de protéger votre projet, pas de flatter un prix</span>
+                          <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Parce que notre rôle est de protéger votre projet, pas de flatter un prix</span>
                         </li>
                       </ul>
                     </div>
                     
                     <div className="pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
-                      <p className="font-semibold text-center" style={{ color: '#dc2626' }}>
+                      <p className="font-semibold text-center" style={{ color: '#dc2626', fontFamily: 'var(--font-poppins), sans-serif' }}>
                         Si votre objectif est d'obtenir une estimation complaisante, notre méthode ne sera probablement pas adaptée.
                       </p>
                     </div>
@@ -171,9 +175,12 @@ export default function EstimationConfirmationPage() {
                 threshold={0.2}
                 delay={0.7}
               >
-                <h2 className="text-2xl md:text-3xl font-light mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+                <div className="text-center mb-6">
+                  <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+                  <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Quand serez-vous recontacté ?
                 </h2>
+                </div>
               </AnimatedContent>
               
               <AnimatedContent
@@ -186,18 +193,18 @@ export default function EstimationConfirmationPage() {
                 threshold={0.2}
                 delay={0.8}
               >
-                <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  <p>
-                    Vous serez contacté <span className="font-semibold">sous 24 à 48h ouvrées</span>
+                <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <p style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    Vous serez contacté <span className="font-semibold" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>sous 24 à 48h ouvrées</span>
                   </p>
-                  <p>
-                    <span className="font-semibold">Par téléphone ou email</span>
+                  <p style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    <span className="font-semibold" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Par téléphone ou email</span>
                   </p>
-                  <p>
+                  <p style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Afin de vous restituer une estimation argumentée et exploitable
                   </p>
-                  <p className="font-semibold mt-4" style={{ color: '#4682B4' }}>
-                    📌 Si votre bien correspond à notre méthode, nous vous expliquerons précisément la stratégie de mise en vente.
+                  <p className="font-semibold mt-4" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    Si votre bien correspond à notre méthode, nous vous expliquerons précisément la stratégie de mise en vente.
                   </p>
                 </div>
               </AnimatedContent>
@@ -215,9 +222,12 @@ export default function EstimationConfirmationPage() {
                 threshold={0.2}
                 delay={0.9}
               >
-                <h2 className="text-2xl md:text-3xl font-light mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+                <div className="text-center mb-6">
+                  <div className="w-16 h-1 bg-blue-600 mb-6 mx-auto" style={{ backgroundColor: '#4682B4' }}></div>
+                  <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Pour aller plus loin
                 </h2>
+                </div>
               </AnimatedContent>
               
               <AnimatedContent
@@ -231,30 +241,36 @@ export default function EstimationConfirmationPage() {
                 delay={1.0}
               >
                 <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  <p>
+                  <p className="text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Afin de tirer le meilleur parti de notre échange, nous vous invitons à réfléchir aux points suivants :
                   </p>
                   
-                  <ul className="space-y-4">
+                  <ul className="space-y-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     <li className="flex items-start">
                       <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                      <span><span className="font-semibold">Suis-je prêt à vendre au prix du marché réel ?</span></span>
+                      <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        <span className="font-semibold" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Suis-je prêt à vendre au prix du marché réel ?</span>
+                      </span>
                     </li>
                     <li className="flex items-start">
                       <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                      <span><span className="font-semibold">Mon objectif est-il de vendre vite ou de tester un prix ?</span></span>
+                      <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        <span className="font-semibold" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Mon objectif est-il de vendre vite ou de tester un prix ?</span>
+                      </span>
                     </li>
                     <li className="flex items-start">
                       <span className="mr-3 mt-1" style={{ color: '#4682B4' }}>•</span>
-                      <span><span className="font-semibold">Suis-je ouvert à une stratégie fondée sur les faits plutôt que sur l'affect ?</span></span>
+                      <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        <span className="font-semibold" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Suis-je ouvert à une stratégie fondée sur les faits plutôt que sur l'affect ?</span>
+                      </span>
                     </li>
                   </ul>
                 </div>
               </AnimatedContent>
             </div>
 
-            {/* SECTION 6 — SORTIE PROPRE */}
-            <div className="text-center">
+            {/* SECTION 6 — NAVIGATION */}
+            <div className="mt-16 pt-8 border-t" style={{ borderColor: '#e5e7eb' }}>
               <AnimatedContent
                 distance={50}
                 direction="vertical"
@@ -265,21 +281,153 @@ export default function EstimationConfirmationPage() {
                 threshold={0.2}
                 delay={1.1}
               >
-                <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                   <a
                     href="/"
-                    className="inline-block text-base text-gray-600 hover:text-gray-900 underline transition-colors"
-                    style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
+                    className="group relative inline-block px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500"
+                    style={{
+                      backgroundColor: 'white',
+                      color: '#4682B4',
+                      fontFamily: 'var(--font-poppins), sans-serif',
+                      fontSize: '1.125rem',
+                      textDecoration: 'none',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                      letterSpacing: '0.3px'
+                    }}
+                    onMouseEnter={(e) => {
+                      const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                      const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                      const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                      const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                      if (fill) {
+                        fill.style.width = '100%'
+                        fill.style.transform = 'translateX(-50%) scaleY(1)'
+                      }
+                      if (arrow) {
+                        arrow.style.opacity = '1'
+                        arrow.style.right = '-14px'
+                      }
+                      if (text) text.style.color = 'white'
+                      if (textSpan) textSpan.style.transform = 'translateX(-8px)'
+                    }}
+                    onMouseLeave={(e) => {
+                      const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                      const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                      const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                      const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                      if (fill) {
+                        fill.style.width = '0%'
+                        fill.style.transform = 'translateX(-50%) scaleY(0)'
+                      }
+                      if (arrow) {
+                        arrow.style.opacity = '0'
+                        arrow.style.right = '-30px'
+                      }
+                      if (text) text.style.color = '#4682B4'
+                      if (textSpan) textSpan.style.transform = 'translateX(0)'
+                    }}
                   >
-                    Retour au site
+                    <span
+                      className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                      style={{
+                        width: '0%',
+                        backgroundColor: '#4682B4',
+                        transform: 'translateX(-50%) scaleY(0)',
+                        transformOrigin: 'center bottom',
+                        transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                        zIndex: 1
+                      }}
+                    ></span>
+                    <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                      <span className="transition-transform duration-300">Retour à l'accueil</span>
+                      <svg
+                        className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                        style={{
+                          opacity: 0,
+                          right: '-30px',
+                          transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                        }}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </span>
                   </a>
-                  <span className="mx-4 text-gray-400">•</span>
+                  
                   <a
                     href="/vente"
-                    className="inline-block text-base text-gray-600 hover:text-gray-900 underline transition-colors"
-                    style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
+                    className="group relative inline-block px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500"
+                    style={{
+                      backgroundColor: 'white',
+                      color: '#4682B4',
+                      fontFamily: 'var(--font-poppins), sans-serif',
+                      fontSize: '1.125rem',
+                      textDecoration: 'none',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                      letterSpacing: '0.3px'
+                    }}
+                    onMouseEnter={(e) => {
+                      const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                      const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                      const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                      const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                      if (fill) {
+                        fill.style.width = '100%'
+                        fill.style.transform = 'translateX(-50%) scaleY(1)'
+                      }
+                      if (arrow) {
+                        arrow.style.opacity = '1'
+                        arrow.style.right = '-14px'
+                      }
+                      if (text) text.style.color = 'white'
+                      if (textSpan) textSpan.style.transform = 'translateX(-8px)'
+                    }}
+                    onMouseLeave={(e) => {
+                      const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                      const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                      const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                      const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                      if (fill) {
+                        fill.style.width = '0%'
+                        fill.style.transform = 'translateX(-50%) scaleY(0)'
+                      }
+                      if (arrow) {
+                        arrow.style.opacity = '0'
+                        arrow.style.right = '-30px'
+                      }
+                      if (text) text.style.color = '#4682B4'
+                      if (textSpan) textSpan.style.transform = 'translateX(0)'
+                    }}
                   >
-                    Découvrir notre méthode de vente
+                    <span
+                      className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                      style={{
+                        width: '0%',
+                        backgroundColor: '#4682B4',
+                        transform: 'translateX(-50%) scaleY(0)',
+                        transformOrigin: 'center bottom',
+                        transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                        zIndex: 1
+                      }}
+                    ></span>
+                    <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                      <span className="transition-transform duration-300">Découvrir notre méthode</span>
+                      <svg
+                        className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                        style={{
+                          opacity: 0,
+                          right: '-30px',
+                          transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                        }}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </span>
                   </a>
                 </div>
               </AnimatedContent>

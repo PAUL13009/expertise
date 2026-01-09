@@ -16,8 +16,8 @@ export default function ConfirmationPage() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* H1 - Titre */}
             <div className="text-center mb-12">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-light mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                Votre demande a bien été reçue
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Votre demande a bien été reçue !
               </h1>
             </div>
 
@@ -133,10 +133,10 @@ export default function ConfirmationPage() {
               delay={0.4}
             >
               <div className="bg-blue-50 border-2 rounded-lg p-6 mb-8" style={{ borderColor: '#4682B4' }}>
-                <p className="text-sm md:text-base font-semibold mb-2" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p className="text-sm md:text-base font-semibold mb-2 text-center" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   À savoir
                 </p>
-                <p className="text-sm md:text-base text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Une estimation réaliste peut parfois être inférieure aux attentes initiales du vendeur.
                   <br />
                   C'est une étape nécessaire pour vendre dans de bonnes conditions.
@@ -159,24 +159,79 @@ export default function ConfirmationPage() {
               <div className="text-center">
                 <a
                   href="/estimation"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all hover:shadow-md hover:scale-105"
+                  className="group relative inline-block px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500"
                   style={{
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'white',
                     color: '#4682B4',
-                    border: '2px solid #4682B4',
-                    fontFamily: 'var(--font-poppins), sans-serif'
+                    fontFamily: 'var(--font-poppins), sans-serif',
+                    fontSize: '1.125rem',
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    letterSpacing: '0.3px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#4682B4'
-                    e.currentTarget.style.color = 'white'
+                    const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                    const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                    const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                    const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                    if (fill) {
+                      fill.style.width = '100%'
+                      fill.style.transform = 'translateX(-50%) scaleY(1)'
+                    }
+                    if (arrow) {
+                      arrow.style.opacity = '1'
+                      arrow.style.right = '-14px'
+                    }
+                    if (text) text.style.color = 'white'
+                    if (textSpan) textSpan.style.transform = 'translateX(-8px)'
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent'
-                    e.currentTarget.style.color = '#4682B4'
+                    const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                    const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                    const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                    const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                    if (fill) {
+                      fill.style.width = '0%'
+                      fill.style.transform = 'translateX(-50%) scaleY(0)'
+                    }
+                    if (arrow) {
+                      arrow.style.opacity = '0'
+                      arrow.style.right = '-30px'
+                    }
+                    if (text) text.style.color = '#4682B4'
+                    if (textSpan) textSpan.style.transform = 'translateX(0)'
                   }}
                 >
-                  <span>📄</span>
-                  <span>Comprendre comment se construit une estimation réaliste</span>
+                  {/* Fond bleu qui se remplit */}
+                  <span
+                    className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                    style={{
+                      width: '0%',
+                      backgroundColor: '#4682B4',
+                      transform: 'translateX(-50%) scaleY(0)',
+                      transformOrigin: 'center bottom',
+                      transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                      zIndex: 1
+                    }}
+                  ></span>
+                  
+                  {/* Contenu du bouton */}
+                  <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                    <span className="transition-transform duration-300">Comprendre comment se construit une estimation réaliste</span>
+                    <svg
+                      className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                      style={{
+                        opacity: 0,
+                        right: '-30px',
+                        transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                      }}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </span>
                 </a>
               </div>
             </AnimatedContent>
@@ -188,5 +243,6 @@ export default function ConfirmationPage() {
     </main>
   )
 }
+
 
 

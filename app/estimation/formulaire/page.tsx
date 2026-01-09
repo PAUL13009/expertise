@@ -17,6 +17,7 @@ export default function EstimationFormulairePage() {
     localisation: '',
     typeBien: '',
     surface: '',
+    surfaceTerrain: '',
     description: ''
   })
   const [submitting, setSubmitting] = useState(false)
@@ -128,17 +129,14 @@ export default function EstimationFormulairePage() {
                     Prise de contact & Identification du bien
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 italic" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  🎯 Objectif : engagement + qualification rapide
-                </p>
               </div>
 
               <div className="space-y-6">
-                {/* 1️⃣ Coordonnées */}
+                {/* 1. Coordonnées */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣ Coordonnées
+                      1. Coordonnées
                     </span>
                   </div>
                   
@@ -157,9 +155,6 @@ export default function EstimationFormulairePage() {
                       className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       style={{ borderColor: '#e5e7eb' }}
                     />
-                    <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      (obligatoire – pas de nom de famille ici, inutile à ce stade)
-                    </p>
                   </div>
 
                   {/* Téléphone */}
@@ -197,11 +192,11 @@ export default function EstimationFormulairePage() {
                   </div>
                 </div>
 
-                {/* 2️⃣ Localisation */}
+                {/* 2. Localisation */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      2️⃣ Localisation
+                      2. Localisation
                     </span>
                   </div>
                   
@@ -228,17 +223,14 @@ export default function EstimationFormulairePage() {
                         <option value="Autre secteur de Marseille" />
                       </datalist>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      (champ texte + suggestions ou select)
-                    </p>
                   </div>
                 </div>
 
-                {/* 3️⃣ Type de bien */}
+                {/* 3. Type de bien */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      3️⃣ Type de bien
+                      3. Type de bien
                     </span>
                   </div>
                   
@@ -264,11 +256,11 @@ export default function EstimationFormulairePage() {
                   </div>
                 </div>
 
-                {/* 4️⃣ Surface */}
+                {/* 4. Surface */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      4️⃣ Surface
+                      4. Surface
                     </span>
                   </div>
                   
@@ -288,13 +280,31 @@ export default function EstimationFormulairePage() {
                       style={{ borderColor: '#e5e7eb' }}
                     />
                   </div>
+                  
+                  {formData.typeBien === 'Maison' && (
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        Surface du terrain (m²)
+                      </label>
+                      <input
+                        type="number"
+                        name="surfaceTerrain"
+                        value={formData.surfaceTerrain}
+                        onChange={handleChange}
+                        min="1"
+                        placeholder="Ex: 200"
+                        className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        style={{ borderColor: '#e5e7eb' }}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                {/* 5️⃣ Description libre (TRÈS IMPORTANT) */}
+                {/* 5. Description libre (TRÈS IMPORTANT) */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      5️⃣ Description libre
+                      5. Description libre
                     </span>
                     <span className="text-xs font-bold px-2 py-1 rounded" style={{ backgroundColor: '#4682B4', color: 'white', fontFamily: 'var(--font-poppins), sans-serif' }}>
                       TRÈS IMPORTANT
@@ -314,9 +324,6 @@ export default function EstimationFormulairePage() {
                       className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       style={{ borderColor: '#e5e7eb' }}
                     />
-                    <p className="text-xs text-gray-600 mt-2 italic" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      ➡️ Champ clé pour repérer immédiatement : vendeurs lucides, biens atypiques, signaux faibles
-                    </p>
                   </div>
                 </div>
 
@@ -331,24 +338,86 @@ export default function EstimationFormulairePage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full px-8 py-4 rounded-full font-semibold tracking-wide transition-all hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="group relative w-full px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
-                      backgroundColor: '#4682B4',
-                      color: 'white',
-                      fontFamily: 'var(--font-poppins), sans-serif'
+                      backgroundColor: 'white',
+                      color: '#4682B4',
+                      fontFamily: 'var(--font-poppins), sans-serif',
+                      fontSize: '1.125rem',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                      letterSpacing: '0.3px'
                     }}
                     onMouseEnter={(e) => {
                       if (!submitting) {
-                        e.currentTarget.style.backgroundColor = '#3a6a8f'
+                        const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                        const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                        const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                        const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                        if (fill) {
+                          fill.style.width = '100%'
+                          fill.style.transform = 'translateX(-50%) scaleY(1)'
+                        }
+                        if (arrow) {
+                          arrow.style.opacity = '1'
+                          arrow.style.right = '-14px'
+                        }
+                        if (text) text.style.color = 'white'
+                        if (textSpan) textSpan.style.transform = 'translateX(-8px)'
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!submitting) {
-                        e.currentTarget.style.backgroundColor = '#4682B4'
+                        const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                        const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                        const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                        const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                        if (fill) {
+                          fill.style.width = '0%'
+                          fill.style.transform = 'translateX(-50%) scaleY(0)'
+                        }
+                        if (arrow) {
+                          arrow.style.opacity = '0'
+                          arrow.style.right = '-30px'
+                        }
+                        if (text) text.style.color = '#4682B4'
+                        if (textSpan) textSpan.style.transform = 'translateX(0)'
                       }
                     }}
                   >
-                    {submitting ? 'Envoi en cours...' : '👉 Recevoir une estimation réaliste'}
+                    {/* Fond bleu qui se remplit */}
+                    <span
+                      className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                      style={{
+                        width: '0%',
+                        backgroundColor: '#4682B4',
+                        transform: 'translateX(-50%) scaleY(0)',
+                        transformOrigin: 'center bottom',
+                        transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                        zIndex: 1
+                      }}
+                    ></span>
+                    
+                    {/* Contenu du bouton */}
+                    <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                      <span className="transition-transform duration-300">
+                        {submitting ? 'Envoi en cours...' : 'Recevoir une estimation réaliste'}
+                      </span>
+                      {!submitting && (
+                        <svg
+                          className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                          style={{
+                            opacity: 0,
+                            right: '-30px',
+                            transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                          }}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      )}
+                    </span>
                   </button>
                 </div>
               </div>

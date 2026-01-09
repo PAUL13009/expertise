@@ -13,49 +13,59 @@ export default function EstimationEtape2Page() {
   const router = useRouter()
   const [etape1Data, setEtape1Data] = useState<any>(null)
   const [formData, setFormData] = useState({
-    // 6️⃣ Composition
+    // 6. Composition
     nombrePieces: '',
     nombreChambres: '',
+    nombreSallesDeBain: '',
     
-    // 7️⃣ Étage & accès
+    // 7. Étage & accès
     etage: '',
     dernierEtage: '',
     ascenseur: '',
     
-    // 8️⃣ Extérieurs
+    // 7. Extérieurs
     exterieur: [] as string[],
+    surfaceExterieur: '',
     
-    // 9️⃣ Stationnement
+    // 8. Stationnement
     stationnement: '',
+    stationnementType: '',
     
-    // 🔟 État général
+    // 10. État général
     etatBien: '',
     
-    // 1️⃣1️⃣ Travaux récents
+    // 11. Travaux récents
     travauxRecents: '',
     natureTravaux: '',
     anneeTravaux: '',
+    montantTravaux: '',
     
-    // 1️⃣2️⃣ Prestations
+    // 12. Prestations
     prestations: [] as string[],
     autresPrestations: '',
+    showAutresPrestations: false,
     
-    // 1️⃣3️⃣ Exposition
+    // 13. Exposition
     exposition: '',
     
-    // 1️⃣4️⃣ Vis-à-vis
+    // 14. Vis-à-vis
     visAVis: '',
     
-    // 1️⃣6️⃣ Délai de vente
+    // 15. Délai de vente
     delaiVente: '',
     
-    // 1️⃣7️⃣ Situation actuelle
+    // 16. Situation actuelle
     situationActuelle: '',
+    typeLocation: '',
+    loyerMensuel: '',
     
-    // 1️⃣8️⃣ Prix envisagé
+    // 17. Prix envisagé
     prixEnvisage: '',
     
-    // 1️⃣9️⃣ Message libre
+    // 17b. Ajustement prix (échelle 1-10)
+    ajustementPrix: '',
+    
+    // 18. Message libre
     messageLibre: ''
   })
   const [submitting, setSubmitting] = useState(false)
@@ -112,6 +122,7 @@ export default function EstimationEtape2Page() {
         localisation: etape1Data.localisation,
         type_bien: etape1Data.typeBien,
         surface: etape1Data.surface || null,
+        surface_terrain: etape1Data.surfaceTerrain || null,
         description_initiale: etape1Data.description || null,
         prenom: etape1Data.prenom,
         telephone: etape1Data.telephone,
@@ -120,22 +131,29 @@ export default function EstimationEtape2Page() {
         // Données étape 2 - Conversion des types
         nombre_pieces: formData.nombrePieces ? parseInt(formData.nombrePieces) : null,
         nombre_chambres: formData.nombreChambres ? parseInt(formData.nombreChambres) : null,
+        nombre_salles_de_bain: formData.nombreSallesDeBain ? parseInt(formData.nombreSallesDeBain) : null,
         etage: formData.etage ? parseInt(formData.etage) : null,
         dernier_etage: formData.dernierEtage === 'oui' ? true : formData.dernierEtage === 'non' ? false : null,
         ascenseur: formData.ascenseur === 'oui' ? true : formData.ascenseur === 'non' ? false : null,
         exterieurs: formData.exterieur.length > 0 ? formData.exterieur : null,
+        surface_exterieur: formData.surfaceExterieur || null,
         stationnement: formData.stationnement || null,
+        stationnement_type: formData.stationnementType || null,
         etat_bien: formData.etatBien || null,
         travaux_recents: formData.travauxRecents === 'oui' ? true : formData.travauxRecents === 'non' ? false : null,
         nature_travaux: formData.natureTravaux || null,
         annee_travaux: formData.anneeTravaux ? parseInt(formData.anneeTravaux) : null,
+        montant_travaux: formData.montantTravaux || null,
         prestations: formData.prestations.length > 0 ? formData.prestations : null,
         autres_prestations: formData.autresPrestations || null,
         exposition: formData.exposition || null,
         vis_a_vis: formData.visAVis || null,
         delai_vente: formData.delaiVente || null,
         situation_actuelle: formData.situationActuelle || null,
+        type_location: formData.typeLocation || null,
+        loyer_mensuel: formData.loyerMensuel || null,
         prix_envisage: formData.prixEnvisage || null,
+        ajustement_prix_echelle: formData.ajustementPrix ? parseInt(formData.ajustementPrix) : null,
         message_libre: formData.messageLibre || null,
         
         // Métadonnées
@@ -265,38 +283,29 @@ export default function EstimationEtape2Page() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* En-tête ÉTAPE 2 */}
             <div className="mb-8 pb-6 border-b-2" style={{ borderColor: '#4682B4' }}>
-              <div className="flex items-center gap-3 mb-3">
+              <div className="mb-3">
                 <span className="text-2xl font-light" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  ÉTAPE 2
-                </span>
-                <span className="text-sm text-gray-500" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  —
-                </span>
-                <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  Affinage de l'estimation (Précision max)
+                  Etape 2 : Affinage de l'estimation ( une précision maximale est souhaitée afin de produire l'estimation la plus réalister possible )
                 </span>
               </div>
-              <p className="text-sm text-gray-600 italic" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                👉 Page suivante uniquement • 👉 Là, on devient chirurgical
-              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 md:p-10 space-y-8">
-              {/* 🏠 CARACTÉRISTIQUES DU BIEN */}
+              {/* CARACTÉRISTIQUES DU BIEN */}
               <div className="space-y-6 pb-6 border-b-2" style={{ borderColor: '#e5e7eb' }}>
                 <h2 className="text-xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  🏠 CARACTÉRISTIQUES DU BIEN
+                  CARACTÉRISTIQUES DU BIEN
                 </h2>
 
-                {/* 6️⃣ Composition */}
+                {/* 6. Composition */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      6️⃣ Composition
+                      6. Composition
                     </span>
                   </div>
                   
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                         Nombre de pièces
@@ -325,15 +334,29 @@ export default function EstimationEtape2Page() {
                         style={{ borderColor: '#e5e7eb' }}
                       />
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        Nombre de salle de bain
+                      </label>
+                      <input
+                        type="number"
+                        name="nombreSallesDeBain"
+                        value={formData.nombreSallesDeBain}
+                        onChange={handleChange}
+                        min="0"
+                        className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        style={{ borderColor: '#e5e7eb' }}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* 7️⃣ Étage & accès */}
+                {/* 7. Étage & accès */}
                 {etape1Data.typeBien === 'Appartement' && (
                   <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                     <div className="flex items-center gap-2 mb-4">
                       <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        7️⃣ Étage & accès
+                        7. Étage & accès
                       </span>
                     </div>
                     
@@ -388,11 +411,11 @@ export default function EstimationEtape2Page() {
                   </div>
                 )}
 
-                {/* 8️⃣ Extérieurs */}
+                {/* 7. Extérieurs */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      8️⃣ Extérieurs
+                      7. Extérieurs
                     </span>
                   </div>
                   
@@ -410,13 +433,31 @@ export default function EstimationEtape2Page() {
                       </label>
                     ))}
                   </div>
+                  
+                  {/* Champ conditionnel surface extérieure */}
+                  {(formData.exterieur.includes('Balcon') || formData.exterieur.includes('Terrasse') || formData.exterieur.includes('Jardin')) && (
+                    <div className="mt-4 transition-all duration-300 ease-in-out">
+                      <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        Surface approximative de l'extérieur (facultatif)
+                      </label>
+                      <input
+                        type="text"
+                        name="surfaceExterieur"
+                        value={formData.surfaceExterieur}
+                        onChange={handleChange}
+                        placeholder="Ex: 15 m²"
+                        className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        style={{ borderColor: '#e5e7eb' }}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                {/* 9️⃣ Stationnement */}
+                {/* 8. Stationnement */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      9️⃣ Stationnement
+                      8. Stationnement
                     </span>
                   </div>
                   
@@ -436,20 +477,45 @@ export default function EstimationEtape2Page() {
                       </label>
                     ))}
                   </div>
+                  
+                  {/* Champ conditionnel type de stationnement */}
+                  {formData.stationnement && formData.stationnement !== 'Aucun' && (
+                    <div className="mt-4 transition-all duration-300 ease-in-out">
+                      <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        Stationnement couvert / extérieur (optionnel)
+                      </label>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {['Couvert', 'Extérieur'].map((option) => (
+                          <label key={option} className="flex items-center p-3 border-2 rounded-lg cursor-pointer hover:bg-stone-50" style={{ borderColor: formData.stationnementType === option ? '#4682B4' : '#e5e7eb' }}>
+                            <input
+                              type="radio"
+                              name="stationnementType"
+                              value={option}
+                              checked={formData.stationnementType === option}
+                              onChange={handleChange}
+                              className="mr-2"
+                              style={{ accentColor: '#4682B4' }}
+                            />
+                            <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>{option}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* 🏗️ ÉTAT & PRESTATIONS */}
+              {/* ÉTAT & PRESTATIONS */}
               <div className="space-y-6 pb-6 border-b-2" style={{ borderColor: '#e5e7eb' }}>
                 <h2 className="text-xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  🏗️ ÉTAT & PRESTATIONS
+                  ÉTAT & PRESTATIONS
                 </h2>
 
-                {/* 🔟 État général */}
+                {/* 10. État général */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      🔟 État général du bien
+                      10. État général du bien
                     </span>
                   </div>
                   
@@ -472,11 +538,11 @@ export default function EstimationEtape2Page() {
                   </div>
                 </div>
 
-                {/* 1️⃣1️⃣ Travaux récents */}
+                {/* 11. Travaux récents */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣1️⃣ Travaux récents
+                      11. Travaux récents
                     </span>
                   </div>
                   
@@ -512,7 +578,8 @@ export default function EstimationEtape2Page() {
                     </div>
                     
                     {formData.travauxRecents === 'oui' && (
-                      <div className="grid md:grid-cols-2 gap-4 mt-4">
+                      <div className="space-y-4 mt-4">
+                        <div className="grid md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                             Nature des travaux
@@ -537,6 +604,21 @@ export default function EstimationEtape2Page() {
                             value={formData.anneeTravaux}
                             onChange={handleChange}
                             placeholder="Ex: 2023"
+                              className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              style={{ borderColor: '#e5e7eb' }}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                            Montant total des travaux réalisés
+                          </label>
+                          <input
+                            type="text"
+                            name="montantTravaux"
+                            value={formData.montantTravaux}
+                            onChange={handleChange}
+                            placeholder="Ex: 25 000 €"
                             className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             style={{ borderColor: '#e5e7eb' }}
                           />
@@ -546,11 +628,11 @@ export default function EstimationEtape2Page() {
                   </div>
                 </div>
 
-                {/* 1️⃣2️⃣ Prestations */}
+                {/* 12. Prestations principales */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣2️⃣ Prestations
+                      12. Prestations principales
                     </span>
                   </div>
                   
@@ -569,6 +651,38 @@ export default function EstimationEtape2Page() {
                     ))}
                   </div>
                   
+                  {/* Bouton Autres prestations */}
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, showAutresPrestations: !formData.showAutresPrestations })}
+                      className="text-sm text-gray-600 hover:text-gray-800 underline"
+                      style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
+                    >
+                      {formData.showAutresPrestations ? 'Masquer' : 'Autres prestations'}
+                    </button>
+                  </div>
+                  
+                  {/* Liste masquée des autres prestations */}
+                  {formData.showAutresPrestations && (
+                    <div className="mt-4 transition-all duration-300 ease-in-out">
+                      <div className="grid md:grid-cols-3 gap-4">
+                        {['Ascenseur', 'Fibre optique', 'Volets roulants / électriques', 'Chauffage individuel / collectif', 'Chauffage au sol', 'Alarme', 'Porte blindée'].map((option) => (
+                          <label key={option} className="flex items-center p-3 border-2 rounded-lg cursor-pointer hover:bg-stone-50" style={{ borderColor: formData.prestations.includes(option) ? '#4682B4' : '#e5e7eb' }}>
+                            <input
+                              type="checkbox"
+                              checked={formData.prestations.includes(option)}
+                              onChange={() => handleCheckboxChange('prestations', option)}
+                              className="mr-2"
+                              style={{ accentColor: '#4682B4' }}
+                            />
+                            <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>{option}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                       Autres prestations
@@ -586,17 +700,17 @@ export default function EstimationEtape2Page() {
                 </div>
               </div>
 
-              {/* 🌞 CONFORT & ENVIRONNEMENT */}
+              {/* CONFORT & ENVIRONNEMENT */}
               <div className="space-y-6 pb-6 border-b-2" style={{ borderColor: '#e5e7eb' }}>
                 <h2 className="text-xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  🌞 CONFORT & ENVIRONNEMENT
+                  CONFORT & ENVIRONNEMENT
                 </h2>
 
-                {/* 1️⃣3️⃣ Exposition */}
+                {/* 13. Exposition */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣3️⃣ Exposition
+                      13. Exposition
                     </span>
                   </div>
                   
@@ -623,11 +737,11 @@ export default function EstimationEtape2Page() {
                   </div>
                 </div>
 
-                {/* 1️⃣4️⃣ Vis-à-vis */}
+                {/* 14. Vis-à-vis */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣4️⃣ Vis-à-vis
+                      14. Vis-à-vis
                     </span>
                   </div>
                   
@@ -650,17 +764,17 @@ export default function EstimationEtape2Page() {
                 </div>
               </div>
 
-              {/* 📊 PROJET DE VENTE */}
+              {/* PROJET DE VENTE */}
               <div className="space-y-6 pb-6 border-b-2" style={{ borderColor: '#e5e7eb' }}>
                 <h2 className="text-xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  📊 PROJET DE VENTE (ULTRA QUALIFICATION)
+                  PROJET DE VENTE
                 </h2>
 
-                {/* 1️⃣5️⃣ Délai de vente */}
+                {/* 15. Délai de vente */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣5️⃣ Délai de vente souhaité
+                      15. Délai de vente souhaité
                     </span>
                   </div>
                   
@@ -687,11 +801,11 @@ export default function EstimationEtape2Page() {
                   </div>
                 </div>
 
-                {/* 1️⃣6️⃣ Situation actuelle */}
+                {/* 16. Situation actuelle */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣6️⃣ Situation actuelle
+                      16. Situation actuelle
                     </span>
                   </div>
                   
@@ -716,13 +830,54 @@ export default function EstimationEtape2Page() {
                       ))}
                     </div>
                   </div>
+                  
+                  {/* Champs conditionnels si "Loué" */}
+                  {formData.situationActuelle === 'Loué' && (
+                    <div className="mt-4 space-y-4 transition-all duration-300 ease-in-out">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          Type de location (optionnel)
+                        </label>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {['Nue', 'Meublée'].map((option) => (
+                            <label key={option} className="flex items-center p-3 border-2 rounded-lg cursor-pointer hover:bg-stone-50" style={{ borderColor: formData.typeLocation === option ? '#4682B4' : '#e5e7eb' }}>
+                              <input
+                                type="radio"
+                                name="typeLocation"
+                                value={option}
+                                checked={formData.typeLocation === option}
+                                onChange={handleChange}
+                                className="mr-2"
+                                style={{ accentColor: '#4682B4' }}
+                              />
+                              <span style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          Loyer mensuel (optionnel)
+                        </label>
+                        <input
+                          type="text"
+                          name="loyerMensuel"
+                          value={formData.loyerMensuel}
+                          onChange={handleChange}
+                          placeholder="Ex: 800 €"
+                          className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          style={{ borderColor: '#e5e7eb' }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* 1️⃣7️⃣ Prix envisagé */}
+                {/* 17. Prix envisagé */}
                 <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣7️⃣ Prix envisagé (OPTIONNEL mais puissant)
+                      17. Prix envisagé
                     </span>
                   </div>
                   
@@ -739,24 +894,56 @@ export default function EstimationEtape2Page() {
                       className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       style={{ borderColor: '#e5e7eb' }}
                     />
-                    <p className="text-xs text-gray-600 italic mt-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      ➡️ Champ clé pour détecter : vendeurs réalistes • vendeurs hors marché
-                    </p>
+                  </div>
+                </div>
+
+                {/* 17b. Ajustement prix */}
+                <div className="space-y-4 pt-4 border-t" style={{ borderColor: '#e5e7eb' }}>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Si l'estimation proposée par le professionnel diffère du prix que vous aviez en tête, dans quelle mesure seriez-vous disposé(e) à ajuster le prix de votre bien ?
+                    </label>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-gray-600" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>1</span>
+                      <input
+                        type="range"
+                        name="ajustementPrix"
+                        value={formData.ajustementPrix}
+                        onChange={handleChange}
+                        min="1"
+                        max="10"
+                        step="1"
+                        className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          accentColor: '#4682B4'
+                        }}
+                      />
+                      <span className="text-sm text-gray-600" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>10</span>
+                      {formData.ajustementPrix && (
+                        <span className="text-lg font-semibold min-w-[2rem] text-center" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          {formData.ajustementPrix}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex justify-between mt-2 text-xs text-gray-500" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      <span>Pas du tout</span>
+                      <span>Très disposé(e)</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* 🧠 MESSAGE FINAL */}
+              {/* MESSAGE FINAL */}
               <div className="space-y-6 pb-6 border-b-2" style={{ borderColor: '#e5e7eb' }}>
                 <h2 className="text-xl font-semibold mb-4" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
-                  🧠 MESSAGE FINAL (TRÈS IMPORTANT)
+                  MESSAGE FINAL (TRÈS IMPORTANT)
                 </h2>
 
-                {/* 1️⃣8️⃣ Message libre */}
+                {/* 18. Message libre */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-lg font-semibold" style={{ color: '#4682B4', fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      1️⃣8️⃣ Message libre
+                      18. Message libre
                     </span>
                   </div>
                   
@@ -769,7 +956,7 @@ export default function EstimationEtape2Page() {
                       value={formData.messageLibre}
                       onChange={handleChange}
                       rows={5}
-                      placeholder="Toute information supplémentaire qui pourrait être utile pour l'estimation..."
+                      placeholder="Toute information complémentaire utile à l'analyse de votre bien (copropriété, vue, environnement, contexte particulier…)"
                       className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       style={{ borderColor: '#e5e7eb' }}
                     />
@@ -788,28 +975,90 @@ export default function EstimationEtape2Page() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full px-8 py-4 rounded-full font-semibold tracking-wide transition-all hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group relative w-full px-8 py-4 rounded-full font-medium overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
-                    backgroundColor: '#4682B4',
-                    color: 'white',
-                    fontFamily: 'var(--font-poppins), sans-serif'
+                    backgroundColor: 'white',
+                    color: '#4682B4',
+                    fontFamily: 'var(--font-poppins), sans-serif',
+                    fontSize: '1.125rem',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    letterSpacing: '0.3px'
                   }}
                   onMouseEnter={(e) => {
                     if (!submitting) {
-                      e.currentTarget.style.backgroundColor = '#3a6a8f'
+                      const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                      const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                      const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                      const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                      if (fill) {
+                        fill.style.width = '100%'
+                        fill.style.transform = 'translateX(-50%) scaleY(1)'
+                      }
+                      if (arrow) {
+                        arrow.style.opacity = '1'
+                        arrow.style.right = '-14px'
+                      }
+                      if (text) text.style.color = 'white'
+                      if (textSpan) textSpan.style.transform = 'translateX(-8px)'
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!submitting) {
-                      e.currentTarget.style.backgroundColor = '#4682B4'
+                      const fill = e.currentTarget.querySelector('.button-fill') as HTMLElement
+                      const arrow = e.currentTarget.querySelector('.button-arrow') as HTMLElement
+                      const text = e.currentTarget.querySelector('.button-text') as HTMLElement
+                      const textSpan = e.currentTarget.querySelector('.button-text span') as HTMLElement
+                      if (fill) {
+                        fill.style.width = '0%'
+                        fill.style.transform = 'translateX(-50%) scaleY(0)'
+                      }
+                      if (arrow) {
+                        arrow.style.opacity = '0'
+                        arrow.style.right = '-30px'
+                      }
+                      if (text) text.style.color = '#4682B4'
+                      if (textSpan) textSpan.style.transform = 'translateX(0)'
                     }
                   }}
                 >
+                  {/* Fond bleu qui se remplit */}
+                  <span
+                    className="button-fill absolute bottom-0 left-1/2 h-full rounded-full"
+                    style={{
+                      width: '0%',
+                      backgroundColor: '#4682B4',
+                      transform: 'translateX(-50%) scaleY(0)',
+                      transformOrigin: 'center bottom',
+                      transition: 'width 0.5s ease-in-out, transform 0.5s ease-in-out',
+                      zIndex: 1
+                    }}
+                  ></span>
+                  
+                  {/* Contenu du bouton */}
+                  <span className="button-text relative z-10 flex items-center justify-center transition-all duration-300" style={{ color: '#4682B4' }}>
+                    <span className="transition-transform duration-300">
                   {submitting ? 'Envoi en cours...' : 'Recevoir mon estimation personnalisée'}
+                    </span>
+                    {!submitting && (
+                      <svg
+                        className="button-arrow absolute w-5 h-5 transition-all duration-300"
+                        style={{
+                          opacity: 0,
+                          right: '-30px',
+                          transition: 'opacity 0.4s ease-in-out, right 0.4s ease-in-out'
+                        }}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    )}
+                  </span>
                 </button>
                 
                 <p className="text-xs text-gray-600 text-center mt-4 italic" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  📌 Chaque estimation est analysée manuellement.
+                  Chaque estimation est analysée manuellement.
                   <br />
                   Nous nous réservons le droit de refuser les biens dont le prix attendu n'est pas cohérent avec le marché.
                 </p>
