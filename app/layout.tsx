@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "L'Agence YL",
   },
   alternates: {
-    canonical: 'https://www.agence-yl.fr',
+    canonical: 'https://www.lagenceyl.fr',
   },
   robots: {
     index: true,

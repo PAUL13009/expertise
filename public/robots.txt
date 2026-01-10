@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.agence-yl.fr/sitemap.xml
+Sitemap: https://www.lagenceyl.fr/sitemap.xml

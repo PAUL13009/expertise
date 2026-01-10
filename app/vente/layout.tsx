@@ -9,11 +9,11 @@ export const metadata: Metadata = {
     description: 'Vente immobilière Marseille : méthode structurée pour vendre votre appartement ou maison au bon prix. Analyse du marché réel, stratégie claire, suivi personnalisé.',
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://www.agence-yl.fr/vente',
+    url: 'https://www.lagenceyl.fr/vente',
     siteName: "L'Agence YL",
   },
   alternates: {
-    canonical: 'https://www.agence-yl.fr/vente',
+    canonical: 'https://www.lagenceyl.fr/vente',
   },
 }
 

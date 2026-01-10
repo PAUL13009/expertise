@@ -9,11 +9,11 @@ export const metadata: Metadata = {
     description: 'Estimation immobilière Marseille : méthode humaine et contextualisée pour votre appartement ou maison. Analyse du marché réel, prix cohérent et recommandation argumentée.',
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://www.agence-yl.fr/estimation',
+    url: 'https://www.lagenceyl.fr/estimation',
     siteName: "L'Agence YL",
   },
   alternates: {
-    canonical: 'https://www.agence-yl.fr/estimation',
+    canonical: 'https://www.lagenceyl.fr/estimation',
   },
 }
 
