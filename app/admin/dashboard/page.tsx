@@ -772,7 +772,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex gap-2 ml-4">
                         <button
-                          onClick={() => toggleMessageRead(message.id, message.read)}
+                          onClick={() => toggleMessageRead(message.id, message.read ?? false)}
                           className={`px-3 py-1 rounded text-sm transition-colors ${
                             message.read
                               ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -888,7 +888,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex flex-col gap-2 ml-4">
                         <button
-                          onClick={() => toggleLeadRead(lead.id, lead.read)}
+                          onClick={() => toggleLeadRead(lead.id, lead.read ?? false)}
                           className={`px-3 py-1 rounded text-sm transition-colors ${
                             lead.read
                               ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -1192,7 +1192,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex flex-col gap-2 ml-4">
                         <button
-                          onClick={() => toggleEstimationRead(estimation.id, estimation.read)}
+                          onClick={() => toggleEstimationRead(estimation.id, estimation.read ?? false)}
                           className={`px-3 py-1 rounded text-sm transition-colors ${
                             estimation.read
                               ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
