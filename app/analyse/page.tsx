@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { createAnalyseLead } from '@/lib/firebase-admin'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import VariableProximity from '@/components/VariableProximity'
@@ -43,28 +43,18 @@ export default function AnalysePage() {
     }
 
     try {
-      // Enregistrer les données dans Supabase
-      const { data, error } = await supabase
-        .from('analyse_leads')
-        .insert([
-          {
-            localisation: formData.localisation,
-            type_bien: formData.typeBien,
-            maturite: formData.maturite,
-            ajustement_prix: formData.ajustementPrix,
-            motivation: formData.motivation,
-            prenom: formData.prenom,
-            telephone: formData.telephone,
-            email: formData.email
-          }
-        ])
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Erreur lors de l\'enregistrement:', error)
-        throw error
-      }
+      // Enregistrer les données dans Firebase
+      await createAnalyseLead({
+        localisation: formData.localisation,
+        type_bien: formData.typeBien,
+        maturite: formData.maturite,
+        ajustement_prix: formData.ajustementPrix,
+        motivation: formData.motivation,
+        prenom: formData.prenom,
+        telephone: formData.telephone,
+        email: formData.email,
+        type_demande: 'analyse'
+      })
 
       // Redirection vers la page de confirmation
       router.push('/analyse/confirmation')

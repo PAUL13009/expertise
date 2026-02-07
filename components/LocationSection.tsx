@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import FadeContent from './FadeContent'
 import VariableProximity from './VariableProximity'
-import { supabase } from '@/lib/supabase'
+import { createContactMessage } from '@/lib/firebase-admin'
 
 export default function LocationSection() {
   const containerRef = null
@@ -36,62 +36,19 @@ export default function LocationSection() {
     setSubmitSuccess(false)
 
     try {
-      // Insérer le message dans la base de données
+      // Insérer le message dans Firebase
       console.log('Inserting message:', formData)
-      const { data: insertedData, error } = await supabase
-        .from('contact_messages')
-        .insert([
-          {
-            nom: formData.nom,
-            prenom: formData.prenom || null,
-            email: formData.email,
-            telephone: formData.telephone || null,
-            pays: formData.pays || null,
-            projet: formData.projet || null,
-            contact_method: formData.contactMethod
-          }
-        ])
-        .select()
-        .single()
+      await createContactMessage({
+        nom: formData.nom,
+        prenom: formData.prenom || undefined,
+        email: formData.email,
+        telephone: formData.telephone || undefined,
+        pays: formData.pays || undefined,
+        projet: formData.projet || undefined,
+        contact_method: formData.contactMethod
+      })
 
-      if (error) {
-        console.error('Erreur lors de l\'insertion du message:', error)
-        console.error('Détails:', JSON.stringify(error, null, 2))
-        throw error
-      }
-
-      console.log('Message inséré avec succès:', insertedData)
-
-      // Appeler la Edge Function pour envoyer l'email
-      console.log('Calling Edge Function with data:', insertedData)
-      try {
-        const { data: functionData, error: functionError } = await supabase.functions.invoke('send-contact-email', {
-          body: {
-            record: {
-              id: insertedData.id,
-              nom: insertedData.nom,
-              prenom: insertedData.prenom,
-              email: insertedData.email,
-              telephone: insertedData.telephone,
-              pays: insertedData.pays,
-              projet: insertedData.projet,
-              contact_method: insertedData.contact_method,
-              created_at: insertedData.created_at
-            }
-          }
-        })
-
-        if (functionError) {
-          console.error('Erreur lors de l\'envoi de l\'email:', functionError)
-          console.error('Détails de l\'erreur:', JSON.stringify(functionError, null, 2))
-        } else {
-          console.log('Email envoyé avec succès:', functionData)
-        }
-      } catch (emailError: any) {
-        console.error('Erreur lors de l\'appel de la fonction email:', emailError)
-        console.error('Stack trace:', emailError.stack)
-        // On continue même si l'email échoue
-      }
+      console.log('Message inséré avec succès')
 
       setSubmitSuccess(true)
       // Réinitialiser le formulaire après soumission
