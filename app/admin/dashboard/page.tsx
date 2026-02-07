@@ -17,6 +17,7 @@ import {
   type ContactMessageWithId,
   type AnalyseLeadWithId
 } from '@/lib/firebase-admin'
+import { Timestamp } from 'firebase/firestore'
 import Image from 'next/image'
 import PropertyForm from '@/components/PropertyForm'
 
@@ -415,7 +416,7 @@ export default function AdminDashboard() {
     }
   }
 
-  const formatDate = (dateInput: string | Date | undefined | any) => {
+  const formatDate = (dateInput: string | Date | Timestamp | undefined | null): string => {
     if (!dateInput) return 'Date non disponible'
     
     // Si c'est un Timestamp Firebase, convertir en Date
