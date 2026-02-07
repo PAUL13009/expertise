@@ -13,7 +13,9 @@ import {
   deleteContactMessage,
   getAllAnalyseLeads,
   updateAnalyseLead,
-  deleteAnalyseLead
+  deleteAnalyseLead,
+  type ContactMessageWithId,
+  type AnalyseLeadWithId
 } from '@/lib/firebase-admin'
 import Image from 'next/image'
 import PropertyForm from '@/components/PropertyForm'
@@ -32,98 +34,14 @@ interface Property {
   updated_at?: string
 }
 
-interface ContactMessage {
-  id: string
-  nom: string
-  prenom: string | null
-  email: string
-  telephone: string | null
-  pays: string | null
-  projet: string | null
-  contact_method: string
-  read: boolean
-  created_at: string
-}
-
 type TabType = 'vendre' | 'louer' | 'messagerie' | 'leads' | 'estimations' | 'trafic'
 
-interface AnalyseLead {
-  id: string
-  localisation: string
-  type_bien: string
-  maturite: string
-  ajustement_prix: string
-  motivation: string
-  prenom: string
-  telephone: string
-  email: string
-  read: boolean
-  status: 'nouveau' | 'en_cours' | 'accepte' | 'refuse'
-  notes: string | null
-  created_at: string
-  updated_at: string
-}
+// Utiliser les interfaces importées de firebase-admin
+// ContactMessage et AnalyseLead sont déjà importées
 
-interface EstimationLead {
-  id: string
-  // Données étape 1
-  prenom: string
-  telephone: string
-  email: string
-  localisation: string
-  type_bien: string
-  surface: string | null
-  surface_terrain: string | null
-  description_initiale: string | null
-  
-  // Données étape 2 - Composition
-  nombre_pieces: number | null
-  nombre_chambres: number | null
-  nombre_salles_de_bain: number | null
-  etage: number | null
-  dernier_etage: boolean | null
-  ascenseur: boolean | null
-  
-  // Extérieurs
-  exterieurs: string[] | null
-  surface_exterieur: string | null
-  
-  // Stationnement
-  stationnement: string | null
-  stationnement_type: string | null
-  
-  // État & Prestations
-  etat_bien: string | null
-  travaux_recents: boolean | null
-  nature_travaux: string | null
-  annee_travaux: number | null
-  montant_travaux: string | null
-  prestations: string[] | null
-  autres_prestations: string | null
-  
-  // Confort & Environnement
-  exposition: string | null
-  vis_a_vis: string | null
-  
-  // Projet de vente
-  delai_vente: string | null
-  situation_actuelle: string | null
-  type_location: string | null
-  loyer_mensuel: string | null
-  prix_envisage: string | null
-  ajustement_prix_echelle: number | null
-  
-  // Message & Photos
-  message_libre: string | null
-  photos_urls: string[] | null
-  
-  // Métadonnées
-  read: boolean
-  status: 'nouveau' | 'en_cours' | 'accepte' | 'refuse'
-  notes: string | null
-  created_at: string
-  updated_at: string
-}
+// EstimationLead est essentiellement un AnalyseLeadWithId avec tous les champs détaillés
+// Tous les champs sont déjà dans AnalyseLeadWithId, donc on peut simplement utiliser AnalyseLeadWithId
+type EstimationLead = AnalyseLeadWithId
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<FirebaseUser | null>(null)
@@ -134,9 +52,9 @@ export default function AdminDashboard() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingProperty, setEditingProperty] = useState<Property | null>(null)
   const [activeTab, setActiveTab] = useState<TabType>('vendre')
-  const [messages, setMessages] = useState<ContactMessage[]>([])
+  const [messages, setMessages] = useState<ContactMessageWithId[]>([])
   const [loadingMessages, setLoadingMessages] = useState(false)
-  const [leads, setLeads] = useState<AnalyseLead[]>([])
+  const [leads, setLeads] = useState<AnalyseLeadWithId[]>([])
   const [loadingLeads, setLoadingLeads] = useState(false)
   const [estimations, setEstimations] = useState<EstimationLead[]>([])
   const [loadingEstimations, setLoadingEstimations] = useState(false)
@@ -359,7 +277,7 @@ export default function AdminDashboard() {
     setLoadingMessages(true)
     try {
       const data = await getAllContactMessages()
-      setMessages(data || [])
+      setMessages(data)
     } catch (error: any) {
       console.error('Error fetching messages:', error.message)
     } finally {
@@ -394,7 +312,7 @@ export default function AdminDashboard() {
       // Récupérer tous les leads et filtrer côté client pour ceux sans type_demande ou avec type_demande = 'analyse'
       const allLeads = await getAllAnalyseLeads()
       const filteredLeads = allLeads.filter(lead => !lead.type_demande || lead.type_demande === 'analyse')
-      setLeads(filteredLeads || [])
+      setLeads(filteredLeads)
     } catch (error: any) {
       console.error('Error fetching leads:', error.message)
     } finally {
@@ -406,7 +324,7 @@ export default function AdminDashboard() {
     setLoadingEstimations(true)
     try {
       const data = await getAllAnalyseLeads('estimation')
-      setEstimations(data || [])
+      setEstimations(data as EstimationLead[])
     } catch (error: any) {
       console.error('Error fetching estimations:', error.message)
     } finally {

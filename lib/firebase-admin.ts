@@ -169,6 +169,11 @@ export interface ContactMessage {
   created_at?: Date | Timestamp
 }
 
+// Type pour ContactMessage avec id requis (utilisé pour les données récupérées)
+export interface ContactMessageWithId extends Omit<ContactMessage, 'id'> {
+  id: string
+}
+
 // Créer un message de contact
 export const createContactMessage = async (messageData: ContactMessage): Promise<string> => {
   try {
@@ -186,7 +191,7 @@ export const createContactMessage = async (messageData: ContactMessage): Promise
 }
 
 // Récupérer tous les messages de contact
-export const getAllContactMessages = async (): Promise<ContactMessage[]> => {
+export const getAllContactMessages = async (): Promise<ContactMessageWithId[]> => {
   try {
     const messagesRef = collection(db, 'contact_messages')
     const q = query(messagesRef, orderBy('created_at', 'desc'))
@@ -196,7 +201,7 @@ export const getAllContactMessages = async (): Promise<ContactMessage[]> => {
       id: doc.id,
       ...doc.data(),
       created_at: doc.data().created_at?.toDate ? doc.data().created_at.toDate() : doc.data().created_at
-    })) as ContactMessage[]
+    })) as ContactMessageWithId[]
   } catch (error) {
     console.error('Error fetching contact messages:', error)
     throw error
@@ -243,6 +248,12 @@ export interface AnalyseLead {
   notes?: string
   created_at?: Date | Timestamp
   updated_at?: Date | Timestamp
+}
+
+// Type pour AnalyseLead avec id requis (utilisé pour les données récupérées)
+export interface AnalyseLeadWithId extends Omit<AnalyseLead, 'id'> {
+  id: string
+}
   
   // Champs pour les estimations détaillées
   surface?: string | null
@@ -296,7 +307,7 @@ export const createAnalyseLead = async (leadData: AnalyseLead): Promise<string> 
 }
 
 // Récupérer tous les leads d'analyse
-export const getAllAnalyseLeads = async (type?: 'analyse' | 'estimation'): Promise<AnalyseLead[]> => {
+export const getAllAnalyseLeads = async (type?: 'analyse' | 'estimation'): Promise<AnalyseLeadWithId[]> => {
   try {
     const leadsRef = collection(db, 'analyse_leads')
     let q
@@ -321,7 +332,7 @@ export const getAllAnalyseLeads = async (type?: 'analyse' | 'estimation'): Promi
       id: doc.id,
       ...doc.data(),
       created_at: doc.data().created_at?.toDate ? doc.data().created_at.toDate() : doc.data().created_at
-    })) as AnalyseLead[]
+    })) as AnalyseLeadWithId[]
   } catch (error) {
     console.error('Error fetching analyse leads:', error)
     // Si l'index n'existe pas encore, essayer sans le filtre type_demande
@@ -334,7 +345,7 @@ export const getAllAnalyseLeads = async (type?: 'analyse' | 'estimation'): Promi
           id: doc.id,
           ...doc.data(),
           created_at: doc.data().created_at?.toDate ? doc.data().created_at.toDate() : doc.data().created_at
-        })) as AnalyseLead[]
+        })) as AnalyseLeadWithId[]
         // Filtrer côté client
         return allLeads.filter(lead => lead.type_demande === type)
       } catch (fallbackError) {
