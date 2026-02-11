@@ -6,7 +6,7 @@ import FadeContent from '@/components/FadeContent'
 import AnimatedContent from '@/components/AnimatedContent'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useScrollImageAnimation } from '@/hooks/useScrollImageAnimation'
 import { useScrollButtonAnimation } from '@/hooks/useScrollButtonAnimation'
 import Stepper, { Step } from '@/components/Stepper'
@@ -16,6 +16,58 @@ export default function AProposPage() {
   const [isFondatriceImageHovered, setIsFondatriceImageHovered] = useState(false)
   const [isExpertiseImageHovered, setIsExpertiseImageHovered] = useState(false)
   const [selectiveToggleOn, setSelectiveToggleOn] = useState(false)
+  const [expandedCompetence, setExpandedCompetence] = useState<number | null>(null)
+  const [mobileRevealedCompetences, setMobileRevealedCompetences] = useState<Set<number>>(new Set())
+  const [isMobile, setIsMobile] = useState(false)
+  const competenceBarRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  const setCompetenceBarRef = useCallback((el: HTMLDivElement | null, index: number) => {
+    competenceBarRefs.current[index] = el
+  }, [])
+
+  // Détection mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // IntersectionObserver pour ouverture séquentielle sur mobile
+  useEffect(() => {
+    if (!isMobile) {
+      setMobileRevealedCompetences(new Set())
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const barIndex = Number(entry.target.getAttribute('data-competence-index'))
+            if (!isNaN(barIndex)) {
+              setTimeout(() => {
+                setMobileRevealedCompetences((prev) => {
+                  const next = new Set(prev)
+                  next.add(barIndex)
+                  return next
+                })
+              }, barIndex * 350)
+              observer.unobserve(entry.target)
+            }
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+
+    competenceBarRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref)
+    })
+
+    return () => observer.disconnect()
+  }, [isMobile])
+
   const { imageRef: fondatriceImageRef, isAnimated: isFondatriceImageAnimated } = useScrollImageAnimation()
   const { imageRef: expertiseImageRef, isAnimated: isExpertiseImageAnimated } = useScrollImageAnimation()
   const venteButtonRef = useScrollButtonAnimation()
@@ -25,18 +77,35 @@ export default function AProposPage() {
       <Navbar />
       
       <Hero 
-        title="L'expertise au service de votre patrimoine"
-        subtitle="Plus qu'une transaction, une analyse certifiée par une experte judiciaire née à Saint-Germain-en-Laye."
+        title="L'estimation au service de votre patrimoine"
+        subtitle="Plus qu'une transaction, une analyse détaillée par une experte immobilier à Saint-Germain-en-Laye."
         buttonText="Échanger sur votre projet avec Yman"
         buttonSubtext="Estimation gratuite – sans engagement"
         buttonLink="/estimation"
         secondaryButtonText="Découvrir nos biens"
         secondaryButtonLink="/catalogue"
         imagePath="/images/herosectionimage.png"
+        mobileCenter
       />
 
+      {/* Wrapper avec image d'arrière-plan pour toutes les sections */}
+      <div className="relative z-10">
+        {/* Image de fond */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herosectionimage.png"
+            alt=""
+            fill
+            className="object-cover blur-md"
+            loading="lazy"
+            sizes="100vw"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+        </div>
+
       {/* Section Pourquoi l'agence existe */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-sable-50 relative z-10" aria-labelledby="pourquoi-agence-existe">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 relative z-10" aria-labelledby="pourquoi-agence-existe">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -62,18 +131,18 @@ export default function AProposPage() {
               </div>
               
               {/* Texte à droite */}
-              <div className="text-lg text-gray-800 leading-relaxed space-y-6" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <p className="font-bold uppercase">
+              <div className="text-lg text-white/70 leading-relaxed space-y-6" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p className="font-bold uppercase text-white">
                   L'Agence YL est née d'une conviction : l'immobilier de prestige ne tolère aucune approximation.
                 </p>
                 <p>
-                  Après 10 ans d'expérience et un Master en Finance Immobilière (ESPI), sa fondatrice a choisi de bâtir une structure où la rigueur technique l'emporte sur le volume commercial. Dans un marché aussi complexe que celui de Saint-Germain-en-Laye, chaque mètre carré compte et chaque détail juridique pèse.
+                  Après 8 ans d'expérience et un Master en Finance Immobilière (ESPI), sa fondatrice a choisi de bâtir une structure où la rigueur technique l'emporte sur le volume commercial. Dans un marché aussi spécifique que celui de Saint-Germain-en-Laye, chaque mètre carré compte et chaque détail juridique pèse.
                 </p>
                 <p>
-                  En tant qu'Expert Judiciaire, Yman Lahlou apporte une dimension rare à la transaction : la certitude de la valeur vénale réelle.
+                  En tant que conseillère, Yman Lahlou apporte une dimension rare à la transaction : la certitude de la valeur réelle.
                 </p>
-                <div className="bg-stone-50 border-l-4 pl-6 py-4 mt-8" style={{ borderColor: '#000000' }}>
-                  <p className="font-semibold text-gray-900 text-lg" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <div className="bg-white/10 backdrop-blur-sm border-l-4 pl-6 py-4 mt-8" style={{ borderColor: '#ffffff' }}>
+                  <p className="font-semibold text-white text-lg" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Aujourd'hui, l'agence assume une sélectivité totale : nous ne multiplions pas les mandats, nous sécurisons des projets de vie avec une précision chirurgicale.
                   </p>
                 </div>
@@ -84,42 +153,79 @@ export default function AProposPage() {
       </section>
 
       {/* Section Notre façon de travailler */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-sable-50 relative z-10" aria-labelledby="notre-facon-de-travailler">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 relative z-10" aria-labelledby="notre-facon-de-travailler">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mb-6 mx-auto" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="notre-facon-de-travailler" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                UN SOCLE DE COMPÉTENCES HAUT DE BILAN
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Bloc 1 */}
-              <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
-                <h3 className="text-xl font-bold mb-4 text-black uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  Master en Finance Immobilière (ESPI)
-                </h3>
-                <p className="text-gray-800 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  « Diplômée de l'École Supérieure des Professions de l'Immobilier, j'appréhende chaque actif non pas comme un simple objet de transaction, mais comme un patrimoine financier complexe. Cette formation me permet de maîtriser les mécanismes de valorisation les plus pointus. »
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start">
+              {/* Colonne gauche — titre + description */}
+              <div className="md:sticky md:top-32">
+                <h2 id="notre-facon-de-travailler" className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold text-white leading-none uppercase mb-6" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Un socle de compétences haut de bilan
+                </h2>
+                <p className="text-base sm:text-lg text-white/50 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Une triple expertise — académique, judiciaire et terrain — au service de la valorisation de votre patrimoine immobilier.
                 </p>
               </div>
-              {/* Bloc 2 */}
-              <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
-                <h3 className="text-xl font-bold mb-4 text-black uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  Expert Judiciaire
-                </h3>
-                <p className="text-gray-800 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  « Titulaire d'une nomination d'Expert Judiciaire, j'exerce avec une déontologie stricte. Ma méthodologie d'analyse est celle exigée par les tribunaux : impartiale, technique et documentée. C'est cette même rigueur que j'applique à l'expertise de votre bien. »
-                </p>
-              </div>
-              {/* Bloc 3 */}
-              <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
-                <h3 className="text-xl font-bold mb-4 text-black uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  10 ans d'Ancrage Local
-                </h3>
-                <p className="text-gray-800 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  « Une décennie passée à décrypter les mutations du marché de Saint-Germain-en-Laye. Cette expérience terrain me permet de traduire les chiffres en réalité de marché, quartier par quartier, rue par rue. »
-                </p>
+
+              {/* Colonne droite — barres expandables */}
+              <div className="flex flex-col gap-4">
+                {[
+                  {
+                    title: 'Master en Finance Immobilière (ESPI)',
+                    subtitle: 'FORMATION ACADÉMIQUE',
+                    content: 'DIPLÔMÉE DE L\'ÉCOLE SUPÉRIEURE DES PROFESSIONS DE L\'IMMOBILIER, J\'APPRÉHENDE CHAQUE ACTIF NON PAS COMME UN SIMPLE OBJET DE TRANSACTION, MAIS COMME UN PATRIMOINE FINANCIER COMPLEXE. CETTE FORMATION ME PERMET DE MAÎTRISER LES MÉCANISMES DE VALORISATION LES PLUS POINTUS.',
+                  },
+                  {
+                    title: 'Expert Judiciaire',
+                    subtitle: 'CERTIFICATION JURIDIQUE',
+                    content: 'TITULAIRE D\'UNE NOMINATION D\'EXPERT JUDICIAIRE, J\'EXERCE AVEC UNE DÉONTOLOGIE STRICTE. MA MÉTHODOLOGIE D\'ANALYSE EST CELLE EXIGÉE PAR LES TRIBUNAUX : IMPARTIALE, TECHNIQUE ET DOCUMENTÉE. C\'EST CETTE MÊME RIGUEUR QUE J\'APPLIQUE À L\'EXPERTISE DE VOTRE BIEN.',
+                  },
+                  {
+                    title: '10 ans d\'Ancrage Local',
+                    subtitle: 'EXPÉRIENCE TERRAIN',
+                    content: 'UNE DÉCENNIE PASSÉE À DÉCRYPTER LES MUTATIONS DU MARCHÉ DE SAINT-GERMAIN-EN-LAYE. CETTE EXPÉRIENCE TERRAIN ME PERMET DE TRADUIRE LES CHIFFRES EN RÉALITÉ DE MARCHÉ, QUARTIER PAR QUARTIER, RUE PAR RUE.',
+                  },
+                ].map((item, index) => {
+                  const isExpandedDesktop = expandedCompetence === index
+                  const isExpandedMobile = mobileRevealedCompetences.has(index)
+                  const isExpanded = isMobile ? isExpandedMobile : isExpandedDesktop
+                  return (
+                    <div
+                      key={index}
+                      ref={(el) => setCompetenceBarRef(el, index)}
+                      data-competence-index={index}
+                      className="rounded-xl cursor-pointer overflow-hidden transition-all duration-700 ease-in-out"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                        height: isExpanded ? '220px' : '80px',
+                      }}
+                      onMouseEnter={!isMobile ? () => setExpandedCompetence(index) : undefined}
+                      onMouseLeave={!isMobile ? () => setExpandedCompetence(null) : undefined}
+                    >
+                      <div className="px-6 sm:px-8 h-full flex flex-col justify-center">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="text-lg sm:text-xl font-bold text-white uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                              {item.title}
+                            </h3>
+                            <p className="text-xs text-white/40 uppercase tracking-widest mt-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                              {item.subtitle}
+                            </p>
+                          </div>
+                          <span className="text-white/30 transition-transform duration-300 text-xl" style={{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}>↓</span>
+                        </div>
+                        <div
+                          className="overflow-hidden transition-all duration-700 ease-in-out"
+                          style={{ maxHeight: isExpanded ? '120px' : '0px', opacity: isExpanded ? 1 : 0 }}
+                        >
+                          <p className="text-sm sm:text-base text-white/70 leading-relaxed mt-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                            {item.content}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -127,113 +233,121 @@ export default function AProposPage() {
       </section>
 
       {/* Section Au-delà de l'estimation */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-sable-50 relative z-10" aria-labelledby="au-dela-estimation">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 relative z-10" aria-labelledby="au-dela-estimation">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mx-auto mb-6" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="au-dela-estimation" className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                AU-DELÀ DE L'ESTIMATION : LE RAPPORT D'EXPERTISE
-              </h2>
-            </div>
-            <div className="text-lg text-gray-800 leading-relaxed space-y-6 text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-              <p>
-                Là où une agence classique vous remettra une simple fourchette de prix, l'Agence YL vous délivre un véritable rapport d'expertise vénale.
-              </p>
-              <p>
-                Nous utilisons les méthodes de capitalisation, de comparaison et d'analyse sol/construction pour définir le Prix Pivot : celui qui maximise votre net vendeur tout en garantissant une vente rapide. Cette approche élimine les marges d'erreur et désarme toute tentative de négociation agressive des acquéreurs.
-              </p>
-            </div>
+          <div className="max-w-5xl mx-auto text-center">
+            <h2 id="au-dela-estimation" className="sr-only">Au-delà de l'estimation</h2>
+            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white font-bold leading-tight uppercase mb-8" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              L'Agence YL vous délivre un véritable rapport d'estimation détaillé.
+            </p>
+            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/70 font-normal leading-tight uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Nous utilisons les méthodes de capitalisation, de comparaison et d'analyse sol/construction pour définir le prix du marché: celui qui maximise votre net vendeur tout en garantissant une vente rapide. Cette approche élimine les marges d'erreur et désarme toute tentative de négociation agressive des acquéreurs.
+            </p>
           </div>
         </FadeContent>
       </section>
 
       {/* Section Saint-Germain-en-Laye */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-sable-50 relative z-10" aria-labelledby="saint-germain-histoire">
+      <section className="px-4 sm:px-6 lg:px-8 py-24 relative z-10" aria-labelledby="saint-germain-histoire">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
           <div className="max-w-7xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mb-6 mx-auto" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="saint-germain-histoire" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                SAINT-GERMAIN-EN-LAYE : PLUS QU'UN SECTEUR, UNE HISTOIRE PERSONNELLE.
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Texte à gauche */}
-              <div className="text-lg text-gray-800 leading-relaxed space-y-6" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <p>
-                  « On ne peut bien expertiser que ce que l'on connaît intimement. Née à Saint-Germain-en-Laye, j'ai grandi au rythme de ses rues, de son marché et de son histoire. J'y vis et j'y travaille aujourd'hui avec une conviction intacte.
-                </p>
-                <p>
-                  Pour moi, expertiser un hôtel particulier près du Château ou une maison de ville dans le quartier Alsace, ce n'est pas seulement analyser des mètres carrés. C'est comprendre l'âme de ces lieux et l'évolution de notre ville.
-                </p>
-                <p>
-                  Cette double culture — la rigueur de l'expertise financière et la sensibilité de l'enfant du pays — est ma plus grande force. Elle me permet de capter les nuances qui échappent aux algorithmes et aux agences nationales pour valoriser votre patrimoine comme il le mérite. »
-                </p>
+            <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+              {/* Image à gauche + légende */}
+              <div>
+                <div className="relative h-[450px] sm:h-[500px] md:h-[600px] overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/ymannew.png"
+                    alt="Yman Lahlou, Experte Immobilier Agréé à Saint-Germain-en-Laye"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <div className="text-center mt-4">
+                  <p className="text-lg font-bold text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Yman Lahlou</p>
+                  <p className="text-sm text-white/50" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Fondatrice de l'Agence YL</p>
+                </div>
               </div>
-              {/* Image d'Yman à droite */}
-              <div className="relative h-[500px] md:h-[600px] overflow-hidden shadow-xl">
-                <Image
-                  src="/images/ymannew.png"
-                  alt="Yman Lahlou, Experte Immobilier Agréé à Saint-Germain-en-Laye"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+
+              {/* Contenu à droite */}
+              <div className="flex flex-col justify-between h-full space-y-8">
+                {/* Titre principal — grande typographie bold */}
+                <h2 id="saint-germain-histoire" className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-white leading-tight uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  On ne peut bien expertiser que ce que l'on connaît intimement.
+                </h2>
+
+                {/* Paragraphe intermédiaire */}
+                <div className="text-lg sm:text-xl md:text-2xl text-white/60 leading-relaxed space-y-4 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <p>
+                    Née à Paris, j'ai grandi au rythme des rues de Saint-Germain-en-Laye, de son marché et de son histoire.
+                  </p>
+                  <p>
+                    Pour moi, estimer un hôtel particulier près du Château ou une maison de ville dans le quartier Alsace, ce n'est pas seulement analyser des mètres carrés. C'est comprendre l'âme de ces lieux et l'évolution de notre ville.
+                  </p>
+                </div>
+
+                {/* Citation en gras */}
+                <p className="text-lg sm:text-xl md:text-2xl text-white font-bold leading-relaxed uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  Cette double culture — la rigueur de ma méthode et la sensibilité de l'enfant du pays est ma plus grande force.
+                </p>
               </div>
             </div>
           </div>
         </FadeContent>
       </section>
 
-      {/* Section CTA Final - même rendu que la page d'accueil */}
-      <section className="relative z-10 min-h-screen flex items-center justify-center" aria-labelledby="cta-final-a-propos">
-        <div className="absolute inset-0 z-0">
-          <div className="relative w-full h-full">
-            <Image
-              src="/images/herosectionimage.png"
-              alt="L'Agence YL - Agence immobilière à Saint-Germain-en-Laye"
-              fill
-              className="object-cover"
-              loading="lazy"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-black/20" aria-hidden="true" role="presentation" />
-          </div>
-        </div>
+      {/* Section CTA Final - même design que la page d'accueil */}
+      <section className="relative z-10 py-32 md:py-44 flex items-center justify-center bg-black" aria-labelledby="cta-final-a-propos">
         <div className="relative z-10 w-full">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-              <h2 id="cta-final-a-propos" className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-light leading-tight px-2 mb-6 sm:mb-8 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              <h2 id="cta-final-a-propos" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-tight mb-6 sm:mb-8 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 PRÊT À OBTENIR UNE VISION CLAIRE DE VOTRE PATRIMOINE ?
               </h2>
-              <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-normal leading-relaxed px-2 mb-8 sm:mb-12" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              <p className="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed mb-10 sm:mb-14 uppercase max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 Que vous ayez un projet de vente immédiat ou que vous souhaitiez simplement sécuriser la valeur de votre bien dans le cadre d'une réflexion patrimoniale, échangeons en toute confidentialité.
               </p>
             </FadeContent>
-            <div className="flex justify-center">
-              <div className="group/cta relative flex flex-col border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10">
-                <div className="flex justify-center w-full">
-                  <a
-                    ref={venteButtonRef as any}
-                    href="/analyse"
-                    aria-label="Prendre rendez-vous avec Yman Lahlou, experte immobilier"
-                    className="group relative inline-flex items-center text-white font-medium transition-all duration-300"
-                    style={{
-                      fontFamily: 'var(--font-poppins), sans-serif',
-                      fontSize: 'clamp(1rem, 1.5vw, 1.125rem)',
-                      textDecoration: 'none',
-                      letterSpacing: '0.5px',
-                    }}
-                  >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">Prendre rendez-vous avec Yman</span>
-                  </a>
-                </div>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                ref={venteButtonRef as any}
+                href="/analyse"
+                aria-label="Prendre rendez-vous avec Yman Lahlou, experte immobilier"
+                className="inline-flex items-center justify-center bg-white text-black font-semibold px-8 py-4 rounded-lg hover:bg-white/90 transition-all duration-300"
+                style={{
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
+                  textDecoration: 'none',
+                  letterSpacing: '0.5px',
+                }}
+              >
+                PRENDRE RENDEZ-VOUS AVEC YMAN
+              </a>
             </div>
           </div>
         </div>
       </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 bg-black py-6" role="contentinfo">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+            2026 — L'AGENCE YL
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link href="/mentions-legales" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Mentions légales
+            </Link>
+            <Link href="/politique-de-confidentialite" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Politique de confidentialité
+            </Link>
+            <Link href="/honoraires" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Honoraires
+            </Link>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

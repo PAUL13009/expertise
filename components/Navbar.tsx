@@ -304,7 +304,7 @@ export default function Navbar() {
         className="staggered-menu-header fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out" 
         role="banner"
         style={{
-          background: scrolled ? 'rgba(250, 250, 249, 0.95)' : 'transparent',
+          background: scrolled ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
           backdropFilter: scrolled ? 'blur(10px)' : 'none',
           transform: scrolled && !isOnHero ? 'translateY(-100%)' : 'translateY(0)',
           opacity: scrolled && !isOnHero ? 0 : 1,
@@ -338,9 +338,7 @@ export default function Navbar() {
           onClick={toggleMenu}
           type="button"
           style={{ 
-            color: menuOpen && isMobile 
-              ? '#000000' 
-              : (isOnHero ? 'white' : '#4682B4')
+            color: '#ffffff'
           }}
         >
           <span ref={iconRef} className="sm-icon" aria-hidden="true">

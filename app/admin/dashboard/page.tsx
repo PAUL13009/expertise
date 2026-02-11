@@ -36,7 +36,7 @@ interface Property {
   updated_at?: string
 }
 
-type TabType = 'vendre' | 'louer' | 'messagerie' | 'leads' | 'estimations' | 'trafic'
+type TabType = 'vendre' | 'louer' | 'messagerie' | 'leads' | 'estimations_partielles' | 'estimations' | 'trafic'
 
 // Utiliser les interfaces importées de firebase-admin
 // ContactMessage et AnalyseLead sont déjà importées
@@ -58,6 +58,8 @@ export default function AdminDashboard() {
   const [loadingMessages, setLoadingMessages] = useState(false)
   const [leads, setLeads] = useState<AnalyseLeadWithId[]>([])
   const [loadingLeads, setLoadingLeads] = useState(false)
+  const [estimationsPartielles, setEstimationsPartielles] = useState<AnalyseLeadWithId[]>([])
+  const [loadingEstimationsPartielles, setLoadingEstimationsPartielles] = useState(false)
   const [estimations, setEstimations] = useState<EstimationLead[]>([])
   const [loadingEstimations, setLoadingEstimations] = useState(false)
   const router = useRouter()
@@ -122,6 +124,9 @@ export default function AdminDashboard() {
     }
     if (user && activeTab === 'leads') {
       fetchLeads()
+    }
+    if (user && activeTab === 'estimations_partielles') {
+      fetchEstimationsPartielles()
     }
     if (user && activeTab === 'estimations') {
       fetchEstimations()
@@ -319,6 +324,38 @@ export default function AdminDashboard() {
       console.error('Error fetching leads:', error.message)
     } finally {
       setLoadingLeads(false)
+    }
+  }
+
+  const fetchEstimationsPartielles = async () => {
+    setLoadingEstimationsPartielles(true)
+    try {
+      const data = await getAllAnalyseLeads('estimation_partielle')
+      setEstimationsPartielles(data)
+    } catch (error: any) {
+      console.error('Error fetching partial estimations:', error.message)
+    } finally {
+      setLoadingEstimationsPartielles(false)
+    }
+  }
+
+  const toggleEstimationPartielleRead = async (id: string, currentReadStatus: boolean) => {
+    try {
+      await updateAnalyseLead(id, { read: !currentReadStatus })
+      fetchEstimationsPartielles()
+    } catch (error: any) {
+      console.error('Error updating partial estimation:', error.message)
+      alert('Erreur: ' + error.message)
+    }
+  }
+
+  const deleteEstimationPartielle = async (id: string) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette demande partielle ?')) return
+    try {
+      await deleteAnalyseLead(id)
+      fetchEstimationsPartielles()
+    } catch (error: any) {
+      alert('Erreur: ' + error.message)
     }
   }
 
@@ -532,6 +569,21 @@ export default function AdminDashboard() {
               style={activeTab === 'leads' ? { borderColor: '#4682B4', color: '#4682B4' } : {}}
             >
               Lead entrant ({leads.filter(l => !l.read).length})
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('estimations_partielles')
+                setShowAddForm(false)
+                setEditingProperty(null)
+              }}
+              className={`px-6 py-3 font-semibold transition-all border-b-2 ${
+                activeTab === 'estimations_partielles'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+              style={activeTab === 'estimations_partielles' ? { borderColor: '#4682B4', color: '#4682B4' } : {}}
+            >
+              Estimation Partielle ({estimationsPartielles.filter(e => !e.read).length})
             </button>
             <button
               onClick={() => {
@@ -921,6 +973,88 @@ export default function AdminDashboard() {
                         </button>
                         <button
                           onClick={() => deleteLead(lead.id)}
+                          className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Onglet Estimation Partielle */}
+        {activeTab === 'estimations_partielles' && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-serif" style={{ color: '#4682B4', fontFamily: 'var(--font-playfair), serif' }}>
+                Demande d'estimation Partielle ({estimationsPartielles.filter(e => !e.read).length} non lues)
+              </h2>
+              <button
+                onClick={fetchEstimationsPartielles}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                style={{ backgroundColor: '#4682B4' }}
+              >
+                Actualiser
+              </button>
+            </div>
+
+            {loadingEstimationsPartielles ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4" style={{ borderColor: '#4682B4' }}></div>
+                <p className="text-gray-600">Chargement des demandes partielles...</p>
+              </div>
+            ) : estimationsPartielles.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                <p>Aucune demande d'estimation partielle pour le moment.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {estimationsPartielles.map((ep) => (
+                  <div
+                    key={ep.id}
+                    className={`border-2 rounded-lg p-5 transition-all hover:shadow-lg ${
+                      ep.read ? 'bg-gray-50 border-gray-200' : 'bg-orange-50 border-orange-300'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h3 className="text-xl font-semibold" style={{ color: '#4682B4' }}>
+                            {ep.prenom} {ep.nom}
+                          </h3>
+                          {!ep.read && (
+                            <span className="px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full">
+                              Nouveau
+                            </span>
+                          )}
+                          <span className="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">
+                            Partielle — Étape 1 uniquement
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                          <p><strong>Email:</strong> {ep.email}</p>
+                          <p><strong>Téléphone:</strong> {ep.telephone}</p>
+                          <p className="text-xs text-gray-500">Reçu le {formatDate(ep.created_at)}</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        <button
+                          onClick={() => toggleEstimationPartielleRead(ep.id, ep.read ?? false)}
+                          className={`px-3 py-1 rounded text-sm transition-colors ${
+                            ep.read
+                              ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                              : 'bg-blue-600 text-white hover:bg-blue-700'
+                          }`}
+                          style={!ep.read ? { backgroundColor: '#4682B4' } : {}}
+                        >
+                          {ep.read ? 'Marquer non lu' : 'Marquer lu'}
+                        </button>
+                        <button
+                          onClick={() => deleteEstimationPartielle(ep.id)}
                           className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
                         >
                           Supprimer

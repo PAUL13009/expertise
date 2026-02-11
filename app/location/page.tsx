@@ -1,13 +1,11 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import Hero from '@/components/Hero'
 import Navbar from '@/components/Navbar'
 import FadeContent from '@/components/FadeContent'
-import AnimatedContent from '@/components/AnimatedContent'
 import Image from 'next/image'
-import Stepper, { Step } from '@/components/Stepper'
-import { AnimatePresence, motion } from 'framer-motion'
+import Link from 'next/link'
 import { useProximityContainer } from '@/components/ProximityProvider'
 import { useScrollButtonAnimation } from '@/hooks/useScrollButtonAnimation'
 
@@ -15,7 +13,45 @@ export default function LocationPage() {
   const mainRef = useRef<HTMLElement>(null)
   const containerRef = useProximityContainer()
   const ctaFinalButtonRef = useScrollButtonAnimation()
-  const [locationToggleOn, setLocationToggleOn] = useState(false)
+  const [expandedBar, setExpandedBar] = useState<number | null>(null)
+  const [mobileRevealedBars, setMobileRevealedBars] = useState<Set<number>>(new Set())
+  const [isMobile, setIsMobile] = useState(false)
+  const barRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  const setBarRef = useCallback((el: HTMLDivElement | null, index: number) => {
+    barRefs.current[index] = el
+  }, [])
+
+  // Détection mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // IntersectionObserver pour ouverture séquentielle sur mobile
+  useEffect(() => {
+    if (!isMobile) { setMobileRevealedBars(new Set()); return }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.getAttribute('data-protocole-index'))
+            if (!isNaN(idx)) {
+              setTimeout(() => {
+                setMobileRevealedBars((prev) => { const next = new Set(prev); next.add(idx); return next })
+              }, idx * 350)
+              observer.unobserve(entry.target)
+            }
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+    barRefs.current.forEach((ref) => { if (ref) observer.observe(ref) })
+    return () => observer.disconnect()
+  }, [isMobile])
 
   useEffect(() => {
     if (mainRef.current && containerRef) {
@@ -29,457 +65,318 @@ export default function LocationPage() {
       
       {/* SECTION 1 — HERO */}
       <Hero 
-        title="Location immobilière avec méthode et sélection"
-        subtitle=""
-        buttonText="Nous contacter pour un projet de location"
+        title="UNE MISE EN LOCATION SÉCURISÉE, UN PATRIMOINE PRÉSERVÉ"
+        subtitle="CONFIEZ LA RECHERCHE DE VOTRE LOCATAIRE À UNE CONSEILLÈRE EXPERTE. DE LA STRATÉGIE DE LOYER À LA SIGNATURE DU BAIL, BÉNÉFICIEZ D'UNE SÉLECTION DRASTIQUE ET D'UN FORMALISME JURIDIQUE DE HAUT NIVEAU POUR VOTRE BIEN À SAINT-GERMAIN-EN-LAYE"
+        buttonText="Trouver mon locataire idéal"
         buttonLink="#contact"
-        imagePath="/images/modern.webp"
+        imagePath="/images/herosectionimage.png"
+        centered={true}
       />
 
-      {/* SECTION 2 — INTRODUCTION */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white" aria-labelledby="introduction-location">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <h2 id="introduction-location" className="sr-only">Introduction au service de location immobilière à Marseille</h2>
-            <div className="bg-stone-50 rounded-xl p-8 md:p-10 shadow-lg">
-              <div className="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <p>
-                  Mettre un bien en location ne se résume pas à publier une annonce.
-                </p>
-                <p>
-                  C'est un processus qui engage le propriétaire sur le plan juridique, financier et humain.
-                </p>
-                <p className="font-semibold mt-6" style={{ color: '#4682B4' }}>
-                  Notre rôle est d'encadrer cette mise en location avec rigueur, en sélectionnant des dossiers sérieux et en assurant un suivi clair à chaque étape.
-                </p>
-              </div>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 3 — À QUI S'ADRESSE CE SERVICE */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-stone-50" aria-labelledby="qui-sadresse-location">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mb-6 mx-auto" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="qui-sadresse-location" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                À qui s'adresse ce service
-              </h2>
-            </div>
-            
-            <div className="bg-white rounded-xl p-8 md:p-10 shadow-lg">
-              <p className="text-lg md:text-xl text-gray-700 mb-6 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Ce service s'adresse aux propriétaires qui :
-              </p>
-              <div className="w-full flex justify-center">
-                <Stepper variant="light" backButtonText="Précédent" nextButtonText="Suivant" completeButtonText="Terminer" contentClassName="!mb-4">
-                  <Step>
-                    <div className="flex justify-center">
-                      <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Souhaitent louer leur bien dans un cadre sécurisé
-                      </span>
-                    </div>
-                  </Step>
-                  <Step>
-                    <div className="flex justify-center">
-                      <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Accordent de l'importance à la sélection des locataires
-                      </span>
-                    </div>
-                  </Step>
-                  <Step>
-                    <div className="flex justify-center">
-                      <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Veulent un interlocuteur unique et impliqué
-                      </span>
-                    </div>
-                  </Step>
-                  <Step>
-                    <div className="flex justify-center">
-                      <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                        Privilégient la qualité des dossiers plutôt que la rapidité à tout prix
-                      </span>
-                    </div>
-                  </Step>
-                </Stepper>
-              </div>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 4 — NOTRE MÉTHODE DE MISE EN LOCATION */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white" aria-labelledby="methode-mise-location">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mb-6 mx-auto" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="methode-mise-location" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Notre méthode de mise en location
-              </h2>
-            </div>
-            
-            <div className="bg-stone-50 rounded-xl p-8 md:p-10 shadow-lg mb-8">
-              <h3 id="methode-claire-depart" className="text-2xl md:text-3xl font-light mb-6 text-center uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Une méthode claire, dès le départ
-              </h3>
-              <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <p>
-                  Chaque mise en location débute par une analyse du bien et de son contexte.
-                </p>
-                <p>
-                  Nous définissons ensemble les conditions de location, le positionnement du bien et les critères de sélection des locataires.
-                </p>
-              </div>
-            </div>
-
-            <div className="w-full flex justify-center">
-              <Stepper variant="light" backButtonText="Précédent" nextButtonText="Suivant" completeButtonText="Terminer" contentClassName="!mb-4">
-                <Step>
-                  <div className="flex justify-center">
-                    <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Analyse du bien et de sa conformité
-                    </span>
-                  </div>
-                </Step>
-                <Step>
-                  <div className="flex justify-center">
-                    <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Définition du loyer en cohérence avec le marché
-                    </span>
-                  </div>
-                </Step>
-                <Step>
-                  <div className="flex justify-center">
-                    <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Rédaction et diffusion de l'annonce
-                    </span>
-                  </div>
-                </Step>
-                <Step>
-                  <div className="flex justify-center">
-                    <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Organisation et gestion des visites
-                    </span>
-                  </div>
-                </Step>
-                <Step>
-                  <div className="flex justify-center">
-                    <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Sélection rigoureuse des dossiers
-                    </span>
-                  </div>
-                </Step>
-                <Step>
-                  <div className="flex justify-center">
-                    <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Accompagnement jusqu'à la signature
-                    </span>
-                  </div>
-                </Step>
-              </Stepper>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 5 — LA SÉLECTION DES LOCATAIRES */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-stone-50" aria-labelledby="selection-locataires">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mb-6 mx-auto" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="selection-locataires" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                La sélection des locataires
-              </h2>
-            </div>
-            
-            <div className="bg-white rounded-xl p-8 md:p-10 shadow-lg">
-              <h3 id="selection-rigoureuse-dossiers" className="text-2xl md:text-3xl font-light mb-6 text-center uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Une sélection rigoureuse des dossiers
-              </h3>
-              <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <p>
-                  Tous les dossiers sont étudiés avec attention.
-                </p>
-                <p>
-                  Notre priorité est de présenter au propriétaire des candidatures sérieuses, cohérentes et compatibles avec le bien proposé.
-                </p>
-                <p className="font-semibold mt-6 text-black">
-                  Chaque dossier fait l'objet d'une analyse complète avant toute décision.
-                </p>
-              </div>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 6 — TRANSPARENCE ET SUIVI */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white" aria-labelledby="transparence-suivi-location">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mb-6 mx-auto" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="transparence-suivi-location" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Transparence et suivi
-              </h2>
-            </div>
-            
-            <div className="bg-stone-50 rounded-xl p-8 md:p-10 shadow-lg">
-              <h3 id="suivi-clair-regulier" className="text-2xl md:text-3xl font-light mb-6 text-center uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Un suivi clair et régulier
-              </h3>
-              <div className="space-y-4 text-lg md:text-xl text-gray-700 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                <p>
-                  Tout au long du processus, le propriétaire est informé des avancées :
-                  visites réalisées, retours, candidatures reçues et étapes à venir.
-                </p>
-                <p className="font-semibold mt-6 text-black">
-                  Cette transparence permet de prendre des décisions éclairées, sans précipitation.
-                </p>
-              </div>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 7 — CE QUE NOUS ACCEPTONS / CE QUE NOUS REFUSONS */}
-      <section className="px-4 sm:px-6 lg:px-8 py-24 bg-white" aria-labelledby="acceptons-refusons-location">
-        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-12 text-center">
-              <div className="w-16 h-1 bg-black mx-auto mb-6" style={{ backgroundColor: '#000000' }} aria-hidden="true" role="presentation"></div>
-              <h2 id="acceptons-refusons-location" className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 leading-tight uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Ce que nous acceptons / Ce que nous refusons
-              </h2>
-            </div>
-            <div className="flex flex-col items-center mb-8">
-              {/* Conteneur pour la transition fluide gauche ↔ droite */}
-              <div className="w-full max-w-xl relative overflow-hidden min-h-[22rem]">
-                <AnimatePresence initial={false}>
-                  {!locationToggleOn ? (
-                    <motion.article
-                      key="accompagnons"
-                      initial={{ x: '-100%' }}
-                      animate={{ x: 0 }}
-                      exit={{ x: '-100%' }}
-                      transition={{ type: 'tween', ease: [0.25, 0.46, 0.45, 0.94], duration: 0.45 }}
-                      className="absolute left-0 top-0 w-full bg-white rounded-xl p-8 shadow-lg border-2 border-gray-200 cursor-pointer group hover:border-gray-300 hover:shadow-xl transition-shadow duration-300"
-                      role="article"
-                      aria-labelledby="nous-accompagnons-location"
-                    >
-                      <div className="flex items-center justify-center mb-6">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4 transition-transform duration-300 group-hover:scale-110 bg-emerald-300" aria-hidden="true" role="presentation">
-                          <span className="text-white text-xl" aria-hidden="true">✓</span>
-                        </div>
-                        <h3 id="nous-accompagnons-location" className="text-xl font-bold text-center text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                          Nous accompagnons
-                        </h3>
-                      </div>
-                      <ul className="flex flex-col items-center gap-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }} role="list">
-                        <AnimatedContent
-                          distance={50}
-                          direction="vertical"
-                          reverse={false}
-                          duration={0.8}
-                          ease="power3.out"
-                          initialOpacity={0}
-                          animateOpacity={true}
-                          threshold={0.2}
-                          delay={0}
-                        >
-                          <li className="w-full flex justify-center" role="listitem">
-                            <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium">
-                              Les projets de location clairs et structurés
-                            </span>
-                          </li>
-                        </AnimatedContent>
-                        <AnimatedContent
-                          distance={50}
-                          direction="vertical"
-                          reverse={false}
-                          duration={0.8}
-                          ease="power3.out"
-                          initialOpacity={0}
-                          animateOpacity={true}
-                          threshold={0.2}
-                          delay={0.1}
-                        >
-                          <li className="w-full flex justify-center" role="listitem">
-                            <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium">
-                              Les propriétaires souhaitant s'inscrire dans un cadre légal
-                            </span>
-                          </li>
-                        </AnimatedContent>
-                        <AnimatedContent
-                          distance={50}
-                          direction="vertical"
-                          reverse={false}
-                          duration={0.8}
-                          ease="power3.out"
-                          initialOpacity={0}
-                          animateOpacity={true}
-                          threshold={0.2}
-                          delay={0.2}
-                        >
-                          <li className="w-full flex justify-center" role="listitem">
-                            <span className="inline-block rounded-full bg-emerald-300 px-5 py-2.5 text-center text-gray-900 text-sm font-medium">
-                              Les biens correctement positionnés sur le marché
-                            </span>
-                          </li>
-                        </AnimatedContent>
-                      </ul>
-                    </motion.article>
-                  ) : (
-                    <motion.article
-                      key="refusons"
-                      initial={{ x: '100%' }}
-                      animate={{ x: 0 }}
-                      exit={{ x: '100%' }}
-                      transition={{ type: 'tween', ease: [0.25, 0.46, 0.45, 0.94], duration: 0.45 }}
-                      className="absolute left-0 top-0 w-full bg-white rounded-xl p-8 shadow-lg border-2 border-gray-200 cursor-pointer group hover:border-gray-300 hover:shadow-xl transition-shadow duration-300"
-                      role="article"
-                      aria-labelledby="nous-refusons-location"
-                    >
-                      <div className="flex items-center justify-center mb-6">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4 transition-transform duration-300 group-hover:scale-110 bg-red-500" aria-hidden="true" role="presentation">
-                          <span className="text-white text-xl" aria-hidden="true">✗</span>
-                        </div>
-                        <h3 id="nous-refusons-location" className="text-xl font-bold text-center text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                          Nous refusons
-                        </h3>
-                      </div>
-                      <ul className="flex flex-col items-center gap-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }} role="list">
-                        <AnimatedContent
-                          distance={50}
-                          direction="vertical"
-                          reverse={false}
-                          duration={0.8}
-                          ease="power3.out"
-                          initialOpacity={0}
-                          animateOpacity={true}
-                          threshold={0.2}
-                          delay={0}
-                        >
-                          <li className="w-full flex justify-center" role="listitem">
-                            <span className="inline-block rounded-full bg-red-500 px-5 py-2.5 text-center text-white text-sm font-medium">
-                              Les conditions irréalistes
-                            </span>
-                          </li>
-                        </AnimatedContent>
-                        <AnimatedContent
-                          distance={50}
-                          direction="vertical"
-                          reverse={false}
-                          duration={0.8}
-                          ease="power3.out"
-                          initialOpacity={0}
-                          animateOpacity={true}
-                          threshold={0.2}
-                          delay={0.1}
-                        >
-                          <li className="w-full flex justify-center" role="listitem">
-                            <span className="inline-block rounded-full bg-red-500 px-5 py-2.5 text-center text-white text-sm font-medium">
-                              Les projets flous ou non définis
-                            </span>
-                          </li>
-                        </AnimatedContent>
-                        <AnimatedContent
-                          distance={50}
-                          direction="vertical"
-                          reverse={false}
-                          duration={0.8}
-                          ease="power3.out"
-                          initialOpacity={0}
-                          animateOpacity={true}
-                          threshold={0.2}
-                          delay={0.2}
-                        >
-                          <li className="w-full flex justify-center" role="listitem">
-                            <span className="inline-block rounded-full bg-red-500 px-5 py-2.5 text-center text-white text-sm font-medium">
-                              Les démarches sans cadre ni suivi
-                            </span>
-                          </li>
-                        </AnimatedContent>
-                      </ul>
-                    </motion.article>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Toggle On/Off — design épuré et moderne */}
-              <div className="flex justify-center mt-4">
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={locationToggleOn}
-                  aria-label={locationToggleOn ? 'Désactiver' : 'Activer'}
-                  onClick={() => setLocationToggleOn((prev) => !prev)}
-                  className={`relative inline-flex items-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 transition-colors duration-300 ease-out w-[5rem] h-8 ${locationToggleOn ? 'bg-red-500' : 'bg-emerald-300'}`}
-                  style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
-                >
-                  <span
-                    className="absolute left-1 top-1 w-6 h-6 rounded-full bg-white shadow-md transition-[transform] duration-300 ease-out"
-                    style={{ transform: locationToggleOn ? 'translateX(calc(5rem - 1.5rem - 0.5rem))' : 'translateX(0)' }}
-                  />
-                  <span className="sr-only">{locationToggleOn ? 'On' : 'Off'}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </FadeContent>
-      </section>
-
-      {/* SECTION 8 — CTA FINAL */}
-      <section className="relative min-h-screen flex items-center justify-center" aria-labelledby="cta-final-location">
+      {/* Wrapper avec image d'arrière-plan pour toutes les sections */}
+      <div className="relative z-10">
+        {/* Image de fond fixe */}
         <div className="absolute inset-0 z-0">
-          <div className="relative w-full h-full">
-            <Image
-              src="/images/modern.webp"
-              alt="L'Agence YL - Service de location immobilière à Saint-Germain-en-Laye"
-              fill
-              className="object-cover"
-              loading="lazy"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-black/20" aria-hidden="true" role="presentation" />
-          </div>
+          <Image
+            src="/images/herosectionimage.png"
+            alt=""
+            fill
+            className="object-cover blur-md"
+            loading="lazy"
+            sizes="100vw"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
         </div>
-        <div className="relative z-10 w-full">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-              <h2 id="cta-final-location" className="sr-only">Contacter l'agence pour un projet de location immobilière</h2>
-              <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white font-light leading-relaxed px-2 mb-8 sm:mb-12 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Chaque projet de location est différent.
-                <br />
-                Le plus important est de vérifier que notre approche correspond à vos attentes.
-              </p>
-            </FadeContent>
-            <div className="flex justify-center items-center">
-              <div className="group/cta relative flex flex-col border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10">
-                <div className="flex justify-center w-full">
-                  <a
-                    ref={ctaFinalButtonRef as any}
-                    href="#contact"
-                    aria-label="Nous contacter pour un projet de location immobilière"
-                    className="group relative inline-flex items-center text-white font-medium transition-all duration-300"
-                    style={{
-                      fontFamily: 'var(--font-poppins), sans-serif',
-                      fontSize: 'clamp(1rem, 1.5vw, 1.125rem)',
-                      textDecoration: 'none',
-                      letterSpacing: '0.5px',
-                    }}
-                  >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">Nous contacter pour un projet de location</span>
-                  </a>
+
+      {/* SECTION 2 — Protocole de sélection — design process bars */}
+      <section className="py-24 relative z-10" aria-labelledby="protocole-selection">
+        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
+          {/* Header */}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+              <div>
+                <p className="text-sm text-white/50 mb-3 uppercase tracking-widest" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>0 - 3</p>
+                <h2 id="protocole-selection" className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  NOTRE PROTOCOLE
+                </h2>
+                <p className="text-lg text-white/70 mt-4 max-w-xl" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  UN PROTOCOLE DE SÉLECTION À LA RIGOUREUX. DECOUVREZ LES 3 ÉTAPES CLÉS DE NOTRE INTERVENTION.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Process Bars */}
+          <div className="w-full">
+            {[
+              { num: '0001', title: 'VALORISATION & DIFFUSION STRATÉGIQUE', content: 'NOUS NE NOUS CONTENTONS PAS DE PUBLIER UNE ANNONCE. NOUS RÉALISONS UNE EXPERTISE DE LA VALEUR LOCATIVE ET UNE MISE EN VALEUR VISUELLE PREMIUM POUR ATTIRER DES PROFILS DE LOCATAIRES À HAUT DOSSIER (CADRES EN MOBILITÉ, EXPATRIÉS, INSTITUTIONNELS).' },
+              { num: '0002', title: 'AUDIT DE SOLVABILITÉ CHIRURGICAL', content: 'C\'EST NOTRE CŒUR DE MÉTIER D\'EXPERTE. CHAQUE DOSSIER EST PASSÉ AU CRIBLE : VÉRIFICATION DE L\'AUTHENTICITÉ DES PIÈCES, ANALYSE DU RATIO D\'ENDETTEMENT, ET VALIDATION DES GARANTIES (PHYSIQUES OU INSTITUTIONNELLES). NOUS NE VOUS PRÉSENTONS QUE L\'EXCELLENCE.' },
+              { num: '0003', title: 'SÉCURISATION DE L\'ENTRÉE', content: 'RÉDACTION D\'UN BAIL CONFORME AUX DERNIÈRES ÉVOLUTIONS LÉGISLATIVES ET RÉALISATION D\'UN ÉTAT DES LIEUX CONTRADICTOIRE D\'UNE PRÉCISION TOTALE. VOUS RÉCUPÉREZ UN DOSSIER COMPLET, PRÊT POUR L\'ENCAISSEMENT DE VOS LOYERS.' },
+            ].map((item, index) => {
+              const colors = [
+                'rgba(255, 255, 255, 0.05)',
+                'rgba(255, 255, 255, 0.10)',
+                'rgba(255, 255, 255, 0.18)',
+              ]
+              const isExpanded = isMobile ? mobileRevealedBars.has(index) : expandedBar === index
+              return (
+                <div
+                  key={index}
+                  ref={(el) => setBarRef(el, index)}
+                  data-protocole-index={index}
+                  className="w-full cursor-pointer overflow-hidden transition-all duration-700 ease-in-out"
+                  style={{
+                    backgroundColor: colors[index],
+                    height: isExpanded ? '260px' : '70px',
+                  }}
+                  onMouseEnter={!isMobile ? () => setExpandedBar(index) : undefined}
+                  onMouseLeave={!isMobile ? () => setExpandedBar(null) : undefined}
+                >
+                  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <span className="text-white transition-transform duration-300" style={{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}>↓</span>
+                        <h3 className="text-xl md:text-2xl font-bold text-white uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          {item.title}
+                        </h3>
+                      </div>
+                      <span className="text-5xl md:text-7xl lg:text-8xl font-bold text-white/10 leading-none select-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        {item.num}
+                      </span>
+                    </div>
+                    <div
+                      className="overflow-hidden transition-all duration-700 ease-in-out"
+                      style={{ maxHeight: isExpanded ? '120px' : '0px', opacity: isExpanded ? 1 : 0 }}
+                    >
+                      <p className="text-base md:text-lg text-white/80 leading-relaxed mt-4 max-w-3xl" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                        {item.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </FadeContent>
+      </section>
+
+      {/* SECTION 3 — Kit Sérénité de Bailleur — design deux colonnes */}
+      <section className="px-4 sm:px-6 lg:px-8 py-24 relative z-10" aria-labelledby="kit-serenite">
+        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
+              {/* Colonne gauche : Grand titre sticky (statique sur mobile) */}
+              <div className="md:sticky md:top-32">
+                <h2 id="kit-serenite" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  VOTRE "KIT SÉRÉNITÉ" :{' '}
+                  <span className="font-light italic text-white/50">DE BAILLEUR</span>
+                </h2>
+              </div>
+
+              {/* Colonne droite : Liste d'éléments avec icônes */}
+              <div className="space-y-0" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                {/* Item 1 */}
+                <div className="py-8 border-b border-white/20">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 mt-1">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">LE DOSSIER DE CANDIDATURE AUDITÉ</h3>
+                      <p className="text-white/70 leading-relaxed">
+                        Un dossier complet, vérifié pièce par pièce, avec une analyse de solvabilité certifiée par l'agence.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Item 2 */}
+                <div className="py-8 border-b border-white/20">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 mt-1">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">LE BAIL SUR-MESURE</h3>
+                      <p className="text-white/70 leading-relaxed">
+                        Un contrat de location rédigé selon les dernières normes juridiques (Loi Alur, décrets récents) pour protéger vos intérêts.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Item 3 */}
+                <div className="py-8 border-b border-white/20">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 mt-1">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">L'ÉTAT DES LIEUX D'EXPERT</h3>
+                      <p className="text-white/70 leading-relaxed">
+                        Un document contradictoire d'une précision chirurgicale, avec photos HD, pour éviter toute contestation lors du départ du locataire.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Item 4 */}
+                <div className="py-8 border-b border-white/20">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 mt-1">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">LE GUIDE DE GESTION</h3>
+                      <p className="text-white/70 leading-relaxed">
+                        Un mémo pratique pour vous aider à gérer la relation avec votre locataire (indexation des loyers, charges, calendrier) en toute autonomie.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </FadeContent>
+      </section>
+
+      {/* SECTION 4 — Pourquoi me confier votre dossier — design timeline verticale */}
+      <section className="px-4 sm:px-6 lg:px-8 py-24 relative z-10" aria-labelledby="pourquoi-confier">
+        <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
+          <div className="max-w-3xl mx-auto">
+            <div className="mb-12 text-center">
+              <div className="w-16 h-1 bg-white mb-6 mx-auto" aria-hidden="true" role="presentation"></div>
+              <h2 id="pourquoi-confier" className="text-3xl md:text-4xl lg:text-5xl font-light mb-8 leading-tight uppercase text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Pourquoi me confier votre dossier ?
+              </h2>
+            </div>
+
+            {/* Timeline verticale */}
+            <div className="flex flex-col items-center">
+              {[
+                {
+                  icon: (
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                  ),
+                  title: 'MAÎTRISE DU RISQUE',
+                  content: 'Contrairement à un agent classique, mon regard d\'experte identifie immédiatement les incohérences d\'un dossier de candidature.',
+                },
+                {
+                  icon: (
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
+                  ),
+                  title: 'CONNAISSANCE DU MARCHÉ LOCAL',
+                  content: 'Une estimation précise du loyer pour attirer le bon profil sans subir de vacance locative prolongée à Saint-Germain-en-Laye.',
+                },
+                {
+                  icon: (
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
+                    </svg>
+                  ),
+                  title: 'NEUTRALITÉ ET DÉONTOLOGIE',
+                  content: 'Une approche basée sur des faits et des chiffres, garantissant une sélection impartiale et sécurisée pour votre patrimoine.',
+                },
+              ].map((item, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  {/* Icône dans un cercle */}
+                  <div className="w-16 h-16 rounded-full border-2 border-white/30 flex items-center justify-center text-white">
+                    {item.icon}
+                  </div>
+                  {/* Titre */}
+                  <h3 className="text-xl md:text-2xl font-bold text-white mt-5 mb-3 text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    {item.title}
+                  </h3>
+                  {/* Description */}
+                  <p className="text-base md:text-lg text-white/70 leading-relaxed text-center max-w-lg" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    {item.content}
+                  </p>
+                  {/* Ligne pointillée de séparation */}
+                  {index < 2 && (
+                    <div className="flex flex-col items-center gap-2 py-8">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </FadeContent>
+      </section>
+
+      {/* SECTION 5 — CTA FINAL — même design que page d'accueil */}
+      <section className="relative z-10 py-32 md:py-44 flex items-center justify-center bg-black" aria-labelledby="cta-final-location">
+        <div className="relative z-10 w-full">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
+              <h2 id="cta-final-location" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-tight mb-6 sm:mb-8 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                VOTRE PATRIMOINE MÉRITE UN LOCATAIRE À SA MESURE
+              </h2>
+            </FadeContent>
+            <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
+              <p className="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed mb-4 uppercase max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Le succès de votre investissement locatif se joue dès la première visite. Ne laissez pas la place à l&apos;improvisation : bénéficiez d&apos;une analyse rigoureuse, d&apos;un dossier juridique blindé et d&apos;un état des lieux d&apos;expert pour une gestion autonome en toute sérénité.
+              </p>
+              <p className="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed mb-10 sm:mb-14 uppercase max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Que votre bien soit déjà disponible ou que vous prépariez sa mise sur le marché, échangeons sur votre stratégie locative.
+              </p>
+            </FadeContent>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                ref={ctaFinalButtonRef as any}
+                href="#contact"
+                aria-label="Confier ma recherche de locataire"
+                className="inline-flex items-center justify-center bg-white text-black font-semibold px-8 py-4 rounded-lg hover:bg-white/90 transition-all duration-300"
+                style={{
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
+                  textDecoration: 'none',
+                  letterSpacing: '0.5px',
+                }}
+              >
+                CONFIER MA RECHERCHE DE LOCATAIRE
+              </a>
+            </div>
+          </div>
         </div>
       </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 bg-black py-6" role="contentinfo">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+            2026 — L'AGENCE YL
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link href="/mentions-legales" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Mentions légales
+            </Link>
+            <Link href="/politique-de-confidentialite" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Politique de confidentialité
+            </Link>
+            <Link href="/honoraires" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Honoraires
+            </Link>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

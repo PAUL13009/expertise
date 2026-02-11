@@ -12,7 +12,8 @@ import {
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore'
-import { db } from './firebase'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { db, storage } from './firebase'
 
 // ===== PROPRIÉTÉS =====
 
@@ -242,7 +243,8 @@ export interface AnalyseLead {
   prenom?: string
   telephone?: string
   email?: string
-  type_demande?: 'analyse' | 'estimation'
+  type_demande?: 'analyse' | 'estimation' | 'estimation_partielle'
+  nom?: string
   read?: boolean
   status?: 'nouveau' | 'en_cours' | 'accepte' | 'refuse'
   notes?: string
@@ -305,8 +307,34 @@ export const createAnalyseLead = async (leadData: AnalyseLead): Promise<string> 
   }
 }
 
+// Uploader des photos pour une estimation
+export const uploadEstimationPhotos = async (
+  files: File[], 
+  leadId: string,
+  onProgress?: (uploaded: number, total: number) => void
+): Promise<string[]> => {
+  const urls: string[] = []
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    const timestamp = Date.now()
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+    const storageRef = ref(storage, `estimations/${leadId}/${timestamp}_${i}_${safeName}`)
+    
+    const snapshot = await uploadBytes(storageRef, file)
+    const downloadURL = await getDownloadURL(snapshot.ref)
+    urls.push(downloadURL)
+    
+    if (onProgress) {
+      onProgress(i + 1, files.length)
+    }
+  }
+  
+  return urls
+}
+
 // Récupérer tous les leads d'analyse
-export const getAllAnalyseLeads = async (type?: 'analyse' | 'estimation'): Promise<AnalyseLeadWithId[]> => {
+export const getAllAnalyseLeads = async (type?: 'analyse' | 'estimation' | 'estimation_partielle'): Promise<AnalyseLeadWithId[]> => {
   try {
     const leadsRef = collection(db, 'analyse_leads')
     let q

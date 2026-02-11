@@ -196,20 +196,36 @@ export default function Home() {
     <main ref={mainRef} className="min-h-screen bg-transparent relative" role="main">
       <Navbar />
       <Hero 
-        title="Vendez au juste prix. L'expertise certifiée à Saint-Germain-en-Laye"
-        subtitle="Ne vous contentez pas d'une estimation automatique. Obtenez un rapport d'expertise vénale complet pour sécuriser votre vente et valoriser votre patrimoine"
-        buttonText="Obtenir mon expertise sous 48h"
+        title="Vendez au juste prix. Estimation certifiée à Saint-Germain-en-Laye"
+        subtitle="Ne vous contentez pas d'une estimation automatique. Obtenez un rapport d'estimation complet pour sécuriser votre vente et valoriser votre patrimoine"
+        buttonText="Obtenir mon estimation sous 24h"
         buttonSubtext="Estimation gratuite – sans engagement"
         buttonLink="/estimation"
         imagePath="/images/herosectionimage.png"
         imageAlt="L'Agence YL - Agence immobilière nouvelle génération à Marseille"
         centered={true}
       />
+      {/* Wrapper avec image d'arrière-plan pour toutes les sections */}
+      <div className="relative z-10">
+        {/* Image de fond */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herosectionimage.png"
+            alt=""
+            fill
+            className="object-cover blur-md"
+            loading="lazy"
+            sizes="100vw"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+        </div>
+
       <StatsSection />
       <Features />
       
       {/* Section Biens à la une */}
-      <section className="pt-16 pb-20 sm:pt-20 sm:pb-24 md:pt-24 md:pb-28 bg-sable-50 relative z-10" aria-labelledby="biens-a-la-une">
+      <section className="pt-16 pb-20 sm:pt-20 sm:pb-24 md:pt-24 md:pb-28 relative z-10" aria-labelledby="biens-a-la-une">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* En-tête avec titre et bouton */}
@@ -217,18 +233,18 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
                 <div className="flex-1">
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4 mb-3">
-                    <h2 id="biens-a-la-une" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-left uppercase text-black" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    <h2 id="biens-a-la-une" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-left uppercase text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                       Découvrez Nos Biens
                     </h2>
                     <Link
                       href="/catalogue"
-                      className="group/cta relative inline-flex items-center border border-gray-800 px-6 py-3 rounded-lg transition-all duration-300 hover:border-gray-900"
+                      className="group/cta relative hidden sm:inline-flex items-center border border-white/60 px-6 py-3 rounded-lg transition-all duration-300 hover:border-white"
                       style={{
                         fontFamily: 'var(--font-poppins), sans-serif',
                         fontSize: 'clamp(0.875rem, 1vw, 1rem)',
                         textDecoration: 'none',
                         letterSpacing: '0.5px',
-                        color: '#000000',
+                        color: '#ffffff',
                         fontWeight: 500,
                         backgroundColor: 'transparent',
                       }}
@@ -242,10 +258,10 @@ export default function Home() {
                     </Link>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm sm:text-base text-gray-800 uppercase tracking-wider" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    <span className="text-sm sm:text-base text-white/70 uppercase tracking-wider" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                       NOS BIENS
                     </span>
-                    <svg className="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-4 h-4 text-white/70" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <rect x="2" y="10" width="2" height="4" rx="1"/>
                       <rect x="6" y="8" width="2" height="8" rx="1"/>
                       <rect x="10" y="6" width="2" height="12" rx="1"/>
@@ -262,10 +278,10 @@ export default function Home() {
               {loading ? (
                 <div className="col-span-full text-center py-8" role="status" aria-live="polite">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800 mx-auto mb-4"></div>
-                  <p className="text-gray-800" aria-label="Chargement des biens immobiliers en cours">Chargement des biens...</p>
+                  <p className="text-white/70" aria-label="Chargement des biens immobiliers en cours">Chargement des biens...</p>
                 </div>
               ) : displayProperties.length === 0 ? (
-                <div className="col-span-full text-center py-8 text-gray-800">
+                <div className="col-span-full text-center py-8 text-white/70">
                   <p>Aucun bien enregistré pour le moment.</p>
                 </div>
               ) : (
@@ -293,13 +309,6 @@ export default function Home() {
                             />
                           </div>
                           
-                          {/* Badge "Expertisé par l'Agence YL" */}
-                          <div className="absolute top-4 left-4 z-20">
-                            <span className="inline-block bg-sable-50 text-black px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold uppercase tracking-wider shadow-lg" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                              Expertisé par l'Agence YL
-                            </span>
-                          </div>
-                          
                           {/* Overlay avec texte en bas à gauche */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
                             <div className="absolute bottom-6 left-6 right-6">
@@ -317,9 +326,9 @@ export default function Home() {
                             </div>
                           </div>
 
-                          {/* CTA qui apparaît au survol */}
+                          {/* CTA qui apparaît au survol — masqué sur mobile */}
                           <div 
-                            className={`absolute inset-0 bg-black/80 flex items-center justify-center transition-all duration-500 ease-in-out ${
+                            className={`absolute inset-0 bg-black/80 hidden sm:flex items-center justify-center transition-all duration-500 ease-in-out ${
                               isHovered ? 'opacity-100' : 'opacity-0'
                             }`}
                           >
@@ -347,32 +356,57 @@ export default function Home() {
                 })
               )}
             </div>
+
+            {/* Bouton catalogue mobile - centré sous les cartes */}
+            <div className="flex sm:hidden justify-center mt-8">
+              <Link
+                href="/catalogue"
+                ref={catalogueButtonRef}
+                className="group/cta relative inline-flex items-center border border-white/60 px-6 py-3 rounded-lg transition-all duration-300 hover:border-white"
+                style={{
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: '0.9rem',
+                  textDecoration: 'none',
+                  letterSpacing: '0.5px',
+                  color: '#ffffff',
+                  fontWeight: 500,
+                  backgroundColor: 'transparent',
+                }}
+              >
+                <span className="transition-transform duration-300 group-hover/cta:translate-x-1">
+                  Découvrir notre catalogue
+                </span>
+                <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover/cta:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </FadeContent>
       </section>
 
       {/* Section Confiance */}
-      <section className="pt-16 pb-20 sm:pt-20 sm:pb-24 md:pt-24 md:pb-28 bg-sable-50 relative z-10" aria-labelledby="message-fondatrice">
+      <section className="pt-16 pb-20 sm:pt-20 sm:pb-24 md:pt-24 md:pb-28 relative z-10" aria-labelledby="message-fondatrice">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
               {/* Colonne gauche : Texte */}
               <div className="order-2 md:order-1 space-y-6 sm:space-y-8">
-                <h2 id="message-fondatrice" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <h2 id="message-fondatrice" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Nous ne promettons pas l'impossible
                 </h2>
                 
                 <div className="space-y-4 sm:space-y-6">
-                  <p className="text-base sm:text-lg md:text-xl text-gray-800 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <p className="text-base sm:text-lg md:text-xl text-white/80 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Nous privilégions les projets cohérents, avec des propriétaires impliqués et des objectifs réalistes.
                   </p>
                   
-                  <p className="text-base sm:text-lg md:text-xl text-gray-800 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <p className="text-base sm:text-lg md:text-xl text-white/80 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Chaque bien est étudié avant d'être accepté, afin de garantir une stratégie adaptée et un suivi sérieux.
                   </p>
                   
-                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-black font-bold leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                    Nous sélectionnons nos mandats pour garantir une vente au prix expertisé sous 60 jours.
+                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-bold leading-relaxed uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    Nous sélectionnons nos mandats pour garantir une vente au prix du marché.
                   </p>
                 </div>
               </div>
@@ -398,8 +432,8 @@ export default function Home() {
                       priority
                       unoptimized={false}
                     />
-                    {/* Overlay avec bouton CTA au survol */}
-                    <div className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-all duration-500 ${
+                    {/* Overlay avec bouton CTA au survol — masqué sur mobile */}
+                    <div className={`absolute inset-0 bg-black/60 hidden sm:flex items-center justify-center transition-all duration-500 ${
                       isConfianceImageHovered ? 'opacity-100' : 'opacity-0'
                     }`}>
                       <Link
@@ -421,22 +455,46 @@ export default function Home() {
                   </div>
                   {/* Caption en bas - centré */}
                   <div className="-mt-2 sm:-mt-3 p-3 sm:p-4 text-center">
-                    <p className="text-xl sm:text-2xl font-bold text-black mb-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                    <p className="text-xl sm:text-2xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                       Yman Lahlou
                     </p>
-                    <p className="text-sm sm:text-base text-black font-light" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                      Experte Immobilier Agréé
+                    <p className="text-sm sm:text-base text-white/70 font-light" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                      Fondatrice de l'Agence YL
                     </p>
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Bouton mobile — centré en bas de la section */}
+            <div className="flex sm:hidden justify-center mt-8">
+              <Link
+                href="/notre-methode"
+                className="group/cta relative inline-flex items-center border border-white/60 px-6 py-3 rounded-lg transition-all duration-300 hover:border-white"
+                style={{
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: '0.9rem',
+                  textDecoration: 'none',
+                  letterSpacing: '0.5px',
+                  color: '#ffffff',
+                  fontWeight: 500,
+                  backgroundColor: 'transparent',
+                }}
+              >
+                <span className="transition-transform duration-300 group-hover/cta:translate-x-1">
+                  Découvrir notre approche
+                </span>
+                <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover/cta:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
             </div>
           </div>
         </FadeContent>
       </section>
 
       {/* Section Présentation de l'agence */}
-      <section className="pt-12 pb-12 sm:pt-16 sm:pb-16 md:pt-20 md:pb-20 bg-sable-50 relative z-10" aria-labelledby="presentation-agence">
+      <section className="pt-12 pb-12 sm:pt-16 sm:pb-16 md:pt-20 md:pb-20 relative z-10" aria-labelledby="presentation-agence">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center mb-8 sm:mb-12">
@@ -483,13 +541,13 @@ export default function Home() {
               {/* Texte à droite */}
               <div className="space-y-4 sm:space-y-6 text-center">
                 <h3 id="presentation-agence" className="sr-only">Présentation de l'agence immobilière à Saint-Germain-en-Laye</h3>
-                <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold px-2 mb-4 sm:mb-6" style={{ color: '#000000', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold px-2 mb-4 sm:mb-6 uppercase" style={{ color: '#ffffff', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   L'expertise au cœur de Saint-Germain-en-Laye.
                 </h4>
-                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl px-2" style={{ color: '#000000', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl px-2" style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Parce que le marché de l'hyper-centre ne ressemble pas à celui de Pereire ou de l'Ermitage, l'Agence YL déploie une connaissance granulaire de chaque quartier.
                 </p>
-                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl px-2" style={{ color: '#000000', fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl px-2" style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Nous ne nous contentons pas de vendre des surfaces ; nous valorisons des emplacements historiques et des cadres de vie uniques. Notre priorité : transformer votre patrimoine en une transaction sereine, certifiée et sans surprise.
                 </p>
               </div>
@@ -499,72 +557,71 @@ export default function Home() {
       </section>
 
       {/* Section CTA Final */}
-      <section className="relative min-h-screen flex items-center justify-center" aria-labelledby="cta-final">
-        {/* Image fixe en arrière-plan */}
-        <div className="fixed inset-0 z-0">
-          <div className="relative w-full h-full">
-            <Image
-              src="/images/herosectionimage.png"
-              alt="L'Agence YL - Agence immobilière à Saint-Germain-en-Laye"
-              fill
-              className="object-cover"
-              loading="lazy"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-black/20" aria-hidden="true" role="presentation" />
-          </div>
-        </div>
+      <section className="relative z-10 py-32 md:py-44 flex items-center justify-center bg-black" aria-labelledby="cta-final">
         <div className="relative z-10 w-full">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-              <h2 id="cta-final" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-light leading-tight px-2 mb-6 sm:mb-8" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Sécurisez votre patrimoine dès aujourd'hui
+              <h2 id="cta-final" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold leading-tight mb-6 sm:mb-8 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Sécurisez votre patrimoine dès aujourd'hui.
               </h2>
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-normal leading-relaxed px-2 mb-8 sm:mb-12" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Que vous soyez prêt à vendre ou simplement en phase de réflexion, échangez avec une experte qui connaît la réalité de votre quartier
+              <p className="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed mb-10 sm:mb-14 uppercase max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Que vous soyez prêt à vendre ou simplement en phase de réflexion, échangez avec une experte qui connaît la réalité de votre quartier.
               </p>
             </FadeContent>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-              <div className="group/cta relative flex flex-col border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10">
-                <div className="flex justify-center w-full">
-                  <a
-                    ref={estimationButtonRef as any}
-                    href="/estimation"
-                    aria-label="Demander mon Expertise Vénale"
-                    className="group relative inline-flex items-center text-white font-medium transition-all duration-300"
-                    style={{
-                      fontFamily: 'var(--font-poppins), sans-serif',
-                      fontSize: 'clamp(1rem, 1.5vw, 1.125rem)',
-                      textDecoration: 'none',
-                      letterSpacing: '0.5px',
-                    }}
-                  >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">Demander mon Expertise Vénale</span>
-                  </a>
-                </div>
-              </div>
-              <div className="group/cta relative flex flex-col border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10">
-                <div className="flex justify-center w-full">
-                  <a
-                    ref={contactButtonRef as any}
-                    href="/analyse"
-                    aria-label="Prendre un simple rendez-vous conseil"
-                    className="group relative inline-flex items-center text-white font-medium transition-all duration-300"
-                    style={{
-                      fontFamily: 'var(--font-poppins), sans-serif',
-                      fontSize: 'clamp(1rem, 1.5vw, 1.125rem)',
-                      textDecoration: 'none',
-                      letterSpacing: '0.5px',
-                    }}
-                  >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">Prendre un simple rendez-vous conseil</span>
-                  </a>
-                </div>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                ref={estimationButtonRef as any}
+                href="/estimation"
+                aria-label="DEMANDER MON ESTIMATION"
+                className="inline-flex items-center justify-center bg-white text-black font-semibold px-8 py-4 rounded-lg hover:bg-white/90 transition-all duration-300"
+                style={{
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
+                  textDecoration: 'none',
+                  letterSpacing: '0.5px',
+                }}
+              >
+                DEMANDER MON ESTIMATION
+              </a>
+              <a
+                ref={contactButtonRef as any}
+                href="/analyse"
+                aria-label="Prendre un simple rendez-vous conseil"
+                className="inline-flex items-center justify-center bg-black/80 text-white font-semibold px-8 py-4 rounded-lg border border-white/30 hover:bg-black hover:border-white/60 transition-all duration-300"
+                style={{
+                  fontFamily: 'var(--font-poppins), sans-serif',
+                  fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
+                  textDecoration: 'none',
+                  letterSpacing: '0.5px',
+                }}
+              >
+                RDV DE CONSEIL
+              </a>
             </div>
           </div>
         </div>
       </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 bg-black py-6" role="contentinfo">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+            2026 — L'AGENCE YL
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link href="/mentions-legales" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Mentions légales
+            </Link>
+            <Link href="/politique-de-confidentialite" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Politique de confidentialité
+            </Link>
+            <Link href="/honoraires" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Honoraires
+            </Link>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

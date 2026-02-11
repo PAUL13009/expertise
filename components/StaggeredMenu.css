@@ -59,23 +59,23 @@
   transition: color 0.3s ease;
 }
 
-/* Sur mobile, forcer la couleur noire quand le menu est ouvert */
+/* Sur mobile, forcer la couleur blanche quand le menu est ouvert */
 @media (max-width: 767px) {
   div[data-open] .staggered-menu-header .sm-toggle {
-    color: #000000 !important;
+    color: #ffffff !important;
   }
 }
 
 .staggered-menu-wrapper[data-open] .sm-toggle {
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
-/* Sur mobile uniquement, forcer la couleur noire quand le menu est ouvert */
+/* Sur mobile uniquement, forcer la couleur blanche quand le menu est ouvert */
 @media (max-width: 767px) {
   div[data-open] .sm-toggle,
   div[data-open] .staggered-menu-header .sm-toggle,
   .staggered-menu-header .sm-toggle[aria-expanded="true"] {
-    color: #000000 !important;
+    color: #ffffff !important;
   }
 }
 
@@ -147,11 +147,11 @@
   width: 100%;
   max-width: 480px;
   height: 100vh;
-  background: #fafaf9;
+  background: #000000;
   z-index: 1001;
   overflow-y: auto;
   padding: 8rem 3rem 3rem;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
 }
 
 /* Bouton de fermeture mobile */
@@ -164,7 +164,7 @@
   border: none;
   cursor: pointer;
   padding: 0.75rem;
-  color: #000000;
+  color: #ffffff;
   z-index: 1003;
   transition: opacity 0.3s ease, transform 0.3s ease;
   width: 48px;
@@ -228,7 +228,7 @@
   gap: 1rem;
   padding: 1rem 0;
   text-decoration: none;
-  color: #1a1a1a;
+  color: #ffffff;
   font-size: 1.5rem;
   font-weight: 400;
   font-family: var(--font-poppins), sans-serif;
@@ -238,6 +238,7 @@
 
 .sm-panel-item:hover {
   color: #4682B4;
+  opacity: 0.85;
 }
 
 .sm-panel-item::before {
@@ -262,7 +263,7 @@
 .sm-socials {
   margin-top: auto;
   padding-top: 2rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .sm-socials-title {
@@ -270,7 +271,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #666;
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 1rem;
   font-family: var(--font-poppins), sans-serif;
 }
@@ -292,7 +293,7 @@
   display: block;
   padding: 0.5rem 0;
   text-decoration: none;
-  color: #1a1a1a;
+  color: #ffffff;
   font-size: 1rem;
   font-family: var(--font-poppins), sans-serif;
   transition: color 0.2s ease;

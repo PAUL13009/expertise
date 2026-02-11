@@ -22,11 +22,11 @@ export default function Features() {
     {
       number: '01',
       image: "/images/heropropre.jpeg",
-      imageAlt: "Expertise Vénale Certifiée - Agence YL",
-      title: "EXPERTISE VÉNALE CERTIFIÉE",
+      imageAlt: "Estimation Réaliste - Agence YL",
+      title: "ESTIMATION REALISTE",
       description: "Plus qu'une estimation, un rapport technique complet basé sur les méthodes de l'expertise immobilière pour sécuriser votre patrimoine",
       link: "/estimation",
-      ctaText: "Obtenir mon expertise"
+      ctaText: "Obtenir mon estimation"
     },
     {
       number: '02',
@@ -42,18 +42,18 @@ export default function Features() {
       image: "/images/chateau_saint_germain_en_laye.webp",
       imageAlt: "Mise en location - Agence YL",
       title: "MISE EN LOCATION",
-      description: "Accompagnement complet pour la mise en location de votre patrimoine. Recherche de locataire, suivi du dossier jusqu'à la signature du bail.",
+      description: "Accompagnement complet pour la mise en location de votre patrimoine. Recherche de locataire, suivi du dossier jusqu'à l'état des lieux d'entrée et la remise des clés.",
       link: "/location",
       ctaText: "Louer mon bien"
     },
   ]
 
   return (
-    <section id="services" className="pt-20 pb-24 sm:pt-24 sm:pb-28 md:pt-28 md:pb-32 bg-sable-50 relative z-10" aria-labelledby="services-title">
+    <section id="services" className="pt-20 pb-24 sm:pt-24 sm:pb-28 md:pt-28 md:pb-32 relative z-10" aria-labelledby="services-title">
       <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Titre "NOS SERVICES" - très grand, aligné à gauche */}
-          <h2 id="services-title" className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-16 sm:mb-20 md:mb-24 text-black uppercase text-left" style={{ fontFamily: 'var(--font-poppins), sans-serif', letterSpacing: '-0.02em' }}>
+          <h2 id="services-title" className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-16 sm:mb-20 md:mb-24 text-white uppercase text-left" style={{ fontFamily: 'var(--font-poppins), sans-serif', letterSpacing: '-0.02em' }}>
             NOS SERVICES
           </h2>
 
@@ -106,18 +106,18 @@ export default function Features() {
 
                 {/* Numéro - très grand */}
                 <div className="mb-5 sm:mb-6">
-                  <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-black leading-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white/20 leading-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     {service.number}
                   </span>
                 </div>
 
                 {/* Titre du service - blanc, gras, majuscules */}
-                <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold mb-4 sm:mb-5 text-black uppercase leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold mb-4 sm:mb-5 text-white uppercase leading-tight" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   {service.title}
                 </h3>
 
                 {/* Description - gris clair, texte plus petit */}
-                <p className="text-base sm:text-lg md:text-lg text-gray-800 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <p className="text-base sm:text-lg md:text-lg text-white/70 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   {service.description}
                 </p>
               </div>

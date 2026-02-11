@@ -20,6 +20,7 @@ interface HeroProps {
   imagePath?: string
   imageAlt?: string
   centered?: boolean
+  mobileCenter?: boolean
 }
 
 export default function Hero({ 
@@ -35,7 +36,8 @@ export default function Hero({
   videoPath,
   imagePath,
   imageAlt,
-  centered = false
+  centered = false,
+  mobileCenter = false
 }: HeroProps = {}) {
   const containerRef = useRef<HTMLElement>(null)
   const heroButtonRef = useScrollButtonAnimation()
@@ -84,23 +86,26 @@ export default function Hero({
         </div>
       )}
       
-      <section ref={containerRef as any} id={id} className={`relative h-screen flex ${centered ? 'items-center' : 'items-end'} overflow-hidden z-10`} style={{ marginTop: 0, paddingTop: 0 }} aria-labelledby="hero-title">
+      <section ref={containerRef as any} id={id} className={`relative h-screen flex ${centered ? 'items-center' : mobileCenter ? 'items-center sm:items-end' : 'items-end'} overflow-hidden z-10`} style={{ marginTop: 0, paddingTop: 0 }} aria-labelledby="hero-title">
+
+      {/* Overlay sombre */}
+      <div className="absolute inset-0 bg-black/30 z-0" aria-hidden="true" />
 
       {/* Contenu */}
-      <div className="relative z-10 w-full px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
+      <div className={`relative z-10 w-full px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 ${mobileCenter ? 'pb-0 sm:pb-12' : 'pb-8 sm:pb-12'} md:pb-16 lg:pb-20`}>
         <div className="max-w-7xl mx-auto">
           {centered ? (
             /* Layout centré avec bouton en dessous */
             <div className="flex flex-col items-center text-center gap-6 md:gap-8">
               <div className="mb-4 sm:mb-6">
-                <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-white leading-tight">
+                <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-white leading-tight uppercase">
                   {title}
                 </h1>
               </div>
               
               {subtitle ? (
                 <div className="mb-6 md:mb-8">
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-normal leading-relaxed max-w-4xl mx-auto">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-normal leading-relaxed max-w-4xl mx-auto uppercase">
                     {subtitle}
                   </p>
                 </div>
@@ -134,18 +139,18 @@ export default function Hero({
             </div>
           ) : (
             /* Layout original avec texte à gauche et CTA à droite */
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-12">
+            <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-12 ${mobileCenter ? 'items-center sm:items-start' : ''}`}>
               {/* Texte à gauche */}
               <div className="flex-1">
                 <div className="mb-4 sm:mb-6">
-                  <h1 id="hero-title" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight text-white text-left leading-tight uppercase">
+                  <h1 id="hero-title" className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight text-white leading-tight uppercase ${mobileCenter ? 'text-center sm:text-left' : 'text-left'}`}>
                     {title}
                   </h1>
                 </div>
                 
                 {subtitle ? (
                   <div>
-                    <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-normal text-left leading-relaxed uppercase">
+                    <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-normal leading-relaxed uppercase ${mobileCenter ? 'text-center sm:text-left' : 'text-left'}`}>
                       {subtitle}
                     </p>
                   </div>
@@ -154,8 +159,8 @@ export default function Hero({
               
               {/* CTA à droite */}
               {buttonText && (
-                <div className="group/cta relative flex flex-col md:items-end border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10">
-                  <div className="flex justify-start md:justify-end w-full">
+                <div className={`group/cta relative flex flex-col md:items-end border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10 ${mobileCenter ? 'self-center sm:self-auto' : ''}`}>
+                  <div className={`flex w-full ${mobileCenter ? 'justify-center sm:justify-start' : 'justify-start'} md:justify-end`}>
                     <a 
                       ref={heroButtonRef as any}
                       href={buttonLink === "#contact" ? "/analyse" : buttonLink}

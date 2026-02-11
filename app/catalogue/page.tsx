@@ -217,7 +217,7 @@ export default function CataloguePage() {
   }, [properties])
 
   return (
-    <main className="min-h-screen bg-white" role="main">
+    <main className="min-h-screen" role="main">
       <Navbar />
       
       <Hero 
@@ -225,20 +225,37 @@ export default function CataloguePage() {
         subtitle=""
         buttonText="Voir les biens"
         buttonLink="#biens"
-        imagePath="/images/modern.webp"
+        imagePath="/images/herosectionimage.png"
         imageAlt="Catalogue de biens immobiliers à Marseille - Vente et location immobilière"
+        mobileCenter
       />
 
+      {/* Wrapper avec image d'arrière-plan pour toutes les sections */}
+      <div className="relative z-10">
+        {/* Image de fond */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/herosectionimage.png"
+            alt=""
+            fill
+            className="object-cover blur-md"
+            loading="lazy"
+            sizes="100vw"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+        </div>
+
       {/* Barre de filtrage */}
-      <section className="px-4 sm:px-6 lg:px-8 py-8 bg-stone-50 border-b border-gray-200" aria-labelledby="filtres-catalogue">
+      <section className="relative px-4 sm:px-6 lg:px-8 py-8 border-b border-white/20" aria-labelledby="filtres-catalogue">
         <FadeContent duration={500} ease="power2.out" threshold={0.1}>
           <div className="max-w-7xl mx-auto">
             <h2 id="filtres-catalogue" className="sr-only">Filtres de recherche de biens immobiliers</h2>
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg shadow-sm p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4" role="list">
                 {/* Statut */}
                 <div role="listitem">
-                  <label htmlFor="filter-type" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <label htmlFor="filter-type" className="block text-sm font-medium text-white/80 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Type
                   </label>
                   <select
@@ -246,7 +263,7 @@ export default function CataloguePage() {
                     value={filters.status}
                     onChange={(e) => handleFilterChange('status', e.target.value)}
                     aria-label="Filtrer par type de bien"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/10 backdrop-blur-sm text-white"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                   >
                     <option value="">Tous</option>
@@ -257,7 +274,7 @@ export default function CataloguePage() {
 
                 {/* Prix minimum */}
                 <div role="listitem">
-                  <label htmlFor="filter-min-price" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <label htmlFor="filter-min-price" className="block text-sm font-medium text-white/80 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Budget min (€)
                   </label>
                   <input
@@ -267,14 +284,14 @@ export default function CataloguePage() {
                     onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                     placeholder="Ex: 200000"
                     aria-label="Filtrer par prix minimum en euros"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/10 backdrop-blur-sm text-white placeholder:text-white/50"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                   />
                 </div>
 
                 {/* Prix maximum */}
                 <div role="listitem">
-                  <label htmlFor="filter-max-price" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <label htmlFor="filter-max-price" className="block text-sm font-medium text-white/80 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Budget max (€)
                   </label>
                   <input
@@ -284,14 +301,14 @@ export default function CataloguePage() {
                     onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                     placeholder="Ex: 500000"
                     aria-label="Filtrer par prix maximum en euros"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/10 backdrop-blur-sm text-white placeholder:text-white/50"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                   />
                 </div>
 
                 {/* Surface minimum */}
                 <div role="listitem">
-                  <label htmlFor="filter-min-surface" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <label htmlFor="filter-min-surface" className="block text-sm font-medium text-white/80 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Surface min (m²)
                   </label>
                   <input
@@ -301,14 +318,14 @@ export default function CataloguePage() {
                     onChange={(e) => handleFilterChange('minSurface', e.target.value)}
                     placeholder="Ex: 50"
                     aria-label="Filtrer par surface minimum en mètres carrés"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/10 backdrop-blur-sm text-white placeholder:text-white/50"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                   />
                 </div>
 
                 {/* Nombre de pièces */}
                 <div role="listitem">
-                  <label htmlFor="filter-min-rooms" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <label htmlFor="filter-min-rooms" className="block text-sm font-medium text-white/80 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Pièces min
                   </label>
                   <input
@@ -318,14 +335,14 @@ export default function CataloguePage() {
                     onChange={(e) => handleFilterChange('minRooms', e.target.value)}
                     placeholder="Ex: 2"
                     aria-label="Filtrer par nombre minimum de pièces"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/10 backdrop-blur-sm text-white placeholder:text-white/50"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                   />
                 </div>
 
                 {/* Localisation */}
                 <div role="listitem">
-                  <label htmlFor="filter-location" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                  <label htmlFor="filter-location" className="block text-sm font-medium text-white/80 mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     Quartier
                   </label>
                   <input
@@ -335,7 +352,7 @@ export default function CataloguePage() {
                     onChange={(e) => handleFilterChange('location', e.target.value)}
                     placeholder="Ex: Marseille 13008"
                     aria-label="Filtrer par quartier ou arrondissement"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/10 backdrop-blur-sm text-white placeholder:text-white/50"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                     list="locations-list"
                   />
@@ -353,7 +370,7 @@ export default function CataloguePage() {
                   <button
                     onClick={resetFilters}
                     aria-label="Réinitialiser tous les filtres de recherche"
-                    className="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                    className="px-6 py-2 text-sm font-medium text-white bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
                     style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
                   >
                     Réinitialiser les filtres
@@ -366,136 +383,104 @@ export default function CataloguePage() {
       </section>
 
       {/* Résultats */}
-      <section id="biens" className="px-4 sm:px-6 lg:px-8 py-12 bg-white" aria-labelledby="resultats-catalogue">
+      <section id="biens" className="relative px-4 sm:px-6 lg:px-8 py-12" aria-labelledby="resultats-catalogue">
         <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
           <div className="max-w-7xl mx-auto">
             <h2 id="resultats-catalogue" className="sr-only">Résultats de recherche de biens immobiliers à Marseille</h2>
             {/* Compteur de résultats */}
             <div className="mb-6">
-              <p className="text-sm text-gray-600" style={{ fontFamily: 'var(--font-poppins), sans-serif' }} role="status" aria-live="polite">
+              <p className="text-sm text-white/70" style={{ fontFamily: 'var(--font-poppins), sans-serif' }} role="status" aria-live="polite">
                 {filteredProperties.length} {filteredProperties.length > 1 ? 'biens trouvés' : 'bien trouvé'}
                 {hasActiveFilters && ` (sur ${properties.length} au total)`}
               </p>
             </div>
 
-            {/* Grille de biens */}
-            {loading ? (
-              <div className="col-span-full text-center py-16" role="status" aria-live="polite" aria-busy="true">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: '#4682B4' }} aria-hidden="true" role="presentation"></div>
-                <p className="text-gray-600" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  Chargement des biens...
-                </p>
-              </div>
-            ) : filteredProperties.length === 0 ? (
-              <div className="text-center py-16" role="status" aria-live="polite">
-                <p className="text-lg text-gray-700 mb-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                  Aucun bien ne correspond aux critères sélectionnés.
-                </p>
-                {hasActiveFilters && (
-                  <button
-                    onClick={resetFilters}
-                    aria-label="Réinitialiser tous les filtres pour afficher tous les biens immobiliers"
-                    className="px-6 py-3 rounded-full font-semibold transition-all hover:shadow-lg"
-                    style={{
-                      backgroundColor: '#4682B4',
-                      color: 'white',
-                      fontFamily: 'var(--font-poppins), sans-serif'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#3a6a8f'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#4682B4'
-                    }}
+            {/* 4 cartes de biens */}
+            <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+                {[
+                  { id: 'exemple-1', image: '/images/DSC02414.jpg', title: 'Appartement 3 pièces - Quartier historique', location: 'Saint-Germain-en-Laye (78)' },
+                  { id: 'exemple-2', image: '/images/DSC04844.jpg', title: 'Appartement 4 pièces haussmannien', location: 'Paris 16ème (75)' },
+                  { id: 'exemple-3', image: '/images/DSC04893.jpg', title: 'Appartement 5 pièces avec balcon', location: 'Paris 7ème (75)' },
+                  { id: 'exemple-4', image: '/images/gratteciel.jpg', title: 'Appartement 4 pièces vue panoramique', location: 'Paris 16ème (75)' },
+                ].map((bien) => (
+                  <Link
+                    key={bien.id}
+                    href={`/properties/${bien.id}`}
+                    className="group relative block rounded-lg overflow-hidden aspect-square"
                   >
-                    Réinitialiser les filtres
-                  </button>
-                )}
+                    <div className="absolute inset-0">
+                      <Image
+                        src={bien.image}
+                        alt={bien.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <p className="text-xs sm:text-sm text-white/80 uppercase tracking-wider mb-2" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          L'AGENCE YL
+                        </p>
+                        <h3 className="text-xl sm:text-2xl md:text-3xl font-light text-white mb-2 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          {bien.title}
+                        </h3>
+                        <p className="text-sm sm:text-base text-white/90" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                          {bien.location}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-black/80 flex items-center justify-center transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                      <span
+                        className="inline-block px-8 py-4 rounded-lg border-2 border-white text-white font-semibold transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100"
+                        style={{ fontFamily: 'var(--font-poppins), sans-serif', fontSize: 'clamp(0.9rem, 1.2vw, 1.125rem)' }}
+                      >
+                        Voir les détails
+                      </span>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Liste des biens immobiliers à Marseille">
-                {filteredProperties.map((property) => {
-                  const currentIndex = currentImageIndex[property.id] || 0
-                  
-                  return (
-                    <PropertyCard
-                      key={property.id}
-                      property={property}
-                      currentIndex={currentIndex}
-                      onPrevious={() => goToPrevious(property.id)}
-                      onNext={() => goToNext(property.id)}
-                      onGoToImage={(index) => goToImage(property.id, index)}
-                    />
-                  )
-                })}
-              </div>
-            )}
+            </div>
           </div>
         </FadeContent>
       </section>
 
       {/* Message de qualification */}
       {!loading && filteredProperties.length > 0 && (
-        <section className="px-4 sm:px-6 lg:px-8 py-12 bg-stone-50" aria-labelledby="qualification-catalogue">
+        <section className="relative px-4 sm:px-6 lg:px-8 py-12" aria-labelledby="qualification-catalogue">
           <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
             <div className="max-w-4xl mx-auto text-center">
               <h2 id="qualification-catalogue" className="sr-only">Qualité de la sélection des biens immobiliers</h2>
-              <p className="text-lg text-gray-700 italic" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              <p className="text-lg text-white/70 italic" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 Chaque bien présenté ici fait l'objet d'une analyse préalable et s'inscrit dans une stratégie cohérente avec le marché local.
               </p>
             </div>
           </FadeContent>
         </section>
       )}
+      </div>
 
-      {/* CTA Final */}
-      <section className="relative min-h-screen flex items-center justify-center" aria-labelledby="cta-final-catalogue">
-        <div className="absolute inset-0 z-0">
-          <div className="relative w-full h-full">
-            <Image
-              src="/images/modern.webp"
-              alt="L'Agence YL - Catalogue de biens immobiliers à Saint-Germain-en-Laye"
-              fill
-              className="object-cover"
-              loading="lazy"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-black/20" aria-hidden="true" role="presentation" />
+      {/* Footer */}
+      <footer className="relative z-10 bg-black py-6" role="contentinfo">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-white/70 uppercase tracking-wider mb-3" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+            2026 — L'AGENCE YL
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link href="/mentions-legales" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Mentions légales
+            </Link>
+            <Link href="/politique-de-confidentialite" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Politique de confidentialité
+            </Link>
+            <Link href="/honoraires" className="text-xs text-white/50 uppercase tracking-wider hover:text-white transition-colors duration-300" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+              Honoraires
+            </Link>
           </div>
         </div>
-        <div className="relative z-10 w-full">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <FadeContent duration={1000} ease="power2.out" threshold={0.2}>
-              <h2 id="cta-final-catalogue" className="sr-only">Découvrir notre approche immobilière</h2>
-              <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white font-light leading-relaxed px-2 mb-8 sm:mb-12 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-                Vous avez un projet immobilier à Saint-Germain-en-Laye ?
-                <br />
-                Découvrez notre approche structurée et transparente.
-              </p>
-            </FadeContent>
-            <div className="flex justify-center items-center">
-              <div className="group/cta relative flex flex-col border border-white/60 px-8 py-6 md:px-10 md:py-8 rounded-3xl backdrop-blur-sm transition-all duration-500 hover:border-white/90 hover:shadow-lg hover:shadow-white/10">
-                <div className="flex justify-center w-full">
-                  <a
-                    ref={ctaFinalButtonRef as any}
-                    href="/notre-methode"
-                    aria-label="Découvrir notre approche immobilière structurée et transparente"
-                    className="group relative inline-flex items-center text-white font-medium transition-all duration-300"
-                    style={{
-                      fontFamily: 'var(--font-poppins), sans-serif',
-                      fontSize: 'clamp(1rem, 1.5vw, 1.125rem)',
-                      textDecoration: 'none',
-                      letterSpacing: '0.5px',
-                    }}
-                  >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">Découvrir notre approche</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      </footer>
     </main>
   )
 }
