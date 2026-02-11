@@ -361,7 +361,7 @@ export default function Home() {
             <div className="flex sm:hidden justify-center mt-8">
               <Link
                 href="/catalogue"
-                ref={catalogueButtonRef}
+                ref={catalogueButtonRef as React.RefObject<HTMLAnchorElement>}
                 className="group/cta relative inline-flex items-center border border-white/60 px-6 py-3 rounded-lg transition-all duration-300 hover:border-white"
                 style={{
                   fontFamily: 'var(--font-poppins), sans-serif',
