@@ -22,11 +22,13 @@ export default function EstimationEtape2Page() {
     nombrePieces: '',
     nombreChambres: '',
     nombreSallesDeBain: '',
+    nombreSallesDEau: '',
     nombreWC: '',
     wcSepares: '',
     nombreNiveaux: '',
     // Étage & accès
     etage: '',
+    nombreEtagesImmeuble: '',
     dernierEtage: '',
     ascenseur: '',
     // Extérieurs
@@ -34,7 +36,9 @@ export default function EstimationEtape2Page() {
     surfaceExterieur: '',
     // Stationnement
     stationnement: '',
-    stationnementType: '',
+    stationnementEmplacement: '',
+    stationnementCouvert: '',
+    stationnementFerme: '',
     surfaceStationnement: '',
     // État général
     etatBien: '',
@@ -58,6 +62,10 @@ export default function EstimationEtape2Page() {
     // Vis-à-vis
     visAVis: '',
     distanceVisAVis: '',
+    // Charges & DPE
+    taxeFonciere: '',
+    chargesCopro: '',
+    dpe: '',
     // Contexte
     contexteVente: '',
     // Délai de vente
@@ -172,16 +180,20 @@ export default function EstimationEtape2Page() {
         nombre_pieces: formData.nombrePieces ? parseInt(formData.nombrePieces) : null,
         nombre_chambres: formData.nombreChambres ? parseInt(formData.nombreChambres) : null,
         nombre_salles_de_bain: formData.nombreSallesDeBain ? parseInt(formData.nombreSallesDeBain) : null,
+        nombre_salles_d_eau: formData.nombreSallesDEau ? parseInt(formData.nombreSallesDEau) : null,
         nombre_wc: formData.nombreWC ? parseInt(formData.nombreWC) : null,
         wc_separes: formData.wcSepares === 'oui' ? true : formData.wcSepares === 'non' ? false : null,
         nombre_niveaux: formData.nombreNiveaux || null,
-        etage: formData.etage ? parseInt(formData.etage) : null,
+        etage: formData.etage || null,
+        nombre_etages_immeuble: formData.nombreEtagesImmeuble || null,
         dernier_etage: formData.dernierEtage === 'oui' ? true : formData.dernierEtage === 'non' ? false : null,
         ascenseur: formData.ascenseur === 'oui' ? true : formData.ascenseur === 'non' ? false : null,
         exterieurs: formData.exterieur.length > 0 ? formData.exterieur : null,
         surface_exterieur: formData.surfaceExterieur || null,
         stationnement: formData.stationnement || null,
-        stationnement_type: formData.stationnementType || null,
+        stationnement_emplacement: formData.stationnementEmplacement || null,
+        stationnement_couvert: formData.stationnementCouvert || null,
+        stationnement_ferme: formData.stationnementFerme || null,
         surface_stationnement: formData.surfaceStationnement || null,
         etat_bien: formData.etatBien || null,
         travaux_recents: formData.travauxRecents === 'oui' ? true : formData.travauxRecents === 'non' ? false : null,
@@ -198,6 +210,9 @@ export default function EstimationEtape2Page() {
         exposition_traversant: formData.expositionTraversant || null,
         vis_a_vis: formData.visAVis || null,
         distance_vis_a_vis: formData.distanceVisAVis || null,
+        taxe_fonciere: formData.taxeFonciere || null,
+        charges_copro: formData.chargesCopro || null,
+        dpe: formData.dpe || null,
         contexte_vente: formData.contexteVente || null,
         delai_vente: formData.delaiVente || null,
         situation_actuelle: formData.situationActuelle || null,
@@ -504,6 +519,10 @@ export default function EstimationEtape2Page() {
                   <label className={labelClass} style={fontStyle}>Salles de bain</label>
                   <input type="number" name="nombreSallesDeBain" value={formData.nombreSallesDeBain} onChange={handleChange} min="0" className={inputClass} style={fontStyle} />
                 </div>
+                <div>
+                  <label className={labelClass} style={fontStyle}>Salles d'eau</label>
+                  <input type="number" name="nombreSallesDEau" value={formData.nombreSallesDEau} onChange={handleChange} min="0" className={inputClass} style={fontStyle} />
+                </div>
               </div>
 
               {/* WC */}
@@ -571,6 +590,10 @@ export default function EstimationEtape2Page() {
                     </select>
                   </div>
                   <div>
+                    <label className={labelClass} style={fontStyle}>Nombre d'étages de l'immeuble</label>
+                    <input type="number" name="nombreEtagesImmeuble" value={formData.nombreEtagesImmeuble} onChange={handleChange} min="1" placeholder="Ex: 5" className={inputClass} style={fontStyle} />
+                  </div>
+                  <div>
                     <label className={labelClass} style={fontStyle}>Dernier étage ?</label>
                     <select name="dernierEtage" value={formData.dernierEtage} onChange={handleChange} className={selectClass} style={fontStyle}>
                       <option value="" className="bg-black text-white">Sélectionnez...</option>
@@ -578,6 +601,8 @@ export default function EstimationEtape2Page() {
                       <option value="non" className="bg-black text-white">Non</option>
                     </select>
                   </div>
+                </div>
+                <div className="grid md:grid-cols-3 gap-4 mt-4">
                   <div>
                     <label className={labelClass} style={fontStyle}>Ascenseur</label>
                     <select name="ascenseur" value={formData.ascenseur} onChange={handleChange} className={selectClass} style={fontStyle}>
@@ -617,8 +642,8 @@ export default function EstimationEtape2Page() {
             {/* Stationnement */}
             <div className="pt-4 border-t border-white/10">
               <p className={sectionTitleClass} style={fontStyle}>Stationnement</p>
-              <div className="grid md:grid-cols-4 gap-4 mt-4">
-                {['Aucun', 'Place de parking', 'Garage', 'Box'].map((option) => (
+              <div className="grid md:grid-cols-5 gap-4 mt-4">
+                {['Aucun', 'Parking', 'Box', 'Garage'].map((option) => (
                   <label key={option} className={getOptionClass(formData.stationnement === option)}>
                     <input
                       type="radio"
@@ -634,21 +659,68 @@ export default function EstimationEtape2Page() {
               </div>
               {formData.stationnement && formData.stationnement !== 'Aucun' && (
                 <div className="mt-4 space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {['Couvert', 'Extérieur'].map((option) => (
-                      <label key={option} className={getOptionClass(formData.stationnementType === option)}>
-                        <input
-                          type="radio"
-                          name="stationnementType"
-                          value={option}
-                          checked={formData.stationnementType === option}
-                          onChange={handleChange}
-                          className="mr-2 accent-white"
-                        />
-                        <span className="text-white text-sm" style={fontStyle}>{option}</span>
-                      </label>
-                    ))}
+                  {/* Emplacement : Intérieur / Extérieur */}
+                  {formData.stationnement === 'Parking' && (
+                    <div>
+                      <label className={labelClass} style={fontStyle}>Emplacement</label>
+                      <div className="grid md:grid-cols-2 gap-4 mt-2">
+                        {['Intérieur', 'Extérieur'].map((option) => (
+                          <label key={option} className={getOptionClass(formData.stationnementEmplacement === option)}>
+                            <input
+                              type="radio"
+                              name="stationnementEmplacement"
+                              value={option}
+                              checked={formData.stationnementEmplacement === option}
+                              onChange={handleChange}
+                              className="mr-2 accent-white"
+                            />
+                            <span className="text-white text-sm" style={fontStyle}>{option}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {/* Couvert / Non couvert */}
+                  <div>
+                    <label className={labelClass} style={fontStyle}>Couverture</label>
+                    <div className="grid md:grid-cols-2 gap-4 mt-2">
+                      {['Couvert', 'Non couvert'].map((option) => (
+                        <label key={option} className={getOptionClass(formData.stationnementCouvert === option)}>
+                          <input
+                            type="radio"
+                            name="stationnementCouvert"
+                            value={option}
+                            checked={formData.stationnementCouvert === option}
+                            onChange={handleChange}
+                            className="mr-2 accent-white"
+                          />
+                          <span className="text-white text-sm" style={fontStyle}>{option}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
+                  {/* Fermé / Non fermé (Box et Garage) */}
+                  {(formData.stationnement === 'Box' || formData.stationnement === 'Garage') && (
+                    <div>
+                      <label className={labelClass} style={fontStyle}>Fermé ?</label>
+                      <div className="grid md:grid-cols-2 gap-4 mt-2">
+                        {['Fermé', 'Non fermé'].map((option) => (
+                          <label key={option} className={getOptionClass(formData.stationnementFerme === option)}>
+                            <input
+                              type="radio"
+                              name="stationnementFerme"
+                              value={option}
+                              checked={formData.stationnementFerme === option}
+                              onChange={handleChange}
+                              className="mr-2 accent-white"
+                            />
+                            <span className="text-white text-sm" style={fontStyle}>{option}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {/* Superficie */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className={labelClass} style={fontStyle}>Superficie (m²)</label>
@@ -825,6 +897,51 @@ export default function EstimationEtape2Page() {
 
           <div className="border-t border-white/10" />
 
+          {/* ═══════════ CHARGES & DPE ═══════════ */}
+          <div className="space-y-6">
+            <h2 className={groupTitleClass} style={fontStyle}>Charges & DPE</h2>
+
+            {/* Taxe foncière */}
+            <div>
+              <p className={sectionTitleClass} style={fontStyle}>Taxe foncière</p>
+              <div className="mt-4">
+                <label className={labelClass} style={fontStyle}>Montant annuel (€)</label>
+                <input type="text" name="taxeFonciere" value={formData.taxeFonciere} onChange={handleChange} placeholder="Ex: 1 500 €" className={inputClass} style={fontStyle} />
+              </div>
+            </div>
+
+            {/* Charges de copropriété */}
+            <div>
+              <p className={sectionTitleClass} style={fontStyle}>Charges de copropriété</p>
+              <div className="mt-4">
+                <label className={labelClass} style={fontStyle}>Montant mensuel (€)</label>
+                <input type="text" name="chargesCopro" value={formData.chargesCopro} onChange={handleChange} placeholder="Ex: 250 €" className={inputClass} style={fontStyle} />
+              </div>
+            </div>
+
+            {/* DPE */}
+            <div>
+              <p className={sectionTitleClass} style={fontStyle}>Diagnostic de Performance Énergétique (DPE)</p>
+              <div className="grid md:grid-cols-4 gap-4 mt-4">
+                {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Non réalisé'].map((option) => (
+                  <label key={option} className={getOptionClass(formData.dpe === option)}>
+                    <input
+                      type="radio"
+                      name="dpe"
+                      value={option}
+                      checked={formData.dpe === option}
+                      onChange={handleChange}
+                      className="mr-2 accent-white"
+                    />
+                    <span className="text-white text-sm" style={fontStyle}>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-white/10" />
+
           {/* ═══════════ PROJET DE VENTE ═══════════ */}
           <div className="space-y-6">
             <h2 className={groupTitleClass} style={fontStyle}>Projet de vente</h2>
@@ -835,11 +952,25 @@ export default function EstimationEtape2Page() {
               <div className="mt-4">
                 <select name="contexteVente" value={formData.contexteVente} onChange={handleChange} className={selectClass} style={fontStyle}>
                   <option value="" className="bg-black text-white">Sélectionnez...</option>
-                  <option value="Simple vente" className="bg-black text-white">Simple vente</option>
+                  <option value="Mutation" className="bg-black text-white">Mutation</option>
+                  <option value="Mariage" className="bg-black text-white">Mariage</option>
+                  <option value="Naissance" className="bg-black text-white">Naissance</option>
+                  <option value="Départ des enfants" className="bg-black text-white">Départ des enfants</option>
+                  <option value="Problème de santé" className="bg-black text-white">Problème de santé</option>
+                  <option value="Besoin de liquidité" className="bg-black text-white">Besoin de liquidité</option>
+                  <option value="Difficultés financières" className="bg-black text-white">Difficultés financières</option>
+                  <option value="Vente pour rachat plus adapté" className="bg-black text-white">Vente pour rachat plus adapté</option>
+                  <option value="Arbitrage patrimonial" className="bg-black text-white">Arbitrage patrimonial</option>
+                  <option value="Revente pour réinvestir ailleurs" className="bg-black text-white">Revente pour réinvestir ailleurs</option>
+                  <option value="Donation / partage" className="bg-black text-white">Donation / partage</option>
+                  <option value="Indivision compliquée" className="bg-black text-white">Indivision compliquée</option>
+                  <option value="Fin de dispositif fiscal" className="bg-black text-white">Fin de dispositif fiscal</option>
+                  <option value="Arbitrage SCI" className="bg-black text-white">Arbitrage SCI</option>
+                  <option value="Optimisation fiscale" className="bg-black text-white">Optimisation fiscale</option>
+                  <option value="Marché favorable" className="bg-black text-white">Marché favorable</option>
+                  <option value="Changement de projet de vie / déménagement" className="bg-black text-white">Changement de projet de vie / déménagement</option>
                   <option value="Divorce" className="bg-black text-white">Divorce</option>
                   <option value="Succession" className="bg-black text-white">Succession</option>
-                  <option value="Renseignement" className="bg-black text-white">Renseignement</option>
-                  <option value="Déménagement" className="bg-black text-white">Déménagement</option>
                 </select>
               </div>
             </div>

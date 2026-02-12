@@ -126,7 +126,7 @@ export default function EstimationPage() {
                 <p className="text-sm text-white/50 mb-3 uppercase tracking-widest" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>0 - 4</p>
                 <h2 id="dossier-reference" className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   BIEN PLUS QU&apos;UN CHIFFRE
-                </h2>
+              </h2>
                 <p className="text-lg text-white/70 mt-4 max-w-xl" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   UN DOSSIER DE RÉFÉRENCE. L&apos;ESTIMATION GRATUITE EST SOUVENT UNE PORTE D&apos;ENTRÉE COMMERCIALE. NOTRE APPROCHE EST DIFFÉRENTE.
                 </p>
@@ -280,8 +280,8 @@ export default function EstimationPage() {
                     </div>
                   )
                 })}
-              </div>
-
+            </div>
+            
               {/* Titre + description — order-1 sur mobile pour passer au-dessus des barres */}
               <div className="md:sticky md:top-32 order-1 md:order-2">
                 <h2 id="accompagnement-strategique" className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold text-white leading-none uppercase mb-6" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
@@ -306,12 +306,12 @@ export default function EstimationPage() {
                 L&apos;INDÉPENDANCE AU SERVICE DE VOTRE SÉRÉNITÉ.
               </h2>
             </div>
-
+            
             <div className="max-w-3xl mx-auto mb-12">
               <p className="text-base md:text-lg text-white/70 leading-relaxed text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 Facturer une analyse de valeur est la garantie de notre impartialité. Contrairement aux estimations gratuites, notre rémunération ne dépend pas de la signature d&apos;un mandat de vente immédiat, mais de la précision de notre conseil. Vous obtenez une vérité de marché, sans influence commerciale.
               </p>
-            </div>
+                  </div>
 
             {/* Encadré mise en avant */}
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 md:p-12 text-center">
@@ -321,8 +321,8 @@ export default function EstimationPage() {
                 </svg>
                 <h3 className="text-xl md:text-2xl font-bold text-white uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Investissement déductible
-                </h3>
-              </div>
+                    </h3>
+                  </div>
               <p className="text-base md:text-lg text-white/90 leading-relaxed max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                 Le montant du rapport d&apos;analyse est <span className="font-bold uppercase">intégralement remboursé</span> si vous nous confiez la vente de votre bien.
               </p>
@@ -352,7 +352,7 @@ export default function EstimationPage() {
                   <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                </div>
+              </div>
                 <h3 className="text-xl font-bold text-white mb-3 uppercase" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>RÉACTIVITÉ</h3>
                 <p className="text-white/70 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Une réponse sous 24h pour organiser notre premier rendez-vous.
@@ -402,7 +402,7 @@ export default function EstimationPage() {
                 Estimations indépendantes · Sans engagement · Sans démarchage
               </p>
             </div>
-
+            
             {/* 3 Pricing Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
               
@@ -414,6 +414,7 @@ export default function EstimationPage() {
                     <span className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>55€</span>
                     <span className="text-sm text-white/50" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>TTC</span>
                   </div>
+                  <p className="text-xs italic text-white/40 mb-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Montant intégralement déductible des honoraires en cas de signature d'un mandat exclusif confié à l'agence</p>
                   <p className="text-sm text-white/50" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Particuliers · Hors Paris Intramuros</p>
                 </div>
                 <div className="mb-6">
@@ -422,14 +423,15 @@ export default function EstimationPage() {
                 <p className="text-sm text-white/50 mb-6 uppercase tracking-wider font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Analyse structurée</p>
                 <ul className="space-y-3 flex-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du marché local</li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Biens comparables</li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Fourchette de valeur</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Biens comparables (méthode d&apos;estimation par comparaison)</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Affichage du prix recommandé + fourchette de valeur haute et basse</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Utilisable comme support de raisonnement</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Document PDF remis</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Utilisable cadre bancaire</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Non-sollicitation commerciale</li>
                   <li className="flex items-center gap-3 text-sm text-white/50"><svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" /></svg><span className="line-through">Analyse du positionnement prix</span></li>
                   <li className="flex items-center gap-3 text-sm text-white/50"><svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" /></svg><span className="line-through">Lecture investissement</span></li>
                   <li className="flex items-center gap-3 text-sm text-white/50"><svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" /></svg><span className="line-through">Spécificités locales</span></li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Document PDF remis</li>
-                  <li className="flex items-center gap-3 text-sm text-white/50"><svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" /></svg><span className="line-through">Utilisable cadre bancaire</span></li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Non-sollicitation commerciale</li>
                 </ul>
                 <a href="/estimation/formulaire" className="mt-8 block w-full text-center py-3.5 rounded-xl border-2 border-white text-white font-medium hover:bg-white hover:text-black transition-colors duration-300 text-sm" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Demander cette estimation
@@ -445,6 +447,7 @@ export default function EstimationPage() {
                     <span className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>89€</span>
                     <span className="text-sm text-white/60" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>TTC</span>
                   </div>
+                  <p className="text-xs italic text-white/40 mb-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Montant intégralement déductible des honoraires en cas de signature d'un mandat exclusif confié à l'agence</p>
                   <p className="text-sm text-white/60" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Investisseurs / SCI · France entière</p>
                 </div>
                 <div className="mb-6">
@@ -453,14 +456,15 @@ export default function EstimationPage() {
                 <p className="text-sm text-white/50 mb-6 uppercase tracking-wider font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Analyse approfondie</p>
                 <ul className="space-y-3 flex-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du marché local</li>
-                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Biens comparables</li>
-                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Fourchette de valeur</li>
-                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du positionnement prix</li>
-                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Lecture investissement</li>
-                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Spécificités locales</li>
+                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Biens comparables (méthode d&apos;estimation par comparaison)</li>
+                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Affichage du prix recommandé + fourchette de valeur haute et basse</li>
+                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Utilisable comme support de raisonnement</li>
                   <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Document PDF remis</li>
                   <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Utilisable cadre bancaire</li>
                   <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Non-sollicitation commerciale</li>
+                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du positionnement prix</li>
+                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Lecture investissement</li>
+                  <li className="flex items-center gap-3 text-sm text-white/90"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Spécificités locales</li>
                 </ul>
                 <a href="/estimation/formulaire" className="mt-8 block w-full text-center py-3.5 rounded-xl border-2 border-white text-white font-medium hover:bg-white hover:text-black transition-colors duration-300 text-sm" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Demander cette estimation
@@ -474,23 +478,25 @@ export default function EstimationPage() {
                   <div className="flex items-baseline gap-1 mb-3">
                     <span className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>129€</span>
                     <span className="text-sm text-white/50" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>TTC</span>
-                  </div>
+              </div>
+                  <p className="text-xs italic text-white/40 mb-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Montant intégralement déductible des honoraires en cas de signature d'un mandat exclusif confié à l'agence</p>
                   <p className="text-sm text-white/50" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Particuliers · Paris Intramuros</p>
-                </div>
+            </div>
                 <div className="mb-6">
                   <span className="inline-block bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Sécuriser une décision à fort enjeu</span>
                 </div>
                 <p className="text-sm text-white/50 mb-6 uppercase tracking-wider font-medium" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>Analyse très approfondie</p>
                 <ul className="space-y-3 flex-1" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du marché local <span className="text-xs text-white/40 ml-1">(micro-marché)</span></li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Biens comparables <span className="text-xs text-white/40 ml-1">(sélection fine)</span></li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Fourchette de valeur</li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du positionnement prix</li>
-                  <li className="flex items-center gap-3 text-sm text-white/50"><svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" /></svg><span className="line-through">Lecture investissement</span></li>
-                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Spécificités locales <span className="text-xs text-white/40 ml-1">(très détaillé)</span></li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Biens comparables (méthode d&apos;estimation par comparaison) <span className="text-xs text-white/40 ml-1">(sélection fine)</span></li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Affichage du prix recommandé + fourchette de valeur haute et basse</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Utilisable comme support de raisonnement</li>
                   <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Document PDF remis</li>
                   <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Utilisable cadre bancaire</li>
                   <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Non-sollicitation commerciale</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Analyse du positionnement prix</li>
+                  <li className="flex items-center gap-3 text-sm text-white/70"><svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Spécificités locales <span className="text-xs text-white/40 ml-1">(très détaillé)</span></li>
+                  <li className="flex items-center gap-3 text-sm text-white/50"><svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" /></svg><span className="line-through">Lecture investissement</span></li>
                 </ul>
                 <a href="/estimation/formulaire" className="mt-8 block w-full text-center py-3.5 rounded-xl border-2 border-white text-white font-medium hover:bg-white hover:text-black transition-colors duration-300 text-sm" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   Demander cette estimation
@@ -502,11 +508,27 @@ export default function EstimationPage() {
             <p className="text-sm text-white/50 text-center max-w-3xl mx-auto leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
               Les tarifs sont définis selon la complexité du marché et le niveau d&apos;analyse requis, et non selon le profil du client. Certains biens à forte valeur ou atypiques peuvent faire l&apos;objet d&apos;une analyse complémentaire ou d&apos;un devis sur mesure.
             </p>
+
+            {/* Mentions importantes */}
+            <div className="mt-12 max-w-4xl mx-auto text-center">
+              <p className="text-xs italic text-white/40 leading-relaxed mb-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <strong className="text-white/50">Mentions importantes.</strong> Pour chaque dossier : documents non contractuels ; ils ne constituent ni une expertise immobilière au sens juridique du terme ni une garantie de prix de vente ; ce document ne peut être utilisé dans le cadre d&apos;une procédure judiciaire ou assimilée sans validation par un expert agréé.
+              </p>
+              <p className="text-xs italic text-white/40 leading-relaxed mb-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Les documents constituent un avis de valeur établi sur la base des éléments communiqués par le vendeur et des données de marché disponibles à la date de son élaboration. La valeur indiquée représente une estimation théorique susceptible d&apos;évolution selon les conditions du marché, l&apos;état réel du bien et les informations complémentaires qui pourraient être portées à notre connaissance.
+              </p>
+              <p className="text-xs italic text-white/40 leading-relaxed mb-4" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Il est recommandé à toute partie (banque, investisseur, notaire ou autre) de procéder à ses propres vérifications ou expertises avant toute prise de décision. L&apos;agence ne saurait être tenue responsable des conséquences résultant de l&apos;utilisation de cette estimation en dehors de son cadre d&apos;application.
+              </p>
+              <p className="text-xs italic text-white/40 leading-relaxed" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
+                Les estimations sont établies avec diligence et professionnalisme par nos soins, sur la base des meilleures données disponibles et de notre connaissance du marché.
+              </p>
+            </div>
           </div>
         </FadeContent>
       </section>
 
-      </div>
+          </div>
 
       {/* Footer */}
       <footer className="relative z-10 bg-black py-6" role="contentinfo">

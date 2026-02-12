@@ -130,8 +130,8 @@ export default function NotreMethodePage() {
                 <h2 id="analyser-avant-agir" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   ANALYSER AVANT D'AGIR :{' '}
                   <span className="font-light italic text-white/50">NOTRE MÉTHODE</span>
-                </h2>
-              </div>
+              </h2>
+            </div>
 
               {/* Colonne droite : Liste d'éléments avec icônes */}
               <div className="space-y-0" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
@@ -219,13 +219,13 @@ export default function NotreMethodePage() {
                 <p className="text-sm text-white/50 mb-3 uppercase tracking-widest" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>0 - 5</p>
                 <h2 id="approche-selective-choix" className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   LA SÉLECTIVITÉ
-                </h2>
+              </h2>
                 <p className="text-lg text-white/70 mt-4 max-w-xl" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                   C'EST LE GAGE DE VOTRE RÉUSSITE. NOTRE PROCESSUS DE SÉLECTION GARANTIT UN ACCOMPAGNEMENT D'EXCELLENCE.
                 </p>
               </div>
             </div>
-          </div>
+            </div>
 
           {/* Process Bars */}
           <div className="w-full">
@@ -269,7 +269,7 @@ export default function NotreMethodePage() {
                       </div>
                       <span className="text-5xl md:text-7xl lg:text-8xl font-bold text-white/10 leading-none select-none" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                         {item.num}
-                      </span>
+                            </span>
                     </div>
                     <div
                       className="overflow-hidden transition-all duration-700 ease-in-out"
@@ -278,9 +278,9 @@ export default function NotreMethodePage() {
                       <p className="text-base md:text-lg text-white/80 leading-relaxed mt-4 max-w-3xl" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                         {item.content}
                       </p>
-                    </div>
-                  </div>
-                </div>
+              </div>
+              </div>
+            </div>
               )
             })}
           </div>
@@ -298,10 +298,10 @@ export default function NotreMethodePage() {
               </h2>
             </div>
             <div className="text-lg text-white/80 leading-relaxed space-y-6 text-center mb-16" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
-              <p>
+                <p>
                 Dans le cadre d'un processus de vente, la donnée n'a de valeur que si elle vous est partagée. Pour l'Agence YL, la transparence est le socle d'une collaboration saine : vous ne devez jamais être dans l'attente d'une information.
-              </p>
-              <p>
+                </p>
+                <p>
                 Nous avons systématisé un protocole de suivi rigoureux pour chaque étape de votre projet :
               </p>
             </div>
@@ -341,11 +341,11 @@ export default function NotreMethodePage() {
                   {/* Icône dans un cercle */}
                   <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center text-white/70">
                     {item.icon}
-                  </div>
+            </div>
                   {/* Titre */}
                   <h3 className="text-xl md:text-2xl font-bold text-white mt-5 mb-3 text-center" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     {item.title}
-                  </h3>
+                        </h3>
                   {/* Description */}
                   <p className="text-base md:text-lg text-white/70 leading-relaxed text-center max-w-lg" style={{ fontFamily: 'var(--font-poppins), sans-serif' }}>
                     {item.content}
@@ -356,9 +356,9 @@ export default function NotreMethodePage() {
                       {[...Array(5)].map((_, i) => (
                         <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/20" />
                       ))}
-                    </div>
+                      </div>
                   )}
-                </div>
+              </div>
               ))}
             </div>
 
@@ -385,19 +385,19 @@ export default function NotreMethodePage() {
               </p>
             </FadeContent>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a
-                href="/estimation"
+                  <a
+                    href="/estimation"
                 aria-label="Demander une estimation immobilière à Saint-Germain-en-Laye"
                 className="inline-flex items-center justify-center bg-white text-black font-semibold px-8 py-4 rounded-lg hover:bg-white/90 transition-all duration-300"
-                style={{
-                  fontFamily: 'var(--font-poppins), sans-serif',
+                    style={{
+                      fontFamily: 'var(--font-poppins), sans-serif',
                   fontSize: 'clamp(0.875rem, 1.2vw, 1rem)',
-                  textDecoration: 'none',
-                  letterSpacing: '0.5px',
-                }}
-              >
+                      textDecoration: 'none',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
                 DEMANDER MON ESTIMATION
-              </a>
+                  </a>
             </div>
           </div>
         </div>

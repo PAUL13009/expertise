@@ -12,7 +12,7 @@ export default function ServicesPage() {
       image: "/images/heropropre.jpeg",
       imageAlt: "Estimation Réaliste - Agence YL",
       title: "ESTIMATION RÉALISTE",
-      description: "PLUS QU'UNE ESTIMATION, UN RAPPORT TECHNIQUE COMPLET BASÉ SUR LES MÉTHODES DE L'EXPERTISE IMMOBILIÈRE POUR SÉCURISER VOTRE PATRIMOINE",
+      description: "PLUS QU'UNE ESTIMATION, UN DOSSIER COMPLET BASÉ SUR LES MÉTHODES DE L'EXPERTISE IMMOBILIÈRE POUR SÉCURISER VOTRE PATRIMOINE",
       link: "/estimation",
     },
     {
